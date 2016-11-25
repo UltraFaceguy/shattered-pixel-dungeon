@@ -22,16 +22,25 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class PotionOfHealing extends Potion {
+public class PotionOfCleansing extends Potion {
 
 	{
 		initials = 2;
@@ -42,15 +51,27 @@ public class PotionOfHealing extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-		heal( Dungeon.hero );
-		GLog.p( Messages.get(this, "heal") );
+		cleanse( Dungeon.hero );
+		GLog.p( Messages.get(this, "cleanse") );
 	}
 	
-	public static void heal( Hero hero ) {
+	public static void cleanse( Hero hero ) {
+
+		Buff.detach( hero, Poison.class );
+		Buff.detach( hero, Cripple.class );
+		Buff.detach( hero, Weakness.class );
+		Buff.detach( hero, Bleeding.class );
+		Buff.detach( hero, Blindness.class );
+        Buff.detach( hero, Burning.class );
+        Buff.detach( hero, Charm.class );
+        Buff.detach( hero, Chill.class );
+        Buff.detach( hero, Frost.class );
+        Buff.detach( hero, Roots.class );
+        Buff.detach( hero, Slow.class );
+        Buff.detach( hero, Ooze.class );
+        Buff.detach( hero, Vertigo.class );
 		
-		hero.HP = hero.HT;
-		
-		hero.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
+		hero.sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.4f, 1);
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -45,8 +46,9 @@ public class WaterOfHealth extends WellWater {
 		Sample.INSTANCE.play( Assets.SND_DRINK );
 		
 		PotionOfHealing.heal( hero );
+		PotionOfCleansing.cleanse( hero );
 		hero.belongings.uncurseEquipped();
-		((Hunger)hero.buff( Hunger.class )).satisfy( Hunger.STARVING );
+		hero.buff( Hunger.class ).satisfy( Hunger.STARVING );
 		
 		CellEmitter.get( pos ).start( ShaftParticle.FACTORY, 0.2f, 3 );
 

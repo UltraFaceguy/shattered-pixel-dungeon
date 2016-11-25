@@ -57,6 +57,7 @@ public class Potion extends Item {
 
 	private static final Class<?>[] potions = {
 			PotionOfHealing.class,
+			PotionOfCleansing.class,
 			PotionOfExperience.class,
 			PotionOfToxicGas.class,
 			PotionOfLiquidFlame.class,
@@ -83,7 +84,8 @@ public class Potion extends Item {
 			put("bistre",ItemSpriteSheet.POTION_BISTRE);
 			put("charcoal",ItemSpriteSheet.POTION_CHARCOAL);
 			put("silver",ItemSpriteSheet.POTION_SILVER);
-			put("ivory",ItemSpriteSheet.POTION_IVORY);
+            put("ivory",ItemSpriteSheet.POTION_IVORY);
+            put("speckled",ItemSpriteSheet.POTION_SCARLET);
 		}
 	};
 	
