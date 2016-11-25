@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -227,6 +228,7 @@ public class Generator {
 		
 		Category.POTION.classes = new Class<?>[]{
 			PotionOfHealing.class,
+			PotionOfCleansing.class,
 			PotionOfExperience.class,
 			PotionOfToxicGas.class,
 			PotionOfParalyticGas.class,
@@ -238,7 +240,7 @@ public class Generator {
 			PotionOfInvisibility.class,
 			PotionOfMight.class,
 			PotionOfFrost.class };
-		Category.POTION.probs = new float[]{ 45, 4, 15, 10, 15, 10, 0, 20, 12, 10, 0, 10 };
+		Category.POTION.probs = new float[]{ 45, 15, 4, 15, 10, 15, 10, 0, 20, 12, 10, 0, 10 };
 
 		//TODO: add last ones when implemented
 		Category.WAND.classes = new Class<?>[]{
