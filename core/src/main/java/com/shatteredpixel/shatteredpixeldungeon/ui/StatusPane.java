@@ -56,6 +56,7 @@ public class StatusPane extends Component {
 	private Image rawShielding;
 	private Image shieldedHP;
 	private Image hp;
+	private Image food;
 	private Image exp;
 
 	private BossHealthBar bossHP;
@@ -110,8 +111,11 @@ public class StatusPane extends Component {
 		shieldedHP = new Image( Assets.SHLD_BAR );
 		add(shieldedHP);
 
-		hp = new Image( Assets.HP_BAR );
-		add( hp );
+        hp = new Image( Assets.HP_BAR );
+        add( hp );
+
+        food = new Image( Assets.FOOD_BAR );
+        add( food );
 
 		exp = new Image( Assets.XP_BAR );
 		add( exp );
@@ -152,8 +156,11 @@ public class StatusPane extends Component {
 		compass.y = avatar.y + avatar.height / 2f - compass.origin.y;
 		PixelScene.align(compass);
 
-		hp.x = shieldedHP.x = rawShielding.x = 30;
-		hp.y = shieldedHP.y = rawShielding.y = 3;
+        hp.x = shieldedHP.x = rawShielding.x = 30;
+        hp.y = shieldedHP.y = rawShielding.y = 3;
+
+        food.x = 30;
+        food.y = 9;
 
 		bossHP.setPos( 6 + (width - bossHP.width())/2, 20);
 
@@ -176,6 +183,7 @@ public class StatusPane extends Component {
 
 		float health = Dungeon.hero.HP;
 		float shield = Dungeon.hero.SHLD;
+        float energy = Dungeon.hero.getFood();
 		float max = Dungeon.hero.HT;
 
 		if (!Dungeon.hero.isAlive()) {
@@ -189,6 +197,7 @@ public class StatusPane extends Component {
 		}
 
 		hp.scale.x = Math.max( 0, (health-shield)/max);
+        food.scale.x = Math.max( 0, energy/400f );
 		shieldedHP.scale.x = health/max;
 		rawShielding.scale.x = shield/max;
 

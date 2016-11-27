@@ -283,6 +283,13 @@ public abstract class Char extends Actor {
 			die( src );
 		}
 	}
+
+	public float getFood() {
+        if (this.buff(Hunger.class) == null) {
+            return 0f;
+        }
+		return 400f - this.buff(Hunger.class).hunger();
+	}
 	
 	public void destroy() {
 		HP = 0;
