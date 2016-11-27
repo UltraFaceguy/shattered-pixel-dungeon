@@ -85,7 +85,7 @@ public class Potion extends Item {
 			put("charcoal",ItemSpriteSheet.POTION_CHARCOAL);
 			put("silver",ItemSpriteSheet.POTION_SILVER);
             put("ivory",ItemSpriteSheet.POTION_IVORY);
-            put("speckled",ItemSpriteSheet.POTION_SCARLET);
+            put("scarlet",ItemSpriteSheet.POTION_SCARLET);
 		}
 	};
 	
@@ -178,6 +178,7 @@ public class Potion extends Item {
 			this instanceof PotionOfMindVision ||
 			this instanceof PotionOfStrength ||
 			this instanceof PotionOfInvisibility ||
+			this instanceof PotionOfCleansing ||
 			this instanceof PotionOfMight)) {
 		
 			GameScene.show(

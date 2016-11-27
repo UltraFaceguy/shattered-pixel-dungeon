@@ -52,7 +52,7 @@ public class PotionOfCleansing extends Potion {
 	public void apply( Hero hero ) {
 		setKnown();
 		cleanse( Dungeon.hero );
-		GLog.p( Messages.get(this, "cleanse") );
+		GLog.i( Messages.get(this, "cleanse") );
 	}
 	
 	public static void cleanse( Hero hero ) {
