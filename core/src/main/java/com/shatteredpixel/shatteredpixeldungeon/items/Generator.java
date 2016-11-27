@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.RingOfMalice;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -203,7 +204,7 @@ public class Generator {
 	
 	private static HashMap<Category,Float> categoryProbs = new HashMap<Generator.Category, Float>();
 
-	private static final float[] INITIAL_ARTIFACT_PROBS = new float[]{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
+	private static final float[] INITIAL_ARTIFACT_PROBS = new float[]{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1};
 	
 	static {
 		
@@ -357,7 +358,8 @@ public class Generator {
 			AlchemistsToolkit.class, //currently removed from drop tables, pending rework.
 			DriedRose.class, //starts with no chance of spawning, chance is set directly after beating ghost quest.
 			LloydsBeacon.class,
-			EtherealChains.class
+            EtherealChains.class,
+			RingOfMalice.class
 			};
 		Category.ARTIFACT.probs = INITIAL_ARTIFACT_PROBS.clone();
 		
