@@ -175,8 +175,8 @@ public class BuffIndicator extends Component {
 		@Override
 		protected void layout() {
 			super.layout();
-			icon.x = this.x+1;
-			icon.y = this.y+2;
+			icon.x = this.x;
+			icon.y = this.y+5;
 		}
 
 		@Override
