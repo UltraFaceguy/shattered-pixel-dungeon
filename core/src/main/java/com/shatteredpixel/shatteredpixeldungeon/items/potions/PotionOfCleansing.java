@@ -43,7 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 public class PotionOfCleansing extends Potion {
 
 	{
-		initials = 2;
+		initials = 12;
 
 		bones = true;
 	}
