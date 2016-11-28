@@ -18,39 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
+package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
-import com.watabou.utils.Random;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class Rat extends Mob {
+public class Cheese extends Food {
 
 	{
-		spriteClass = RatSprite.class;
-		
-		HP = HT = 8;
-		defenseSkill = 2;
-		
-		maxLvl = 5;
-
-		loot = Cheese.class;
-		lootChance = 0.08f;
+		image = ItemSpriteSheet.CHEESE;
+		energy = Hunger.SNACKY;
+		hornValue = 1;
 	}
 	
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1, 4 );
-	}
-	
-	@Override
-	public int attackSkill( Char target ) {
-		return 8;
-	}
-	
-	@Override
-	public int drRoll() {
-		return Random.NormalIntRange(0, 1);
+	public int price() {
+		return 5 * quantity;
 	}
 }

@@ -24,6 +24,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.AlbinoSprite;
 import com.watabou.utils.Random;
 
@@ -33,6 +35,9 @@ public class Albino extends Rat {
 		spriteClass = AlbinoSprite.class;
 		
 		HP = HT = 15;
+
+		loot = Cheese.class;
+		lootChance = 1.0f;
 	}
 	
 	@Override
