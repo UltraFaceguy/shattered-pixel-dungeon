@@ -195,8 +195,8 @@ public abstract class Char extends Actor {
 	public static boolean hit( Char attacker, Char defender, boolean magic ) {
 		float acuRoll = Random.Float( attacker.attackSkill( defender ) );
 		float defRoll = Random.Float( defender.defenseSkill( attacker ) );
-		if (attacker.buff(Bless.class) != null) acuRoll *= 1.20f;
-		if (defender.buff(Bless.class) != null) defRoll *= 1.20f;
+		if (attacker.buff(Bless.class) != null) acuRoll *= 1.50f;
+		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		return (magic ? acuRoll * 2 : acuRoll) >= defRoll;
 	}
 	
@@ -261,20 +261,24 @@ public abstract class Char extends Actor {
 		}
 
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
+        boolean fullyShielded = false;
 		if (src instanceof Hunger || SHLD == 0){
 			HP -= dmg;
 		} else if (SHLD >= dmg){
+            fullyShielded = true;
 			SHLD -= dmg;
 		} else if (SHLD > 0) {
 			HP -= (dmg - SHLD);
 			SHLD = 0;
+            dmg -= SHLD;
 		}
 
 		if (dmg > 0 || src instanceof Char) {
-			sprite.showStatus( HP > HT / 2 ?
-				CharSprite.WARNING :
-				CharSprite.NEGATIVE,
-				Integer.toString( dmg ) );
+            if (fullyShielded) {
+                sprite.showStatus(CharSprite.DEFAULT, Integer.toString(dmg));
+            } else {
+                sprite.showStatus(CharSprite.WARNING, Integer.toString(dmg));
+            }
 		}
 
 		if (HP < 0) HP = 0;
