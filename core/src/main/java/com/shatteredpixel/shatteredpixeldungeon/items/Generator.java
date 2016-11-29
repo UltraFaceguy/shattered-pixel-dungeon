@@ -73,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTranquility;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
@@ -342,8 +343,9 @@ public class Generator {
 			RingOfMight.class,
 			RingOfSharpshooting.class,
 			RingOfTenacity.class,
-			RingOfWealth.class};
-		Category.RING.probs = new float[]{ 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 };
+			RingOfWealth.class,
+			RingOfTranquility.class};
+		Category.RING.probs = new float[]{ 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 };
 
 		Category.ARTIFACT.classes = new Class<?>[]{
 			CapeOfThorns.class,

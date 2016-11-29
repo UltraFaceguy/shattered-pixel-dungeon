@@ -22,9 +22,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTranquility;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -48,8 +51,15 @@ public class Dewdrop extends Item {
 			
 			int value = 1 + (Dungeon.depth - 1) / 5;
 			if (hero.subClass == HeroSubClass.WARDEN) {
-				value+=2;
+				value += 2;
 			}
+
+			int bonus = RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
+            if (bonus > 0) {
+                hero.buff(Hunger.class).satisfy(bonus);
+            }
+
+			value = Math.max(value + bonus, 1);
 			
 			int effect = Math.min( hero.HT - hero.HP, value * quantity );
 			if (effect > 0) {

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTranquility;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -90,8 +91,8 @@ public class DewVial extends Item {
 				if (hero.heroClass == HeroClass.HUNTRESS) {
 					value++;
 				}
-				value *= volume;
-				value = (int)Math.max(volume*volume*.01*hero.HT, value);
+				value += RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
+				value *= Math.pow(volume, 1.5);
 				int effect = Math.min( hero.HT - hero.HP, value );
 				if (effect > 0) {
 					hero.HP += effect;
