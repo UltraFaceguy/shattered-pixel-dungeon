@@ -30,9 +30,9 @@ public class Crab extends Mob {
 	{
 		spriteClass = CrabSprite.class;
 		
-		HP = HT = 14;
-		defenseSkill = 3;
-		baseSpeed = 2.5f;
+		HP = HT = 12;
+		defenseSkill = 4;
+		baseSpeed = 2f;
 		
 		EXP = 4;
 		maxLvl = 9;
@@ -43,7 +43,7 @@ public class Crab extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 8 );
+		return Random.NormalIntRange( 3, 7 );
 	}
 	
 	@Override
@@ -53,6 +53,6 @@ public class Crab extends Mob {
 	
 	@Override
 	public int drRoll() {
-		return Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 4);
 	}
 }

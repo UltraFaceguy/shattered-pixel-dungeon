@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BombBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
@@ -205,7 +206,7 @@ public class Generator {
 	
 	private static HashMap<Category,Float> categoryProbs = new HashMap<Generator.Category, Float>();
 
-	private static final float[] INITIAL_ARTIFACT_PROBS = new float[]{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1};
+	private static final float[] INITIAL_ARTIFACT_PROBS = new float[]{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1};
 	
 	static {
 		
@@ -361,7 +362,8 @@ public class Generator {
 			DriedRose.class, //starts with no chance of spawning, chance is set directly after beating ghost quest.
 			LloydsBeacon.class,
             EtherealChains.class,
-			RingOfMalice.class
+			RingOfMalice.class,
+			BombBag.class
 			};
 		Category.ARTIFACT.probs = INITIAL_ARTIFACT_PROBS.clone();
 		

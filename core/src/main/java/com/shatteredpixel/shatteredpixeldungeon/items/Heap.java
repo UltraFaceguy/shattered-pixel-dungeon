@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
@@ -240,7 +241,7 @@ public class Heap implements Bundlable {
 				burnt = true;
 			} else if (item instanceof Bomb) {
 				items.remove( item );
-				((Bomb) item).explode( pos );
+				((Bomb) item).detonate( pos );
 				//stop processing the burning, it will be replaced by the explosion.
 				return;
 			}
@@ -290,7 +291,7 @@ public class Heap implements Bundlable {
 
 				} else if (item instanceof Bomb) {
 					items.remove( item );
-					((Bomb) item).explode(pos);
+					((Bomb) item).detonate(pos);
 					//stop processing current explosion, it will be replaced by the new one.
 					return;
 

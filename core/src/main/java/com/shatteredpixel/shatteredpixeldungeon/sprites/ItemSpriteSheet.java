@@ -42,7 +42,8 @@ public class ItemSpriteSheet {
 	public static final int DEWDROP         = UNCOLLECTIBLE+1;
 	public static final int PETAL           = UNCOLLECTIBLE+2;
 	public static final int SANDBAG         = UNCOLLECTIBLE+3;
-	public static final int DBL_BOMB        = UNCOLLECTIBLE+4;
+    public static final int DBL_BOMB        = UNCOLLECTIBLE+4;
+    public static final int SMALL_BOMB      = UNCOLLECTIBLE+5;
 
 	private static final int CONTAINERS     =                               xy(1, 2);   //16 slots
 	public static final int BONES           = CONTAINERS+0;
@@ -188,6 +189,7 @@ public class ItemSpriteSheet {
 	public static final int ARTIFACT_ROSE2      = ARTIFACTS+21;
 	public static final int ARTIFACT_ROSE3      = ARTIFACTS+22;
 	public static final int ARTIFACT_RING       = ARTIFACTS+23;
+	public static final int ARTIFACT_BOMB       = ARTIFACTS+24;
 
 	                                                                                    //32 free slots
 

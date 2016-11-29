@@ -20,7 +20,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
-import com.shatteredpixel.shatteredpixeldungeon.items.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 
 public class ExplosiveTrap extends Trap {
 
@@ -31,7 +31,7 @@ public class ExplosiveTrap extends Trap {
 
 	@Override
 	public void activate() {
-		new Bomb().explode(pos);
+		new Bomb().detonate(pos);
 	}
 
 }
