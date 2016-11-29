@@ -91,20 +91,20 @@ public class Bestiary {
 			break;
 			
 		case 6:
-			chances = new float[]{ 3, 1, 1,     0.2f };
-			classes = new Class<?>[]{ Skeleton.class, Thief.class, Swarm.class,   Shaman.class };
+			chances = new float[]{ 3, 1, 1, 0.2f };
+			classes = new Class<?>[]{ Skeleton.class, Thief.class, Swarm.class, Shaman.class };
 			break;
 		case 7:
-			chances = new float[]{ 3, 1, 1, 1 };
-			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Thief.class, Guard.class };
+			chances = new float[]{ 3, 1, 1, 1, 0.02f };
+			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Thief.class, Guard.class, FetidRat.class };
 			break;
 		case 8:
-			chances = new float[]{ 3, 2, 2, 1,   0.02f };
-			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Guard.class, Thief.class,   Bat.class };
+			chances = new float[]{ 3, 2, 2, 1, 0.04f, 0.02f };
+			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Guard.class, Thief.class, Bat.class, GnollTrickster.class};
 			break;
 		case 9:
-			chances = new float[]{ 3, 3, 2, 1,   0.02f, 0.01f };
-			classes = new Class<?>[]{ Skeleton.class, Guard.class, Shaman.class, Thief.class,   Bat.class, Brute.class };
+			chances = new float[]{ 3, 3, 2, 1, 0.04f, 0.02f, 0.02f, 0.02f };
+			classes = new Class<?>[]{ Skeleton.class, Guard.class, Shaman.class, Thief.class, Bat.class, Brute.class, FetidRat.class, GnollTrickster.class };
 			break;
 			
 		case 10:

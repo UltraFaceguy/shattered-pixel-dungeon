@@ -26,9 +26,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.CurareDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -49,7 +51,7 @@ public class GnollTrickster extends Gnoll {
 
 		state = WANDERING;
 
-		loot = Generator.random(CurareDart.class);
+		loot = Generator.random(Gold.class);
 		lootChance = 1f;
 
 		properties.add(Property.MINIBOSS);
@@ -72,26 +74,21 @@ public class GnollTrickster extends Gnoll {
 	public int attackProc( Char enemy, int damage ) {
 		//The gnoll's attacks get more severe the more the player lets it hit them
 		combo++;
-		int effect = Random.Int(4)+combo;
+		int effect = Random.Int(4) + combo;
 
-		if (effect > 2) {
+		if (combo > 2) {
+            Buff.affect(enemy, Poison.class).set(effect * Poison.durationFactor(enemy));
+            if (combo > 4) {
+                Buff.prolong( enemy, Cripple.class, Cripple.DURATION / 2);
+            }
+        }
 
-			if (effect >=6 && enemy.buff(Burning.class) == null){
-
-				if (Level.flamable[enemy.pos])
-					GameScene.add(Blob.seed(enemy.pos, 4, Fire.class));
-				Buff.affect(enemy, Burning.class).reignite( enemy );
-
-			} else
-				Buff.affect( enemy, Poison.class).set((effect-2) * Poison.durationFactor(enemy));
-
-		}
-		return damage;
+		return damage + 1;
 	}
 
 	@Override
 	protected boolean getCloser( int target ) {
-		combo = 0; //if he's moving, he isn't attacking, reset combo.
+        combo = Math.max(combo-2, 0); //if he's moving, he isn't attacking, reduce combo.
 		if (state == HUNTING) {
 			return enemySeen && getFurther( target );
 		} else {
