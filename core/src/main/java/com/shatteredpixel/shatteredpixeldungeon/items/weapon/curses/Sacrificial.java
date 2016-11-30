@@ -44,7 +44,7 @@ public class Sacrificial extends Weapon.Enchantment {
 		}
 
 		if (damage > defender.HP) {
-            int healing = (defender.HT * Random.Int(3 + weapon.level() * 2)) / 100;
+            int healing = (defender.HT * Random.Int(6 + weapon.level() * 4)) / 100;
             healing = Math.max(1, healing);
             defender.sprite.emitter().burst(SacrificialParticle.FACTORY, 5 );
             attacker.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
