@@ -95,7 +95,6 @@ public class DewVial extends Item {
 				value *= Math.pow(volume, 1.5);
 				if (value >= 0) {
 					hero.heal(value);
-					hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), volume > 5 ? 2 : 1 );
 				} else {
                     hero.damage(value, null);
                     hero.sprite.emitter().burst(Speck.factory(Speck.DUST), 1);

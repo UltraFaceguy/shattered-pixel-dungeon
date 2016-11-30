@@ -60,7 +60,6 @@ public class Dewdrop extends Item {
             if (value >= 0) {
                 Sample.INSTANCE.play( Assets.SND_DEWDROP );
                 hero.heal(value);
-                hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
                 if (bonus > 0) {
                     hero.buff(Hunger.class).satisfy(bonus);
                 }

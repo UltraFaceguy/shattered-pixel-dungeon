@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Speed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
@@ -292,6 +293,7 @@ public abstract class Char extends Actor {
         amount = Math.min(amount, HT - HP);
         if (amount > 0) {
             sprite.showStatus(CharSprite.POSITIVE, Integer.toString(amount));
+            sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 1 + (amount / 10) );
             HP += amount;
         }
     }

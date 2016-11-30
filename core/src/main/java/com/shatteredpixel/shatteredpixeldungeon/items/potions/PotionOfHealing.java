@@ -47,9 +47,7 @@ public class PotionOfHealing extends Potion {
 	}
 	
 	public static void fullHeal( Hero hero ) {
-		
 		hero.heal(hero.HT);
-		hero.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 	}
 
 	@Override
