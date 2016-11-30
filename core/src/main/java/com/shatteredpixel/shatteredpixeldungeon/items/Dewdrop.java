@@ -56,7 +56,7 @@ public class Dewdrop extends Item {
 
         value = value + bonus;
 
-        if (hero.HP + value < hero.HT) {
+        if (hero.HP < hero.HT) {
             if (value >= 0) {
                 Sample.INSTANCE.play( Assets.SND_DEWDROP );
                 value = Math.min( hero.HT - hero.HP, value );
