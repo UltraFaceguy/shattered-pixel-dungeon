@@ -94,10 +94,13 @@ public class DewVial extends Item {
 				value += RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
 				value *= Math.pow(volume, 1.5);
 				int effect = Math.min( hero.HT - hero.HP, value );
-				if (effect > 0) {
+				if (effect >= 0) {
 					hero.HP += effect;
 					hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), volume > 5 ? 2 : 1 );
 					hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "value", effect) );
+				} else {
+                    hero.damage(value, null);
+                    hero.sprite.emitter().burst(Speck.factory(Speck.DUST), 1);
 				}
 
 				volume = 0;

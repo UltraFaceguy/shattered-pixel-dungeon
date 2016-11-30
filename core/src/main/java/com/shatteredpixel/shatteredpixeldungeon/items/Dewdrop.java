@@ -46,38 +46,40 @@ public class Dewdrop extends Item {
 	public boolean doPickUp( Hero hero ) {
 		
 		DewVial vial = hero.belongings.getItem( DewVial.class );
-		
-		if (hero.HP < hero.HT || vial == null || vial.isFull()) {
-			
-			int value = 1 + (Dungeon.depth - 1) / 5;
-			if (hero.subClass == HeroSubClass.WARDEN) {
-				value += 2;
-			}
 
-			int bonus = RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
-            if (bonus > 0) {
-                hero.buff(Hunger.class).satisfy(bonus);
+        int value = 1 + (Dungeon.depth - 1) / 5;
+        if (hero.subClass == HeroSubClass.WARDEN) {
+            value += 2;
+        }
+
+        int bonus = RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
+
+        value = value + bonus;
+
+        if (hero.HP + value < hero.HT) {
+            if (value >= 0) {
+                Sample.INSTANCE.play( Assets.SND_DEWDROP );
+                value = Math.min( hero.HT - hero.HP, value );
+                hero.HP += value;
+                hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+                hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "value", value));
+                if (bonus > 0) {
+                    hero.buff(Hunger.class).satisfy(bonus);
+                }
+            } else {
+                Sample.INSTANCE.play( Assets.SND_ZAP );
+                hero.damage(value, null);
+                hero.sprite.emitter().burst(Speck.factory(Speck.DUST), 1);
             }
-
-			value = Math.max(value + bonus, 1);
-			
-			int effect = Math.min( hero.HT - hero.HP, value * quantity );
-			if (effect > 0) {
-				hero.HP += effect;
-				hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-				hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "value", effect) );
-			} else {
-				GLog.i( Messages.get(this, "already_full") );
-				return false;
-			}
-			
-		} else {
-			
-			vial.collectDew( this );
-			
-		}
-		
-		Sample.INSTANCE.play( Assets.SND_DEWDROP );
+        } else {
+            if (vial == null || vial.isFull()) {
+                GLog.i(Messages.get(this, "already_full"));
+                return false;
+            } else {
+                Sample.INSTANCE.play( Assets.SND_DEWDROP );
+                vial.collectDew(this);
+            }
+        }
 		hero.spendAndNext( TIME_TO_PICK_UP );
 		
 		return true;
