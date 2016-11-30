@@ -23,7 +23,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 
@@ -34,9 +39,18 @@ public class Sacrificial extends Weapon.Enchantment {
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage ) {
 
-		if (Random.Int(12) == 0){
+		if (Random.Int(8 + weapon.level()) == 0){
 			Buff.affect(attacker, Bleeding.class).set(Math.max(1, attacker.HP/6));
 		}
+
+		if (damage > defender.HP) {
+            int healing = (defender.HT * Random.Int(3 + weapon.level() * 2)) / 100;
+            healing = Math.max(1, healing);
+            defender.sprite.emitter().burst(SacrificialParticle.FACTORY, 5 );
+            attacker.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+            attacker.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( healing ) );
+            attacker.HP += healing;
+        }
 
 		return damage;
 	}
