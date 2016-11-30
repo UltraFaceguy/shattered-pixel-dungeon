@@ -82,14 +82,15 @@ public class Sungrass extends Plant {
 			if (target.pos != pos) {
 				detach();
 			}
-			if (count == 5) {
-				if (level <= healCurr*.025*target.HT) {
-					target.HP = Math.min(target.HT, target.HP + level);
+			if (count == 3) {
+                int amount = (int)(healCurr * 0.015 * target.HT);
+				if (level <= amount) {
+					target.heal(level);
 					target.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 					detach();
 				} else {
-					target.HP = Math.min(target.HT, target.HP+(int)(healCurr*.025*target.HT));
-					level -= (healCurr*.025*target.HT);
+					target.heal(amount);
+					level -= amount;
 					if (healCurr < 6)
 						healCurr ++;
 					target.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
