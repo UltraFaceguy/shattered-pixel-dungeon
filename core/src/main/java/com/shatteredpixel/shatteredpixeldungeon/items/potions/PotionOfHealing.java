@@ -42,14 +42,13 @@ public class PotionOfHealing extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-		heal( Dungeon.hero );
+		fullHeal( Dungeon.hero );
 		GLog.p( Messages.get(this, "heal") );
 	}
 	
-	public static void heal( Hero hero ) {
+	public static void fullHeal( Hero hero ) {
 		
-		hero.HP = hero.HT;
-		
+		hero.heal(hero.HT);
 		hero.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 	}
 

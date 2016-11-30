@@ -45,7 +45,7 @@ public class WaterOfHealth extends WellWater {
 		
 		Sample.INSTANCE.play( Assets.SND_DRINK );
 		
-		PotionOfHealing.heal( hero );
+		PotionOfHealing.fullHeal( hero );
 		PotionOfCleansing.cleanse( hero );
 		hero.belongings.uncurseEquipped();
 		hero.buff( Hunger.class ).satisfy( Hunger.STARVING );
