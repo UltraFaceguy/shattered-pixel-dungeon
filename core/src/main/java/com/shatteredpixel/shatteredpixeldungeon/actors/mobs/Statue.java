@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampiric;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
 import com.watabou.utils.Bundle;
@@ -58,7 +57,7 @@ public class Statue extends Mob {
 		} while (!(weapon instanceof MeleeWeapon) || weapon.cursed);
 		
 		weapon.identify();
-		weapon.enchant( Enchantment.random() );
+		weapon.enchant( Enchantment.randomEnchantment() );
 		
 		HP = HT = 15 + Dungeon.depth * 5;
 		defenseSkill = 4 + Dungeon.depth;

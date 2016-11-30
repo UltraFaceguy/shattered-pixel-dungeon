@@ -59,15 +59,13 @@ public class Dewdrop extends Item {
         if (hero.HP < hero.HT) {
             if (value >= 0) {
                 Sample.INSTANCE.play( Assets.SND_DEWDROP );
-                value = Math.min( hero.HT - hero.HP, value );
-                hero.HP += value;
+                hero.heal(value);
                 hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
-                hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "value", value));
                 if (bonus > 0) {
                     hero.buff(Hunger.class).satisfy(bonus);
                 }
             } else {
-                Sample.INSTANCE.play( Assets.SND_ZAP );
+                Sample.INSTANCE.play( Assets.SND_HIT );
                 hero.damage(value, null);
                 hero.sprite.emitter().burst(Speck.factory(Speck.DUST), 1);
             }

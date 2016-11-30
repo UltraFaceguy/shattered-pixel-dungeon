@@ -200,7 +200,7 @@ abstract public class Weapon extends KindOfWeapon {
 	public Item upgrade( boolean enchant ) {
 
 		if (enchant && (enchantment == null || enchantment.curse())){
-			enchant( Enchantment.random() );
+			enchant( Enchantment.randomEnchantment() );
 		} else if (!enchant && Random.Float() > Math.pow(0.9, level())){
 			enchant(null);
 		}
@@ -246,9 +246,9 @@ abstract public class Weapon extends KindOfWeapon {
 	public Weapon enchant() {
 
 		Class<? extends Enchantment> oldEnchantment = enchantment != null ? enchantment.getClass() : null;
-		Enchantment ench = Enchantment.random();
+		Enchantment ench = Enchantment.randomEnchantment();
 		while (ench.getClass() == oldEnchantment) {
-			ench = Enchantment.random();
+			ench = Enchantment.randomEnchantment();
 		}
 
 		return enchant( ench );
@@ -328,7 +328,7 @@ abstract public class Weapon extends KindOfWeapon {
 		public abstract ItemSprite.Glowing glowing();
 		
 		@SuppressWarnings("unchecked")
-		public static Enchantment random() {
+		public static Enchantment randomEnchantment() {
 			try {
 				return ((Class<Enchantment>)enchants[ Random.chances( chances ) ]).newInstance();
 			} catch (Exception e) {

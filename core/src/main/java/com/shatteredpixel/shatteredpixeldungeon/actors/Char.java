@@ -288,6 +288,14 @@ public abstract class Char extends Actor {
 		}
 	}
 
+	public void heal( int amount ) {
+        amount = Math.min(amount, HT - HP);
+        if (amount > 0) {
+            sprite.showStatus(CharSprite.POSITIVE, Integer.toString(amount));
+            HP += amount;
+        }
+    }
+
 	public float getFood() {
         if (this.buff(Hunger.class) == null) {
             return 0f;
