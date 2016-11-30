@@ -44,9 +44,9 @@ public class Divine extends Weapon.Enchantment {
 		// lvl 2 - 30%
 		int level = Math.max( 0, weapon.level() );
 		
-		if (Random.Int(11 + level) >= 9) {
-			Buff.prolong(attacker, Bless.class, 1 + (level / 2));
-            CellEmitter.get(attacker.pos).start(Speck.factory(Speck.LIGHT), 0.1f, 2);
+		if (Random.Int(11 + level) > 9) {
+			Buff.prolong(attacker, Bless.class, 1 + Random.Int(1 + level / 2));
+            CellEmitter.get(attacker.pos).start(Speck.factory(Speck.LIGHT), 0.1f, 4);
 		}
 
 		return damage;
