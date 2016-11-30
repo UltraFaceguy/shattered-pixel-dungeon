@@ -27,7 +27,7 @@ public class Cheese extends Food {
 
 	{
 		image = ItemSpriteSheet.CHEESE;
-		energy = Hunger.SNACKY;
+		energy = Hunger.NIBBLE;
 		hornValue = 1;
 	}
 	

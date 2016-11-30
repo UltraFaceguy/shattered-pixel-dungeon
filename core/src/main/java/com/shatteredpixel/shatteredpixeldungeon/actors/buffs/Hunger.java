@@ -36,7 +36,11 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	private static final float STEP	= 10f;
 
-	public static final float SNACKY	= 55f;
+    public static final float NIBBLE	= 60f;
+    public static final float BITE  	= 120f;
+    public static final float SNACK 	= 180f;
+    public static final float MEAL  	= 240f;
+
 	public static final float HUNGRY	= 300f;
 	public static final float STARVING	= 400f;
 
@@ -138,7 +142,9 @@ public class Hunger extends Buff implements Hero.Doom {
 		level -= energy;
 		if (level < 0) {
 			level = 0;
-		} else if (level > STARVING) {
+		} else if (level >= HUNGRY) {
+			level = HUNGRY;
+		} else if (level >= STARVING) {
 			level = STARVING;
 		}
 
