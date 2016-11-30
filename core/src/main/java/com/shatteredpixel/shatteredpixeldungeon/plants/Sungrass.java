@@ -82,23 +82,21 @@ public class Sungrass extends Plant {
 			if (target.pos != pos) {
 				detach();
 			}
-			if (count == 3) {
-                int amount = (int)(healCurr * 0.015 * target.HT);
+			if (count == 2) {
+                int amount = 1 + (int)(healCurr * 0.01 * target.HT);
 				if (level <= amount) {
 					target.heal(level);
-					target.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 					detach();
 				} else {
 					target.heal(amount);
 					level -= amount;
-					if (healCurr < 6)
-						healCurr ++;
-					target.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+					if (healCurr < 12)
+						healCurr++;
 				}
 				if (target.HP == target.HT && target instanceof Hero){
 					((Hero)target).resting = false;
 				}
-				count = 1;
+				count = 0;
 			} else {
 				count++;
 			}
