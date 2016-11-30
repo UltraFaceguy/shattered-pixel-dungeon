@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Dazzling;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Divine;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Eldritch;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
@@ -272,13 +273,24 @@ abstract public class Weapon extends KindOfWeapon {
 	public static abstract class Enchantment implements Bundlable {
 
 		private static final Class<?>[] enchants = new Class<?>[]{
-			Blazing.class, Venomous.class, Vorpal.class, Shocking.class,
-			Chilling.class, Eldritch.class, Lucky.class, Projecting.class, Unstable.class, Dazzling.class,
-			Grim.class, Stunning.class, Vampiric.class,};
+				Blazing.class,
+				Venomous.class,
+				Vorpal.class,
+				Shocking.class,
+				Chilling.class,
+				Eldritch.class,
+				Lucky.class,
+				Projecting.class,
+				Unstable.class,
+				Dazzling.class,
+				Grim.class,
+				Stunning.class,
+				Vampiric.class,
+				Divine.class
+		};
 		private static final float[] chances= new float[]{
-			10, 10, 10, 10,
-			5, 5, 5, 5, 5, 5,
-			2, 2, 2 };
+			8, 8, 8, 8, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2
+        };
 
 		private static final Class<?>[] curses = new Class<?>[]{
 				Annoying.class, Displacing.class, Exhausting.class, Fragile.class, Sacrificial.class, Wayward.class

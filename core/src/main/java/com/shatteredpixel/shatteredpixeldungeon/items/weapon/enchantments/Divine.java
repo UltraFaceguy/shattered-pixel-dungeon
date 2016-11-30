@@ -20,42 +20,40 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EnergyParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.watabou.utils.Random;
 
-public class Unstable extends Weapon.Enchantment {
+public class Divine extends Weapon.Enchantment {
 
-	private static ItemSprite.Glowing WHITE = new ItemSprite.Glowing( 0xFFFFFF );
-
-	private static Class<?extends Weapon.Enchantment>[] randomEnchants = new Class[]{
-			Blazing.class,
-			Chilling.class,
-			Dazzling.class,
-			Divine.class,
-			Eldritch.class,
-			Grim.class,
-			Lucky.class,
-			Shocking.class,
-			Stunning.class,
-			Vampiric.class,
-			Vorpal.class
-	};
-
+	private static Glowing LIGHT_YELLOW = new Glowing( 0xFFFFDC );
+	
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		try {
-			return Random.oneOf(randomEnchants).newInstance().proc( weapon, attacker, defender, damage );
-		} catch (Exception e) {
-			ShatteredPixelDungeon.reportException(e);
-			return damage;
+		// lvl 0 - 10%
+		// lvl 1 - 18%
+		// lvl 2 - 25%
+		// lvl 2 - 30%
+		int level = Math.max( 0, weapon.level() );
+		
+		if (Random.Int(11 + level) >= 9) {
+			Buff.prolong(attacker, Bless.class, 1 + (level / 2));
+            CellEmitter.get(attacker.pos).start(Speck.factory(Speck.LIGHT), 0.1f, 2);
 		}
-	}
 
+		return damage;
+	}
+	
 	@Override
-	public ItemSprite.Glowing glowing() {
-		return WHITE;
+	public Glowing glowing() {
+		return LIGHT_YELLOW;
 	}
 }

@@ -36,7 +36,7 @@ import java.util.HashSet;
 
 public class Shocking extends Weapon.Enchantment {
 
-	private static ItemSprite.Glowing WHITE = new ItemSprite.Glowing( 0xFFFFFF, 0.6f );
+	private static ItemSprite.Glowing LIGHT_BLUE = new ItemSprite.Glowing( 0xDCF9FF, 0.6f );
 
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
@@ -64,7 +64,7 @@ public class Shocking extends Weapon.Enchantment {
 
 	@Override
 	public ItemSprite.Glowing glowing() {
-		return WHITE;
+		return LIGHT_BLUE;
 	}
 
 	private ArrayList<Char> affected = new ArrayList<>();
