@@ -44,17 +44,12 @@ public class Metabolism extends Glyph {
 			int healing = Math.min((int)Hunger.STARVING/100, defender.HT - defender.HP);
 
 			if (healing > 0) {
-				
 				Hunger hunger = defender.buff( Hunger.class );
 				
 				if (hunger != null && !hunger.isStarving()) {
-					
 					hunger.reduceHunger( healing * -10 );
 					BuffIndicator.refreshHero();
-					
-					defender.HP += healing;
-					defender.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-					defender.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( healing ) );
+					defender.heal(healing);
 				}
 			}
 
