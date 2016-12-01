@@ -293,7 +293,7 @@ public abstract class Char extends Actor {
         amount = Math.min(amount, HT - HP);
         if (amount > 0) {
             sprite.showStatus(CharSprite.POSITIVE, Integer.toString(amount));
-            sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 1 + (amount / 10) );
+            sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 + (amount / 10) );
             HP += amount;
         }
     }
