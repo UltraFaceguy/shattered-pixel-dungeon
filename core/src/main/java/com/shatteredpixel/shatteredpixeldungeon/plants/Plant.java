@@ -68,11 +68,6 @@ public abstract class Plant implements Bundlable {
 	public abstract void activate();
 	
 	public void wither() {
-		if (Dungeon.hero.belongings.armor.hasGlyph(Blight.class)) {
-			Blight b = (Blight)Dungeon.hero.belongings.armor.glyph;
-			b.blightGround(Dungeon.hero.pos);
-            return;
-		}
 		Dungeon.level.uproot( pos );
 
 		if (Dungeon.visible[pos]) {

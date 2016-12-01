@@ -41,7 +41,9 @@ public class Blight extends Armor.Glyph {
 
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
-        blightGround(defender.pos);
+        if (Random.Int(4) != 0) {
+            blightArea(defender.pos);
+        }
 		return damage;
 	}
 
@@ -55,50 +57,41 @@ public class Blight extends Armor.Glyph {
 		return true;
 	}
 
-    public void blightGround(int pos) {
+    public void blightCell (int pos) {
+        if (pos >= 0 && pos < Dungeon.level.length()) {
+            Plant plant = Dungeon.level.plants.get( pos );
+            if (plant != null) {
+                Dungeon.level.uproot(pos);
+            }
 
-        if (Random.Int(4) != 0) {
-            return;
+            int tile = Dungeon.level.map[pos];
+            if (tile == Terrain.HIGH_GRASS || tile == Terrain.GRASS) {
+                Dungeon.level.destroy(pos);
+                GameScene.updateMap(pos);
+                if (Dungeon.visible[pos]) {
+                    CellEmitter.get(pos).burst(SmokeParticle.FACTORY, 1);
+                }
+            }
         }
+    }
 
-        boolean terrainAffected = false;
+    public void blightArea(int pos) {
 
         for (int n : PathFinder.NEIGHBOURS9) {
-
-            if (Random.Int(2) != 0 && n != 0) {
+            if (n != 0 && Random.Int(2) == 0) {
                 continue;
             }
 
             int c = pos + n;
-            int tile;
+            blightCell(c);
 
-            if (c >= 0 && c < Dungeon.level.length()) {
-                Char ch = Actor.findChar(c);
-                if (ch != null) {
-                    if (ch instanceof RotHeart || ch instanceof RotLasher) {
-                        CellEmitter.get(c).burst(SmokeParticle.FACTORY, 1);
-                        ch.damage(ch.HP, null);
-                    }
-                }
-
-                Plant plant = Dungeon.level.plants.get( c );
-                if (plant != null) {
-                    Dungeon.level.uproot(c);
-                }
-
-                tile = Dungeon.level.map[c];
-                if (tile == Terrain.HIGH_GRASS || tile == Terrain.GRASS) {
-                    Dungeon.level.destroy(c);
-                    GameScene.updateMap(c);
-                    terrainAffected = true;
-                    if (Dungeon.visible[c]) {
-                        CellEmitter.get(c).burst(SmokeParticle.FACTORY, 1);
-                    }
+            Char ch = Actor.findChar(c);
+            if (ch != null) {
+                if (ch instanceof RotHeart || ch instanceof RotLasher) {
+                    CellEmitter.get(pos).burst(SmokeParticle.FACTORY, 1);
+                    ch.damage(ch.HP, null);
                 }
             }
-        }
-        if (terrainAffected) {
-            Dungeon.observe();
         }
     }
 }
