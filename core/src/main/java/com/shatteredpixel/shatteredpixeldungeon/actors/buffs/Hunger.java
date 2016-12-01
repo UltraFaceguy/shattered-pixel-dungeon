@@ -132,14 +132,14 @@ public class Hunger extends Buff implements Hero.Doom {
 			GLog.n( Messages.get(this, "cursedhorn") );
 		}
 
-		if (!Dungeon.isChallenged(Challenges.NO_FOOD))
-			reduceHunger( energy );
+		if (!Dungeon.isChallenged(Challenges.NO_FOOD)) {
+			reduceHunger(energy);
+		}
 	}
 
 	//directly interacts with hunger, no checks.
 	public void reduceHunger( float energy ) {
-
-		level -= energy;
+		level = Math.max(0, level - energy);
 		if (level < 0) {
 			level = 0;
 		} else if (level >= HUNGRY) {
