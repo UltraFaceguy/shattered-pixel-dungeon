@@ -21,6 +21,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -60,7 +61,7 @@ public class Dewdrop extends Item {
             if (value >= 0) {
                 Sample.INSTANCE.play( Assets.SND_DEWDROP );
                 hero.heal(value);
-                if (bonus > 0) {
+                if (bonus > 0 && !Dungeon.isChallenged(Challenges.NO_FOOD)) {
                     hero.buff(Hunger.class).satisfy(bonus);
                 }
             } else {
