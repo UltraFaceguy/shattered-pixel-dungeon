@@ -27,7 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 
-public class Blighting extends Weapon.Enchantment {
+public class Starving extends Weapon.Enchantment {
 
 	private static ItemSprite.Glowing BROWN = new ItemSprite.Glowing( 0x9F6F22 );
 

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Blight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -67,6 +68,11 @@ public abstract class Plant implements Bundlable {
 	public abstract void activate();
 	
 	public void wither() {
+		if (Dungeon.hero.belongings.armor.hasGlyph(Blight.class)) {
+			Blight b = (Blight)Dungeon.hero.belongings.armor.glyph;
+			b.blightGround(Dungeon.hero.pos);
+            return;
+		}
 		Dungeon.level.uproot( pos );
 
 		if (Dungeon.visible[pos]) {
