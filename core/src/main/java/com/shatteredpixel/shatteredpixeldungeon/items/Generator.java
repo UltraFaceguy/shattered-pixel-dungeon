@@ -132,6 +132,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.CurareDart
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.IncendiaryDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.SerratedDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tamahawk;
 import com.shatteredpixel.shatteredpixeldungeon.plants.BlandfruitBush;
@@ -294,9 +295,10 @@ public class Generator {
 			Sai.class,
 			Whip.class,
 			Shuriken.class,
-			CurareDart.class
+			CurareDart.class,
+			SerratedDart.class
 		};
-		Category.WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 6, 6 };
+		Category.WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 6, 6, 3 };
 
 		Category.WEP_T4.classes = new Class<?>[]{
 			Longsword.class,
@@ -304,9 +306,10 @@ public class Generator {
 			Flail.class,
 			RunicBlade.class,
 			AssassinsBlade.class,
-			Javelin.class
+			Javelin.class,
+			SerratedDart.class
 		};
-		Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6 };
+		Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6, 2 };
 
 		Category.WEP_T5.classes = new Class<?>[]{
 			Greatsword.class,

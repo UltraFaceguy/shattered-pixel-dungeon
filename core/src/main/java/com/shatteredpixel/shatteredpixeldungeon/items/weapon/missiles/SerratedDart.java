@@ -49,10 +49,6 @@ public class SerratedDart extends MissileWeapon {
 		return 14;
 	}
 
-	public SerratedDart() {
-		this( 1 );
-	}
-
 	public SerratedDart(int number ) {
 		super();
 		quantity = number;
