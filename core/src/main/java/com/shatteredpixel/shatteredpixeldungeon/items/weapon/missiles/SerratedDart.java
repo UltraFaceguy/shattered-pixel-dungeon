@@ -32,6 +32,8 @@ public class SerratedDart extends MissileWeapon {
 
 	{
 		image = ItemSpriteSheet.SERRATED_DART;
+
+        bones = true;
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class SerratedDart extends MissileWeapon {
 
 	@Override
 	public int max(int lvl) {
-		return 6;
+		return 5;
 	}
 
 	@Override
@@ -49,16 +51,13 @@ public class SerratedDart extends MissileWeapon {
 		return 14;
 	}
 
+    public SerratedDart() {
+        this( 1 );
+    }
+
 	public SerratedDart(int number ) {
 		super();
 		quantity = number;
-	}
-	
-	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.affect(defender, Bleeding.class).set(damage + defender.HT / 10);
-		Buff.prolong(defender, Cripple.class, damage);
-		return super.proc( attacker, defender, damage );
 	}
 	
 	@Override
@@ -66,6 +65,13 @@ public class SerratedDart extends MissileWeapon {
 		quantity = Random.Int( 3, 6 );
 		return this;
 	}
+
+    @Override
+    public int proc( Char attacker, Char defender, int damage ) {
+        Buff.affect(defender, Bleeding.class).set(damage + defender.HT / 10);
+        Buff.prolong(defender, Cripple.class, damage);
+        return super.proc( attacker, defender, damage );
+    }
 	
 	@Override
 	public int price() {
