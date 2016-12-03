@@ -29,24 +29,19 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MaliceClone;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class RingOfMalice extends Artifact {
 
@@ -68,25 +63,6 @@ public class RingOfMalice extends Artifact {
 	}
 
 	public static final String AC_SUMMON = "SUMMON";
-
-	private final ArrayList<Class> scrolls = new ArrayList<>();
-
-	protected WndBag.Mode mode = WndBag.Mode.SCROLL;
-
-	public RingOfMalice() {
-		super();
-
-		Class<?>[] scrollClasses = Generator.Category.SCROLL.classes;
-		float[] probs = Generator.Category.SCROLL.probs.clone(); //array of primitives, clone gives deep copy.
-		int i = Random.chances(probs);
-
-		while (i != -1){
-			scrolls.add(scrollClasses[i]);
-			probs[i] = 0;
-
-			i = Random.chances(probs);
-		};
-	}
 
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
