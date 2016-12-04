@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfAwareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfHealth;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -35,7 +36,7 @@ import com.watabou.utils.Random;
 public class MagicWellPainter extends Painter {
 
 	private static final Class<?>[] WATERS =
-		{WaterOfAwareness.class, WaterOfHealth.class, WaterOfTransmutation.class};
+		{WaterOfAwareness.class, WaterOfHealth.class, WaterOfTransmutation.class, WaterOfPower.class};
 	
 	public static void paint( Level level, Room room ) {
 

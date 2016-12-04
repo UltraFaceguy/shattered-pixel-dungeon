@@ -48,6 +48,7 @@ public class Speck extends Image {
 	public static final int BUBBLE		= 12;
 	public static final int STEAM		= 13;
 	public static final int COIN		= 14;
+	public static final int RED_RUNE	= 15;
 	
 	public static final int DISCOVER	= 101;
 	public static final int EVOKE		= 102;

@@ -41,13 +41,14 @@ public class WellWater extends Blob {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 
-		if (volume > 0)
-			for (int i=0; i < cur.length; i++) {
+		if (volume > 0) {
+			for (int i = 0; i < cur.length; i++) {
 				if (cur[i] > 0) {
 					pos = i;
 					break;
 				}
 			}
+		}
 	}
 	
 	@Override
@@ -62,7 +63,9 @@ public class WellWater extends Blob {
 				Journal.add( Feature.WELL_OF_HEALTH );
 			} else if (this instanceof WaterOfTransmutation) {
 				Journal.add( Feature.WELL_OF_TRANSMUTATION );
-			}
+			} else if (this instanceof WaterOfPower) {
+                Journal.add( Feature.WELL_OF_POWER );
+            }
 		}
 	}
 	
@@ -139,7 +142,7 @@ public class WellWater extends Blob {
 	
 	public static void affectCell( int cell ) {
 		
-		Class<?>[] waters = {WaterOfHealth.class, WaterOfAwareness.class, WaterOfTransmutation.class};
+		Class<?>[] waters = {WaterOfHealth.class, WaterOfAwareness.class, WaterOfTransmutation.class, WaterOfPower.class};
 		
 		for (Class<?>waterClass : waters) {
 			WellWater water = (WellWater)Dungeon.level.blobs.get( waterClass );

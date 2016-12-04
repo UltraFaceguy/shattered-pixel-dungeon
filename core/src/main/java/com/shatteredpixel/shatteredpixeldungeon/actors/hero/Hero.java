@@ -153,6 +153,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
+    public boolean empowered = false;
 	public boolean weakened = false;
 	
 	public float awareness;
@@ -183,8 +184,13 @@ public class Hero extends Char {
 		int STR = this.STR;
 
 		STR += RingOfMight.getBonus(this, RingOfMight.Might.class);
-
-		return weakened ? STR - 2 : STR;
+		if (empowered) {
+			STR =+ 2;
+		}
+		if (weakened) {
+			STR =- 2;
+		}
+		return STR;
 	}
 
 	private static final String ATTACK		= "attackSkill";
