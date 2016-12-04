@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
@@ -333,8 +334,9 @@ public class Generator {
 		Category.FOOD.classes = new Class<?>[]{
 			Food.class,
 			Pasty.class,
-			MysteryMeat.class };
-		Category.FOOD.probs = new float[]{ 4, 1, 0 };
+			MysteryMeat.class,
+			Cheese.class };
+		Category.FOOD.probs = new float[]{ 4, 1, 0, 0 };
 			
 		Category.RING.classes = new Class<?>[]{
 			RingOfAccuracy.class,
