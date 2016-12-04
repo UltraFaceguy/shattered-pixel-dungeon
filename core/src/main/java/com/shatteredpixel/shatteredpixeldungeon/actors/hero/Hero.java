@@ -69,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -1307,8 +1308,8 @@ public class Hero extends Char {
 		if (ankh != null && ankh.isBlessed()) {
 			this.HP = HT/4;
 
-			//ensures that you'll get to act first in almost any case, to prevent reviving and then instantly dieing again.
-			Buff.detach(this, Paralysis.class);
+			// Hey, let's upgrade this to removing ALL debuffs while we're at it!
+			PotionOfCleansing.cleanse(this);
 			spend(-cooldown());
 
 			new Flare(8, 32).color(0xFFFF66, true).show(sprite, 2f);
