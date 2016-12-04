@@ -38,17 +38,17 @@ public class SerratedDart extends MissileWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return 2;
+		return 3;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return 5;
+		return 6;
 	}
 
 	@Override
 	public int STRReq(int lvl) {
-		return 14;
+		return 15;
 	}
 
     public SerratedDart() {
@@ -62,14 +62,14 @@ public class SerratedDart extends MissileWeapon {
 	
 	@Override
 	public Item random() {
-		quantity = Random.Int( 3, 6 );
+		quantity = Random.Int( 3, 7 );
 		return this;
 	}
 
     @Override
     public int proc( Char attacker, Char defender, int damage ) {
-        Buff.affect(defender, Bleeding.class).set(damage + defender.HT / 10);
-        Buff.prolong(defender, Cripple.class, damage);
+        Buff.affect(defender, Bleeding.class).set(damage + defender.HT / 8);
+        Buff.prolong(defender, Cripple.class, 6);
         return super.proc( attacker, defender, damage );
     }
 	
