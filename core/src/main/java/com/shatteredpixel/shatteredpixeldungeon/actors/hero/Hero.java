@@ -185,10 +185,10 @@ public class Hero extends Char {
 
 		STR += RingOfMight.getBonus(this, RingOfMight.Might.class);
 		if (empowered) {
-			STR =+ 2;
+			STR += 2;
 		}
 		if (weakened) {
-			STR =- 2;
+			STR -= 2;
 		}
 		return STR;
 	}
