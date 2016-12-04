@@ -128,197 +128,200 @@ public class Speck extends Image {
 		angularSpeed = 0;
 		
 		switch (type) {
-			
-		case HEALING:
-			speed.set( 0, -20 );
-			lifespan = 1f;
-			break;
-			
-		case STAR:
-			speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 128 ) );
-			acc.set( 0, 128 );
-			angle = Random.Float( 360 );
-			angularSpeed = Random.Float( -360, +360 );
-			lifespan = 1f;
-			break;
-		
-		case FORGE:
-			speed.polar( Random.Float( -3.1415926f ), Random.Float( 64 ) );
-			acc.set( 0, 128 );
-			angle = Random.Float( 360 );
-			angularSpeed = Random.Float( -360, +360 );
-			lifespan = 0.51f;
-			break;
-			
-		case EVOKE:
-			speed.polar( Random.Float( -3.1415926f ), 50 );
-			acc.set( 0, 50 );
-			angle = Random.Float( 360 );
-			angularSpeed = Random.Float( -180, +180 );
-			lifespan = 1f;
-			break;
-			
-		case KIT:
-			speed.polar( index * 3.1415926f / 5, 50 );
-			acc.set( -speed.x, -speed.y );
-			angle = index * 36;
-			angularSpeed = 360;
-			lifespan = 1f;
-			break;
-			
-		case MASTERY:
-			speed.set( Random.Int( 2 ) == 0 ? Random.Float( -128, -64 ) : Random.Float( +64, +128 ), 0 );
-			angularSpeed = speed.x < 0 ? -180 : +180;
-			acc.set( -speed.x, 0 );
-			lifespan = 0.5f;
-			break;
+            case HEALING:
+                speed.set( 0, -20 );
+                lifespan = 1f;
+                break;
 
-		case RED_LIGHT:
-			tint(0xFFCC0000);
-		case LIGHT:
-			angle = Random.Float( 360 );
-			angularSpeed = 90;
-			lifespan = 1f;
-			break;
-			
-		case DISCOVER:
-			angle = Random.Float( 360 );
-			angularSpeed = 90;
-			lifespan = 0.5f;
-			am = 0;
-			break;
-			
-		case QUESTION:
-			lifespan = 0.8f;
-			break;
-			
-		case UP:
-			speed.set( 0, -20 );
-			lifespan = 1f;
-			break;
-			
-		case SCREAM:
-			lifespan = 0.9f;
-			break;
-			
-		case BONE:
-			lifespan = 0.2f;
-			speed.polar( Random.Float( 2 * 3.1415926f ), 24 / lifespan );
-			acc.set( 0, 128 );
-			angle = Random.Float( 360 );
-			angularSpeed = 360;
-			break;
-			
-		case RATTLE:
-			lifespan = 0.5f;
-			speed.set( 0, -200 );
-			acc.set( 0, -2 * speed.y / lifespan );
-			angle = Random.Float( 360 );
-			angularSpeed = 360;
-			break;
-			
-		case WOOL:
-			lifespan = 0.5f;
-			speed.set( 0, -50 );
-			angle = Random.Float( 360 );
-			angularSpeed = Random.Float( -360, +360 );
-			break;
-			
-		case ROCK:
-			angle = Random.Float( 360 );
-			angularSpeed = Random.Float( -360, +360 );
-			scale.set( Random.Float( 1, 2 ) );
-			speed.set( 0, 64 );
-			lifespan = 0.2f;
-			y -= speed.y * lifespan;
-			break;
-			
-		case NOTE:
-			angularSpeed = Random.Float( -30, +30 );
-			speed.polar( (angularSpeed - 90) * PointF.G2R, 30 );
-			lifespan = 1f;
-			break;
-			
-		case CHANGE:
-			angle = Random.Float( 360 );
-			speed.polar( (angle - 90) * PointF.G2R, Random.Float( 4, 12 ) );
-			lifespan = 1.5f;
-			break;
-			
-		case HEART:
-			speed.set( Random.Int( -10, +10 ), -40 );
-			angularSpeed = Random.Float( -45, +45 );
-			lifespan = 1f;
-			break;
-			
-		case BUBBLE:
-			speed.set( 0, -15 );
-			scale.set( Random.Float( 0.8f, 1 ) );
-			lifespan = Random.Float( 0.8f, 1.5f );
-			break;
-			
-		case STEAM:
-			speed.y = -Random.Float( 20, 30 );
-			angularSpeed = Random.Float( +180 );
-			angle = Random.Float( 360 );
-			lifespan = 1f;
-			break;
-			
-		case JET:
-			speed.y = +32;
-			acc.y = -64;
-			angularSpeed = Random.Float( 180, 360 );
-			angle = Random.Float( 360 );
-			lifespan = 0.5f;
-			break;
-			
-		case TOXIC:
-			hardlight( 0x50FF60 );
-			angularSpeed = 30;
-			angle = Random.Float( 360 );
-			lifespan = Random.Float( 1f, 3f );
-			break;
+            case STAR:
+                speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 128 ) );
+                acc.set( 0, 128 );
+                angle = Random.Float( 360 );
+                angularSpeed = Random.Float( -360, +360 );
+                lifespan = 1f;
+                break;
 
-		case VENOM:
-			hardlight( 0x8844FF );
-			angularSpeed = 30;
-			angle = Random.Float( 360 );
-			lifespan = Random.Float( 1f, 3f );
-			break;
-			
-		case PARALYSIS:
-			hardlight( 0xFFFF66 );
-			angularSpeed = -30;
-			angle = Random.Float( 360 );
-			lifespan = Random.Float( 1f, 3f );
-			break;
+            case FORGE:
+                speed.polar( Random.Float( -3.1415926f ), Random.Float( 64 ) );
+                acc.set( 0, 128 );
+                angle = Random.Float( 360 );
+                angularSpeed = Random.Float( -360, +360 );
+                lifespan = 0.51f;
+                break;
 
-		case STENCH:
-			hardlight( 0x003300 );
-			angularSpeed = -30;
-			angle = Random.Float( 360 );
-			lifespan = Random.Float( 1f, 3f );
-			break;
+            case EVOKE:
+                speed.polar( Random.Float( -3.1415926f ), 50 );
+                acc.set( 0, 50 );
+                angle = Random.Float( 360 );
+                angularSpeed = Random.Float( -180, +180 );
+                lifespan = 1f;
+                break;
 
-		case CONFUSION:
-			hardlight( Random.Int( 0x1000000 ) | 0x000080 );
-			angularSpeed = Random.Float( -20, +20 );
-			angle = Random.Float( 360 );
-			lifespan = Random.Float( 1f, 3f );
-			break;
+            case KIT:
+                speed.polar( index * 3.1415926f / 5, 50 );
+                acc.set( -speed.x, -speed.y );
+                angle = index * 36;
+                angularSpeed = 360;
+                lifespan = 1f;
+                break;
 
-		case DUST:
-			hardlight( 0xFFFF66 );
-			angle = Random.Float( 360 );
-			speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 16, 48 ) );
-			lifespan = 0.5f;
-			break;
+            case MASTERY:
+                speed.set( Random.Int( 2 ) == 0 ? Random.Float( -128, -64 ) : Random.Float( +64, +128 ), 0 );
+                angularSpeed = speed.x < 0 ? -180 : +180;
+                acc.set( -speed.x, 0 );
+                lifespan = 0.5f;
+                break;
 
-		case COIN:
-			speed.polar( -PointF.PI * Random.Float( 0.3f, 0.7f ), Random.Float( 48, 96 ) );
-			acc.y = 256;
-			lifespan = -speed.y / acc.y * 2;
-			break;
+            case RED_LIGHT:
+                tint(0xFFCC0000);
+            case LIGHT:
+                angle = Random.Float( 360 );
+                angularSpeed = 90;
+                lifespan = 1f;
+                break;
+
+            case DISCOVER:
+                angle = Random.Float( 360 );
+                angularSpeed = 90;
+                lifespan = 0.5f;
+                am = 0;
+                break;
+
+            case QUESTION:
+                lifespan = 0.8f;
+                break;
+
+            case UP:
+                speed.set( 0, -20 );
+                lifespan = 1f;
+                break;
+
+            case SCREAM:
+                lifespan = 0.9f;
+                break;
+
+            case BONE:
+                lifespan = 0.2f;
+                speed.polar( Random.Float( 2 * 3.1415926f ), 24 / lifespan );
+                acc.set( 0, 128 );
+                angle = Random.Float( 360 );
+                angularSpeed = 360;
+                break;
+
+            case RATTLE:
+                lifespan = 0.5f;
+                speed.set( 0, -200 );
+                acc.set( 0, -2 * speed.y / lifespan );
+                angle = Random.Float( 360 );
+                angularSpeed = 360;
+                break;
+
+            case WOOL:
+                lifespan = 0.5f;
+                speed.set( 0, -50 );
+                angle = Random.Float( 360 );
+                angularSpeed = Random.Float( -360, +360 );
+                break;
+
+            case ROCK:
+                angle = Random.Float( 360 );
+                angularSpeed = Random.Float( -360, +360 );
+                scale.set( Random.Float( 1, 2 ) );
+                speed.set( 0, 64 );
+                lifespan = 0.2f;
+                y -= speed.y * lifespan;
+                break;
+
+            case NOTE:
+                angularSpeed = Random.Float( -30, +30 );
+                speed.polar( (angularSpeed - 90) * PointF.G2R, 30 );
+                lifespan = 1f;
+                break;
+
+            case CHANGE:
+                angle = Random.Float( 360 );
+                speed.polar( (angle - 90) * PointF.G2R, Random.Float( 4, 12 ) );
+                lifespan = 1.5f;
+                break;
+
+            case HEART:
+                speed.set( Random.Int( -10, +10 ), -40 );
+                angularSpeed = Random.Float( -45, +45 );
+                lifespan = 1f;
+                break;
+
+            case BUBBLE:
+                speed.set( 0, -15 );
+                scale.set( Random.Float( 0.8f, 1 ) );
+                lifespan = Random.Float( 0.8f, 1.5f );
+                break;
+
+            case STEAM:
+                speed.y = -Random.Float( 20, 30 );
+                angularSpeed = Random.Float( +180 );
+                angle = Random.Float( 360 );
+                lifespan = 1f;
+                break;
+
+            case JET:
+                speed.y = +32;
+                acc.y = -64;
+                angularSpeed = Random.Float( 180, 360 );
+                angle = Random.Float( 360 );
+                lifespan = 0.5f;
+                break;
+
+            case TOXIC:
+                hardlight( 0x50FF60 );
+                angularSpeed = 30;
+                angle = Random.Float( 360 );
+                lifespan = Random.Float( 1f, 3f );
+                break;
+
+            case VENOM:
+                hardlight( 0x8844FF );
+                angularSpeed = 30;
+                angle = Random.Float( 360 );
+                lifespan = Random.Float( 1f, 3f );
+                break;
+
+            case PARALYSIS:
+                hardlight( 0xFFFF66 );
+                angularSpeed = -30;
+                angle = Random.Float( 360 );
+                lifespan = Random.Float( 1f, 3f );
+                break;
+
+            case STENCH:
+                hardlight( 0x003300 );
+                angularSpeed = -30;
+                angle = Random.Float( 360 );
+                lifespan = Random.Float( 1f, 3f );
+                break;
+
+            case CONFUSION:
+                hardlight( Random.Int( 0x1000000 ) | 0x000080 );
+                angularSpeed = Random.Float( -20, +20 );
+                angle = Random.Float( 360 );
+                lifespan = Random.Float( 1f, 3f );
+                break;
+
+            case DUST:
+                hardlight( 0xFFFF66 );
+                angle = Random.Float( 360 );
+                speed.polar( Random.Float( 2 * 3.1415926f ), Random.Float( 16, 48 ) );
+                lifespan = 0.5f;
+                break;
+
+            case COIN:
+                speed.polar( -PointF.PI * Random.Float( 0.3f, 0.7f ), Random.Float( 48, 96 ) );
+                acc.y = 256;
+                lifespan = -speed.y / acc.y * 2;
+                break;
+
+            case RED_RUNE:
+                lifespan = 0.8f;
+                break;
 		}
 		
 		left = lifespan;
@@ -339,105 +342,109 @@ public class Speck extends Image {
 			float p = 1 - left / lifespan;	// 0 -> 1
 			
 			switch (type) {
-				
-			case STAR:
-			case FORGE:
-				scale.set( 1 - p );
-				am = p < 0.2f ? p * 5f : (1 - p) * 1.25f;
-				break;
-				
-			case KIT:
-			case MASTERY:
-				am = 1 - p * p;
-				break;
-				
-			case EVOKE:
-				
-			case HEALING:
-				am = p < 0.5f ? 1 : 2 - p * 2;
-				break;
+                case STAR:
+                case FORGE:
+                    scale.set( 1 - p );
+                    am = p < 0.2f ? p * 5f : (1 - p) * 1.25f;
+                    break;
 
-			case RED_LIGHT:
-			case LIGHT:
-				am = scale.set( p < 0.2f ? p * 5f : (1 - p) * 1.25f ).x;
-				break;
-				
-			case DISCOVER:
-				am = 1 - p;
-				scale.set( (p < 0.5f ? p : 1 - p) * 2 );
-				break;
-				
-			case QUESTION:
-				scale.set( (float)(Math.sqrt( p < 0.5f ? p : 1 - p ) * 3) );
-				break;
-				
-			case UP:
-				scale.set( (float)(Math.sqrt( p < 0.5f ? p : 1 - p ) * 2) );
-				break;
-				
-			case SCREAM:
-				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 2f );
-				scale.set( p * 7 );
-				break;
-				
-			case BONE:
-			case RATTLE:
-				am = p < 0.9f ? 1 : (1 - p) * 10;
-				break;
-				
-			case ROCK:
-				am = p < 0.2f ? p * 5 : 1 ;
-				break;
-				
-			case NOTE:
-				am = 1 - p * p;
-				break;
-				
-			case WOOL:
-				scale.set( 1 - p );
-				break;
-				
-			case CHANGE:
-				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 2);
-				scale.y = (1 + p) * 0.5f;
-				scale.x = scale.y * (float)Math.cos( left * 15 );
-				break;
-				
-			case HEART:
-				scale.set( 1 - p );
-				am = 1 - p * p;
-				break;
-				
-			case BUBBLE:
-				am = p < 0.2f ? p * 5 : 1;
-				break;
-				
-			case STEAM:
-			case TOXIC:
-			case PARALYSIS:
-			case CONFUSION:
-			case DUST:
-				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 0.5f );
-				scale.set( 1 + p );
-				break;
+                case KIT:
+                case MASTERY:
+                    am = 1 - p * p;
+                    break;
 
-			case VENOM:
-				hardlight( ColorMath.interpolate( 0x8844FF, 0x00FF00 , p ));
-			case STENCH:
-				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) );
-				scale.set( 1 + p );
-				break;
-				
-			case JET:
-				am = (p < 0.5f ? p : 1 - p) * 2;
-				scale.set( p * 1.5f );
-				break;
-				
-			case COIN:
-				scale.x = (float)Math.cos( left * 5 );
-				rm = gm = bm = (Math.abs( scale.x ) + 1) * 0.5f;
-				am = p < 0.9f ? 1 : (1 - p) * 10;
-				break;
+                case EVOKE:
+
+                case HEALING:
+                    am = p < 0.5f ? 1 : 2 - p * 2;
+                    break;
+
+                case RED_LIGHT:
+                case LIGHT:
+                    am = scale.set( p < 0.2f ? p * 5f : (1 - p) * 1.25f ).x;
+                    break;
+
+                case DISCOVER:
+                    am = 1 - p;
+                    scale.set( (p < 0.5f ? p : 1 - p) * 2 );
+                    break;
+
+                case QUESTION:
+                    scale.set( (float)(Math.sqrt( p < 0.5f ? p : 1 - p ) * 3) );
+                    break;
+
+                case UP:
+                    scale.set( (float)(Math.sqrt( p < 0.5f ? p : 1 - p ) * 2) );
+                    break;
+
+                case SCREAM:
+                    am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 2f );
+                    scale.set( p * 7 );
+                    break;
+
+                case BONE:
+                case RATTLE:
+                    am = p < 0.9f ? 1 : (1 - p) * 10;
+                    break;
+
+                case ROCK:
+                    am = p < 0.2f ? p * 5 : 1 ;
+                    break;
+
+                case NOTE:
+                    am = 1 - p * p;
+                    break;
+
+                case WOOL:
+                    scale.set( 1 - p );
+                    break;
+
+                case CHANGE:
+                    am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 2);
+                    scale.y = (1 + p) * 0.5f;
+                    scale.x = scale.y * (float)Math.cos( left * 15 );
+                    break;
+
+                case HEART:
+                    scale.set( 1 - p );
+                    am = 1 - p * p;
+                    break;
+
+                case BUBBLE:
+                    am = p < 0.2f ? p * 5 : 1;
+                    break;
+
+                case STEAM:
+                case TOXIC:
+                case PARALYSIS:
+                case CONFUSION:
+                case DUST:
+                    am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 0.5f );
+                    scale.set( 1 + p );
+                    break;
+
+                case VENOM:
+                    hardlight( ColorMath.interpolate( 0x8844FF, 0x00FF00 , p ));
+                case STENCH:
+                    am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) );
+                    scale.set( 1 + p );
+                    break;
+
+                case JET:
+                    am = (p < 0.5f ? p : 1 - p) * 2;
+                    scale.set( p * 1.5f );
+                    break;
+
+                case COIN:
+                    scale.x = (float)Math.cos( left * 5 );
+                    rm = gm = bm = (Math.abs( scale.x ) + 1) * 0.5f;
+                    am = p < 0.9f ? 1 : (1 - p) * 10;
+                    break;
+
+                case RED_RUNE:
+                    scale.set( (float)(Math.sqrt( p < 0.5f ? p : 1 - p / 2 ) * 2) );
+                    am = p < 0.5f ? 1 : 2.0f - p * 2;
+                    break;
 			}
 		}
 	}

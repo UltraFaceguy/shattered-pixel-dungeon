@@ -67,8 +67,8 @@ public class WaterOfPower extends WellWater {
 	@Override
 	protected Item affectItem( Item item ) {
 		if (item instanceof Potion) {
-            changePotion((Potion)item);
             Journal.remove( Feature.WELL_OF_POWER );
+            return changePotion((Potion)item);
         }
 		return null;
 	}
@@ -76,7 +76,7 @@ public class WaterOfPower extends WellWater {
 	@Override
 	public void use( BlobEmitter emitter ) {
 		super.use( emitter );
-        emitter.start( Speck.factory( Speck.RED_RUNE ), 0.5f, 0 );
+        emitter.start( Speck.factory( Speck.RED_RUNE ), 0.3f, 0 );
 	}
 	
 	@Override
