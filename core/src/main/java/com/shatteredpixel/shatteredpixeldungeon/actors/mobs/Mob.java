@@ -44,15 +44,20 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level.Feeling;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public abstract class Mob extends Char {
@@ -553,6 +558,40 @@ public abstract class Mob extends Char {
 		
 		if (Dungeon.hero.isAlive() && !Dungeon.visible[pos]) {
 			GLog.i( Messages.get(this, "died") );
+		}
+	}
+
+	public void bossDie () {
+
+        GameScene.bossSlain();
+
+		ArrayList<Integer> passable = new ArrayList<Integer>();
+		for (Integer ofs : PathFinder.NEIGHBOURS8) {
+			int cell = pos + ofs;
+			if ((Level.passable[cell] || Level.avoid[cell]) && Dungeon.level.heaps.get( cell ) == null) {
+				passable.add( cell );
+			}
+		}
+		Collections.shuffle( passable );
+
+		ArrayList<Item> items = new ArrayList<Item>();
+		items.add(Generator.randomWeapon());
+		items.add(Generator.randomArmor());
+		items.add(Generator.random());
+		items.add(Generator.random());
+		items.add(Generator.random());
+        if (Random.Int(3) == 0) {
+            items.add(new ScrollOfUpgrade());
+        }
+
+		for (Integer cell : passable) {
+			if (items.isEmpty()) {
+				break;
+			}
+
+			Item item = Random.element( items );
+			Dungeon.level.drop( item, cell ).sprite.drop( pos );
+			items.remove( item );
 		}
 	}
 	

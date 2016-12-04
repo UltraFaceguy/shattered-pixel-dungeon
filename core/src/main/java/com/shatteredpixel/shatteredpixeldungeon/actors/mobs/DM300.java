@@ -142,11 +142,11 @@ public class DM300 extends Mob {
 
 	@Override
 	public void die( Object cause ) {
+
+		Dungeon.level.drop( new SkeletonKey( Dungeon.depth  ), pos ).sprite.drop();
 		
 		super.die( cause );
-		
-		GameScene.bossSlain();
-		Dungeon.level.drop( new SkeletonKey( Dungeon.depth  ), pos ).sprite.drop();
+		super.bossDie();
 		
 		Badges.validateBossSlain();
 

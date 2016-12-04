@@ -166,9 +166,10 @@ public class Yog extends Mob {
 				mob.die( cause );
 			}
 		}
-		
-		GameScene.bossSlain();
+
 		Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
+
+		super.bossDie();
 		super.die( cause );
 		
 		yell( Messages.get(this, "defeated") );
