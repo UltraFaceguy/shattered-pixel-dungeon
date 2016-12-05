@@ -292,8 +292,6 @@ public class Heap implements Bundlable {
 				} else if (item instanceof Bomb) {
 					items.remove( item );
 					((Bomb) item).detonate(pos);
-					//stop processing current explosion, it will be replaced by the new one.
-					return;
 
 				//unique and upgraded items can endure the blast
 				} else if (!(item.level() > 0 || item.unique))

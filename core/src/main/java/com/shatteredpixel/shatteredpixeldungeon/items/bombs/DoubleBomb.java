@@ -36,12 +36,7 @@ public class DoubleBomb extends Bomb {
 	public boolean doPickUp(Hero hero) {
 		Bomb bomb = new Bomb();
 		bomb.quantity(2);
-		if (bomb.doPickUp(hero)) {
-			//isaaaaac.... (don't bother doing this when not in english)
-			if (Messages.get(this, "name").equals("two bombs"))
-				hero.sprite.showStatus(CharSprite.NEUTRAL, "1+1 free!");
-			return true;
-		}
-		return false;
+        bomb.doPickUp(hero);
+		return true;
 	}
 }

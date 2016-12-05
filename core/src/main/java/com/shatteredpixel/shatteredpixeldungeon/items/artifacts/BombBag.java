@@ -51,7 +51,7 @@ public class BombBag extends Artifact {
 		levelCap = 10;
 		exp = 0;
 
-		charge = 3;
+		charge = 2;
         partialCharge = 0;
         chargeCap = 2 + (2+level()) / 3;
 
@@ -125,7 +125,7 @@ public class BombBag extends Artifact {
             SmallBomb sb = new SmallBomb();
             sb.bombLevel = level();
             sb.cast( curUser, target );
-            curUser.spendAndNext(1f);
+            curUser.spendAndNext(0.5f);
         }
 
         @Override

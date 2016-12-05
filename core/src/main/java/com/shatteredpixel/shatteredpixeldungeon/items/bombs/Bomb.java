@@ -89,7 +89,7 @@ public class Bomb extends Item {
 	@Override
 	protected void onThrow( int cell ) {
 		if (!Level.pit[ cell ] && lightingFuse) {
-			Actor.addDelayed(fuse = new Fuse().ignite(this), 3);
+			Actor.addDelayed(fuse = new Fuse().ignite(this), 2.1f);
 		}
 		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
 			ArrayList<Integer> candidates = new ArrayList<>();
@@ -137,14 +137,15 @@ public class Bomb extends Item {
 
 				//destroys items / triggers bombs caught in the blast.
 				Heap heap = Dungeon.level.heaps.get( c );
-				if(heap != null)
+				if (heap != null) {
 					heap.explode();
+				}
 
 				Char ch = Actor.findChar( c );
 				if (ch != null) {
 					//those not at the center of the blast take damage less consistently.
 					int maxDamage = 10 + Dungeon.depth + (ch.HT / 5);
-                    int minDamage = c == cell ? maxDamage / 2 : 1;
+                    int minDamage = c == cell ? maxDamage / 2 : maxDamage / 4;
 
 					int dmg = Random.NormalIntRange( minDamage, maxDamage ) - ch.drRoll();
 					if (dmg > 0) {
@@ -219,7 +220,7 @@ public class Bomb extends Item {
 	private static class Fuse extends Actor {
 
 		{
-			actPriority = 3; //as if it were a buff
+			actPriority = 1; //as if it were a buff
 		}
 
 		private Bomb bomb;
