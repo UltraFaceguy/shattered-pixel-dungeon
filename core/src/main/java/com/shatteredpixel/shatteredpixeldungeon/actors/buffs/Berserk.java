@@ -77,7 +77,7 @@ public class Berserk extends Buff {
 				exhaustion = EXHAUSTION_START;
 				levelRecovery = LEVEL_RECOVER_START;
 				BuffIndicator.refreshHero();
-				target.HP = Math.max(target.HP + target.SHLD, target.HT);
+				target.HP = Math.min(target.HP + target.SHLD, target.HT);
 				target.SHLD = 0;
 			}
 		} else if (state == State.EXHAUSTED){
