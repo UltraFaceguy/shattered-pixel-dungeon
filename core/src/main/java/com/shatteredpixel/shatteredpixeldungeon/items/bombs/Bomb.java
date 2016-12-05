@@ -89,7 +89,7 @@ public class Bomb extends Item {
 	@Override
 	protected void onThrow( int cell ) {
 		if (!Level.pit[ cell ] && lightingFuse) {
-			Actor.addDelayed(fuse = new Fuse().ignite(this), 2.1f);
+			Actor.addDelayed(fuse = new Fuse().ignite(this), 3f);
 		}
 		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
 			ArrayList<Integer> candidates = new ArrayList<>();

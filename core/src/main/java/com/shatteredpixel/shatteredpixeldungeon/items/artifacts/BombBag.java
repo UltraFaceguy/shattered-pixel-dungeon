@@ -125,7 +125,7 @@ public class BombBag extends Artifact {
             SmallBomb sb = new SmallBomb();
             sb.bombLevel = level();
             sb.cast( curUser, target );
-            curUser.spendAndNext(0.5f);
+            curUser.spendAndNext(1f);
         }
 
         @Override

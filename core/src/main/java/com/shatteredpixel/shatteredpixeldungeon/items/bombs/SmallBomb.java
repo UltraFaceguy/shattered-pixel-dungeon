@@ -63,7 +63,7 @@ public class SmallBomb extends Bomb {
 	@Override
 	protected void onThrow( int cell ) {
 		if (!Level.pit[ cell ]) {
-			Actor.addDelayed(fuse = new Fuse().ignite(this), 2.1f);
+			Actor.addDelayed(fuse = new Fuse().ignite(this), 3f);
 		}
 		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
 			ArrayList<Integer> candidates = new ArrayList<>();
@@ -121,7 +121,7 @@ public class SmallBomb extends Bomb {
 				Char ch = Actor.findChar( c );
 				if (ch != null) {
 					//those not at the center of the blast take damage less consistently.
-					int maxDamage = 5 + bombLevel * 3 + (ch.HT / (15 - bombLevel));
+					int maxDamage = 5 + bombLevel * 2 + (ch.HT / (15 - bombLevel));
                     int minDamage = c == cell ? maxDamage / 2 : maxDamage / 4;
 
 					int dmg = Random.NormalIntRange( minDamage, maxDamage ) - ch.drRoll();
