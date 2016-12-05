@@ -59,7 +59,7 @@ public class DisintegrationTrap extends Trap {
 
 		Char ch = Actor.findChar(pos);
 		if (ch != null){
-			ch.damage( Math.max( ch.HT/5, Random.Int(ch.HP / 2, 2 * ch.HP / 3) ), this );
+			ch.damage( Math.max( ch.HT/5, Random.Int(ch.HP / 4, ch.HP / 3) ), this );
 			if (ch == Dungeon.hero){
 				Hero hero = (Hero)ch;
 				if (!hero.isAlive()){
