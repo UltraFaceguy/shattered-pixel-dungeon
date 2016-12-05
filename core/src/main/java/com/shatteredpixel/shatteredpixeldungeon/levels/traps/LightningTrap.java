@@ -49,7 +49,7 @@ public class LightningTrap extends Trap {
 		Char ch = Actor.findChar( pos );
 
 		if (ch != null) {
-			ch.damage( Math.max( 1, Random.Int( ch.HP / 3, 2 * ch.HP / 3 ) ), LIGHTNING );
+			ch.damage( Math.max( ch.HT / 10, Random.Int( ch.HP / 4, 2 * ch.HP / 4 ) ), LIGHTNING );
 			if (ch == Dungeon.hero) {
 
 				Camera.main.shake( 2, 0.3f );
