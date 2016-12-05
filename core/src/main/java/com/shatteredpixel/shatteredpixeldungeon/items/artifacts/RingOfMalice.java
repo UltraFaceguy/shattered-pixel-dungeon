@@ -49,11 +49,11 @@ public class RingOfMalice extends Artifact {
 		image = ItemSpriteSheet.ARTIFACT_RING;
 
         exp = 0;
-        levelCap = 14;
+        levelCap = 10;
 
-        charge = level()+6;
+        charge = 5 + level();
         partialCharge = 0;
-        chargeCap = level()+6;
+        chargeCap = 5 + level();
 
         cooldown = 0;
 
@@ -98,20 +98,26 @@ public class RingOfMalice extends Artifact {
                 }
 
                 int index = Random.index( respawnPoints );
+
                 MaliceClone clone = new MaliceClone();
-                clone.duplicate( curUser );
+                clone.duplicate( curUser, level() );
+
                 GameScene.add( clone );
+                Buff.append(clone, Corruption.class);
+
                 clone.sprite.interruptMotion();
                 clone.move( respawnPoints.get( index ) );
                 clone.sprite.place( respawnPoints.get( index ) );
+
                 Sample.INSTANCE.play( Assets.SND_CURSED );
                 clone.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
-                Buff.append(clone, Corruption.class);
+
                 hero.HP = Math.max (hero.HP - (hero.HP / 5), 1);
-                exp += 18;
-                if (exp >= (level()+1)*40 && level() < levelCap) {
+
+                exp += 20;
+                if (exp >= (level() + 1) * 40 && level() < levelCap) {
                     upgrade();
-                    exp -= level()*40;
+                    exp -= level() * 40;
                     GLog.p( Messages.get(this, "levelup") );
                 }
 
@@ -160,7 +166,7 @@ public class RingOfMalice extends Artifact {
 		public boolean act() {
 			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
-				partialCharge += 1 / (150f - (chargeCap - charge)*15f);
+				partialCharge += 1 / (150f - (chargeCap - charge) * 15f);
 
 				if (partialCharge >= 1) {
 					partialCharge --;

@@ -40,9 +40,11 @@ public class MaliceClone extends NPC {
 
     private static final String TIER	= "tier";
 
-    public void duplicate( Hero hero ) {
+    public void duplicate( Hero hero, int level ) {
         copiedHero = hero;
-        HP = HT = Math.max(hero.HP / 5, hero.HT / 20);
+        // (20% of hero's HP) plus (5 per artifact level, scaled based on percent hero HP)
+        float health = hero.HP / 5 + (hero.HP / hero.HT) * (level * 5);
+        HT = HP = Math.max((int)health, hero.HT / 10);
         tier = hero.tier();
     }
 
