@@ -44,7 +44,7 @@ public class Food extends Item {
 	
 	public static final String AC_EAT	= "EAT";
 	
-	public float energy = Hunger.HUNGRY;
+	public float energy = Hunger.MEAL;
 	public String message = Messages.get(this, "eat_msg");
 
 	public int hornValue = 3;

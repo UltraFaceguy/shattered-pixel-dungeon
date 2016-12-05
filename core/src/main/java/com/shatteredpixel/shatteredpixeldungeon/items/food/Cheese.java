@@ -29,6 +29,8 @@ public class Cheese extends Food {
 		image = ItemSpriteSheet.CHEESE;
 		energy = Hunger.NIBBLE;
 		hornValue = 1;
+
+		bones = false;
 	}
 	
 	@Override

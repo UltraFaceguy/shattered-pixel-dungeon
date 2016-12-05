@@ -86,7 +86,7 @@ public class Pasty extends Food {
 				break;
 		}
 
-		energy = Hunger.STARVING;
+		energy = Hunger.FEAST;
 		hornValue = 5;
 
 		bones = true;

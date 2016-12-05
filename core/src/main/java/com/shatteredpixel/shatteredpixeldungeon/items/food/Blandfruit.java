@@ -57,7 +57,7 @@ public class Blandfruit extends Food {
 		image = ItemSpriteSheet.BLANDFRUIT;
 
 		//only applies when blandfruit is cooked
-		energy = Hunger.STARVING;
+		energy = Hunger.FEAST;
 		hornValue = 6;
 
 		bones = true;
