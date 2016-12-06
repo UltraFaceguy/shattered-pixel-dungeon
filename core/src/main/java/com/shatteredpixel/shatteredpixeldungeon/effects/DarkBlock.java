@@ -37,7 +37,7 @@ public class DarkBlock extends Gizmo{
 	public void update() {
 		super.update();
 
-		target.brightness(0.4f);
+		target.brightness(0.6f);
 
 	}
 
