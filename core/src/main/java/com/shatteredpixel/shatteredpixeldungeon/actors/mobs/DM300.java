@@ -143,11 +143,11 @@ public class DM300 extends Mob {
 	@Override
 	public void die( Object cause ) {
 
-		Dungeon.level.drop( new SkeletonKey( Dungeon.depth  ), pos ).sprite.drop();
-		
 		super.die( cause );
 		super.bossDie();
-		
+
+		Dungeon.level.drop( new SkeletonKey( Dungeon.depth  ), pos ).sprite.drop();
+
 		Badges.validateBossSlain();
 
 		LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);

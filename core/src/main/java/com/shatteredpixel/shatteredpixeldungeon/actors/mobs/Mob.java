@@ -568,7 +568,7 @@ public abstract class Mob extends Char {
 		ArrayList<Integer> passable = new ArrayList<Integer>();
 		for (Integer ofs : PathFinder.NEIGHBOURS8) {
 			int cell = pos + ofs;
-			if ((Level.passable[cell] || Level.avoid[cell]) && Dungeon.level.heaps.get( cell ) == null) {
+			if ((Level.passable[cell] || Level.avoid[cell])) {
 				passable.add( cell );
 			}
 		}

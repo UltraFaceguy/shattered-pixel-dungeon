@@ -234,10 +234,11 @@ public class Goo extends Mob {
 	public void die( Object cause ) {
 		
 		Dungeon.level.unseal();
-		Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
 
         super.bossDie();
         super.die( cause );
+
+		Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
 		
 		Badges.validateBossSlain();
 		
