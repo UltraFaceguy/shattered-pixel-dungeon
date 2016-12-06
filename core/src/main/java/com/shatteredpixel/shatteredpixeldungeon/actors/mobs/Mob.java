@@ -579,10 +579,11 @@ public abstract class Mob extends Char {
 		items.add(Generator.randomArmor());
 		items.add(Generator.random());
 		items.add(Generator.random());
-		items.add(Generator.random());
-        if (Random.Int(3) == 0) {
+        if (Random.Int(4) == 0) {
             items.add(new ScrollOfUpgrade());
-        }
+        } else {
+			items.add(Generator.random(Generator.Category.SCROLL));
+		}
 
 		for (Integer cell : passable) {
 			if (items.isEmpty()) {
