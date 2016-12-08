@@ -25,11 +25,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class LeatherTunic extends Armor {
 
 	{
-		image = ItemSpriteSheet.ARMOR_LEATHER;
+		image = ItemSpriteSheet.ARMOR_TUNIC;
 	}
 
 	public LeatherTunic() {
-		super( 1 , 3 );
+		super( 1 , 2 );
 	}
 
 }
