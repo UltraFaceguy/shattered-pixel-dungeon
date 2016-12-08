@@ -124,14 +124,18 @@ public class ItemSpriteSheet {
 
 	private static final int ARMOR          =                               xy(1, 11);  //16 slots
 	public static final int ARMOR_CLOTH     = ARMOR+0;
-	public static final int ARMOR_LEATHER   = ARMOR+1;
-	public static final int ARMOR_MAIL      = ARMOR+2;
-	public static final int ARMOR_SCALE     = ARMOR+3;
-	public static final int ARMOR_PLATE     = ARMOR+4;
-	public static final int ARMOR_WARRIOR   = ARMOR+5;
-	public static final int ARMOR_MAGE      = ARMOR+6;
-	public static final int ARMOR_ROGUE     = ARMOR+7;
-	public static final int ARMOR_HUNTRESS  = ARMOR+8;
+	public static final int ARMOR_MAIL      = ARMOR+1;
+	public static final int ARMOR_HALF      = ARMOR+2;
+	public static final int ARMOR_PLATE     = ARMOR+3;
+	public static final int ARMOR_MITHRIL   = ARMOR+4;
+	public static final int ARMOR_TUNIC     = ARMOR+5;
+	public static final int ARMOR_LEATHER   = ARMOR+6;
+	public static final int ARMOR_SCALE_MAIL= ARMOR+7;
+	public static final int ARMOR_SCALE     = ARMOR+8;
+	public static final int ARMOR_WARRIOR   = ARMOR+9;
+	public static final int ARMOR_MAGE      = ARMOR+10;
+	public static final int ARMOR_ROGUE     = ARMOR+11;
+	public static final int ARMOR_HUNTRESS  = ARMOR+12;
 
 	                                                                                    //32 free slots
 

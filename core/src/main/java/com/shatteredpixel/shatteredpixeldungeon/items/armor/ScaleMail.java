@@ -22,16 +22,14 @@ package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class ClothArmor extends Armor {
+public class ScaleMail extends Armor {
 
 	{
-		image = ItemSpriteSheet.ARMOR_CLOTH;
-
-		bones = false; //Finding them in bones would be semi-frequent and disappointing.
+		image = ItemSpriteSheet.ARMOR_SCALE_MAIL;
 	}
-	
-	public ClothArmor() {
-		super( -1 , 1 );
+
+	public ScaleMail() {
+		super( 1 , 4 );
 	}
 
 }

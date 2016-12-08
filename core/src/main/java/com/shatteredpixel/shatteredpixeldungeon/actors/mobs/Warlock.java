@@ -89,15 +89,13 @@ public class Warlock extends Mob implements Callback {
 			boolean visible = Level.fieldOfView[pos] || Level.fieldOfView[enemy.pos];
 			if (visible) {
 				sprite.zap( enemy.pos );
-			} else {
-				zap();
 			}
 			
 			return !visible;
 		}
 	}
 	
-	private void zap() {
+	private void castShadowBolt() {
 		spend( TIME_TO_ZAP );
 		
 		if (hit( this, enemy, true )) {
@@ -118,10 +116,10 @@ public class Warlock extends Mob implements Callback {
 	}
 	
 	public void onZapComplete() {
-		zap();
+        castShadowBolt();
 		next();
 	}
-	
+
 	@Override
 	public void call() {
 		next();

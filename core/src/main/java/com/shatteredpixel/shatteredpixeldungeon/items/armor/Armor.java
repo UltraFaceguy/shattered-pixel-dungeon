@@ -66,7 +66,8 @@ public class Armor extends EquipableItem {
 	private static final int HITS_TO_KNOW    = 10;
 
 	protected static final String AC_DETACH       = "DETACH";
-	
+
+    public int type = 0;
 	public int tier;
 	
 	private int hitsToKnow = HITS_TO_KNOW;
@@ -74,8 +75,9 @@ public class Armor extends EquipableItem {
 	public Glyph glyph;
 	private BrokenSeal seal;
 	
-	public Armor( int tier ) {
-		this.tier = tier;
+	public Armor( int type, int tier ) {
+		this.type = type;
+        this.tier = tier;
 	}
 
 	private static final String UNFAMILIRIARITY	= "unfamiliarity";
@@ -217,24 +219,35 @@ public class Armor extends EquipableItem {
 	public final int DRMax(){
 		return DRMax(level());
 	}
+    public final int DRMin(){
+        return DRMin(level());
+    }
 
 	public int DRMax(int lvl){
-		int effectiveTier = tier;
-		if (glyph != null) effectiveTier += glyph.tierDRAdjust();
-		effectiveTier = Math.max(0, effectiveTier);
+        int effectiveTier = tier;
+        if (glyph != null && this.hasGlyph(Swiftness.class)) {
+            effectiveTier -= 1;
+        }
+        switch (type) {
+            default:
+                return effectiveTier * (lvl+2);
+            case 1:
+                return effectiveTier * (lvl+1);
+        }
 
-		return Math.max(DRMin(lvl), effectiveTier * (2 + lvl));
 	}
 
-	public final int DRMin(){
-		return DRMin(level());
-	}
-
-	public int DRMin(int lvl){
-		if (glyph != null && glyph instanceof Stone)
-			return 2 + 2*lvl;
-		else
-			return lvl;
+	public int DRMin(int lvl) {
+        int bonus = 0;
+        if (glyph != null && this.hasGlyph(Stone.class)) {
+            bonus = tier;
+        }
+        switch (type) {
+            default:
+                return lvl + bonus;
+            case 1:
+                return bonus;
+        }
 	}
 
 	@Override
@@ -282,7 +295,18 @@ public class Armor extends EquipableItem {
 	@Override
 	public String info() {
 		String info = desc();
-		
+
+        switch (type) {
+            default:
+                break;
+            case 0:
+                info += "\n\n" + Messages.get(Armor.class, "heavy");
+                break;
+            case 1:
+                info += "\n\n" + Messages.get(Armor.class, "light");
+                break;
+        }
+
 		if (levelKnown) {
 			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", DRMin(), DRMax(), STRReq());
 			

@@ -42,9 +42,10 @@ abstract public class ClassArmor extends Armor {
 	}
 
 	private int armorTier;
+    private int armorType;
 	
 	public ClassArmor() {
-		super( 6 );
+		super( -1, 6 );
 	}
 	
 	public static ClassArmor upgrade ( Hero owner, Armor armor ) {
@@ -72,17 +73,20 @@ abstract public class ClassArmor extends Armor {
 
 		classArmor.level(armor.level());
 		classArmor.armorTier = armor.tier;
+		classArmor.armorType = armor.type;
 		classArmor.inscribe( armor.glyph );
 		
 		return classArmor;
 	}
 
-	private static final String ARMOR_TIER	= "armortier";
+    private static final String ARMOR_TIER	= "armortier";
+    private static final String ARMOR_TYPE	= "armortype";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
-		bundle.put( ARMOR_TIER, armorTier );
+        bundle.put( ARMOR_TIER, armorTier );
+        bundle.put( ARMOR_TYPE, armorType );
 	}
 
 	@Override
@@ -100,7 +104,8 @@ abstract public class ClassArmor extends Armor {
 				armorTier = 4;
 			}
 		} else {
-			armorTier = bundle.getInt( ARMOR_TIER );
+            armorTier = bundle.getInt( ARMOR_TIER );
+            armorType = bundle.getInt( ARMOR_TYPE );
 		}
 	}
 	
@@ -135,26 +140,6 @@ abstract public class ClassArmor extends Armor {
 	}
 
 	abstract public void doSpecial();
-
-	@Override
-	public int STRReq(int lvl) {
-		lvl = Math.max(0, lvl);
-		float effectiveTier = armorTier;
-		if (glyph != null) effectiveTier += glyph.tierSTRAdjust();
-		effectiveTier = Math.max(0, effectiveTier);
-
-		//strength req decreases at +1,+3,+6,+10,etc.
-		return (8 + Math.round(effectiveTier * 2)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
-	}
-
-	@Override
-	public int DRMax(int lvl){
-		int effectiveTier = armorTier;
-		if (glyph != null) effectiveTier += glyph.tierDRAdjust();
-		effectiveTier = Math.max(0, effectiveTier);
-
-		return effectiveTier * (2 + lvl);
-	}
 	
 	@Override
 	public boolean isIdentified() {

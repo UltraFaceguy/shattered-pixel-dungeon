@@ -25,10 +25,14 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.HalfPlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherTunic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.MithrilArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleMail;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BombBag;
@@ -167,6 +171,11 @@ public class Generator {
 		WEP_T4	( 0, 	Weapon.class),
 		WEP_T5	( 0, 	Weapon.class),
 		ARMOR	( 60,	Armor.class ),
+        ARM_T1	( 0, 	Weapon.class),
+        ARM_T2	( 0,	Weapon.class),
+        ARM_T3	( 0, 	Weapon.class),
+        ARM_T4	( 0, 	Weapon.class),
+        ARM_T5	( 0, 	Weapon.class),
 		POTION	( 500,	Potion.class ),
 		SCROLL	( 400,	Scroll.class ),
 		WAND	( 40,	Wand.class ),
@@ -268,68 +277,92 @@ public class Generator {
 		Category.WEAPON.classes = new Class<?>[]{};
 		Category.WEAPON.probs = new float[]{};
 
-		Category.WEP_T1.classes = new Class<?>[]{
-			WornShortsword.class,
-			Knuckles.class,
-			Dagger.class,
-			MagesStaff.class,
-			Boomerang.class,
-			Dart.class
-		};
-		Category.WEP_T1.probs = new float[]{ 1, 1, 1, 0, 0, 1 };
+        Category.WEP_T1.classes = new Class<?>[]{
+                WornShortsword.class,
+                Knuckles.class,
+                Dagger.class,
+                MagesStaff.class,
+                Boomerang.class,
+                Dart.class
+        };
+        Category.WEP_T1.probs = new float[]{ 1, 1, 1, 0, 0, 1 };
 
-		Category.WEP_T2.classes = new Class<?>[]{
-			NewShortsword.class,
-			HandAxe.class,
-			Spear.class,
-			Quarterstaff.class,
-			Dirk.class,
-			IncendiaryDart.class
-		};
-		Category.WEP_T2.probs = new float[]{ 6, 5, 5, 4, 4, 6 };
+        Category.WEP_T2.classes = new Class<?>[]{
+                NewShortsword.class,
+                HandAxe.class,
+                Spear.class,
+                Quarterstaff.class,
+                Dirk.class,
+                IncendiaryDart.class
+        };
+        Category.WEP_T2.probs = new float[]{ 6, 5, 5, 4, 4, 6 };
 
-		Category.WEP_T3.classes = new Class<?>[]{
-			Sword.class,
-			Mace.class,
-			Scimitar.class,
-			RoundShield.class,
-			Sai.class,
-			Whip.class,
-			Shuriken.class,
-			CurareDart.class,
-			SerratedDart.class
-		};
-		Category.WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 6, 6, 3 };
+        Category.WEP_T3.classes = new Class<?>[]{
+                Sword.class,
+                Mace.class,
+                Scimitar.class,
+                RoundShield.class,
+                Sai.class,
+                Whip.class,
+                Shuriken.class,
+                CurareDart.class,
+                SerratedDart.class
+        };
+        Category.WEP_T3.probs = new float[]{ 6, 5, 5, 4, 4, 4, 6, 6, 3 };
 
-		Category.WEP_T4.classes = new Class<?>[]{
-			Longsword.class,
-			BattleAxe.class,
-			Flail.class,
-			RunicBlade.class,
-			AssassinsBlade.class,
-			Javelin.class,
-			SerratedDart.class
-		};
-		Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6, 2 };
+        Category.WEP_T4.classes = new Class<?>[]{
+                Longsword.class,
+                BattleAxe.class,
+                Flail.class,
+                RunicBlade.class,
+                AssassinsBlade.class,
+                Javelin.class,
+                SerratedDart.class
+        };
+        Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6, 2 };
 
-		Category.WEP_T5.classes = new Class<?>[]{
-			Greatsword.class,
-			WarHammer.class,
-			Glaive.class,
-			Greataxe.class,
-			Greatshield.class,
-			Tamahawk.class
-		};
-		Category.WEP_T5.probs = new float[]{ 6, 5, 5, 4, 4, 6 };
+        Category.WEP_T5.classes = new Class<?>[]{
+                Greatsword.class,
+                WarHammer.class,
+                Glaive.class,
+                Greataxe.class,
+                Greatshield.class,
+                Tamahawk.class
+        };
+        Category.WEP_T5.probs = new float[]{ 6, 5, 5, 4, 4, 6 };
 
-		//see Generator.randomArmor
-		Category.ARMOR.classes = new Class<?>[]{
-			ClothArmor.class,
-			LeatherArmor.class,
-			MailArmor.class,
-			ScaleArmor.class,
-			PlateArmor.class };
-		Category.ARMOR.probs = new float[]{ 0, 0, 0, 0, 0 };
+        //see Generator.randomArmor
+        Category.ARMOR.classes = new Class<?>[]{};
+        Category.ARMOR.probs = new float[]{};
+
+        Category.ARM_T1.classes = new Class<?>[]{
+                ClothArmor.class
+        };
+        Category.ARM_T1.probs = new float[]{ 1 };
+
+        Category.ARM_T2.classes = new Class<?>[]{
+                MailArmor.class,
+                LeatherTunic.class
+        };
+        Category.ARM_T2.probs = new float[]{ 1, 1};
+
+        Category.ARM_T3.classes = new Class<?>[]{
+                HalfPlateArmor.class,
+                LeatherArmor.class
+        };
+        Category.ARM_T3.probs = new float[]{ 1, 1 };
+
+        Category.ARM_T4.classes = new Class<?>[]{
+                PlateArmor.class,
+                ScaleMail.class
+        };
+        Category.ARM_T4.probs = new float[]{ 1, 1 };
+
+        Category.ARM_T5.classes = new Class<?>[]{
+                MithrilArmor.class,
+                ScaleArmor.class
+        };
+        Category.ARM_T5.probs = new float[]{ 1, 1 };
 		
 		Category.FOOD.classes = new Class<?>[]{
 			Food.class,
@@ -437,50 +470,59 @@ public class Generator {
 		}
 	}
 
-	public static Armor randomArmor(){
-		return randomArmor(Dungeon.depth / 5);
-	}
-	
-	public static Armor randomArmor(int floorSet) {
+    public static final Category[] wepTiers = new Category[]{
+            Category.WEP_T1,
+            Category.WEP_T2,
+            Category.WEP_T3,
+            Category.WEP_T4,
+            Category.WEP_T5
+    };
 
-		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
+    public static final Category[] armTiers = new Category[]{
+            Category.ARM_T1,
+            Category.ARM_T2,
+            Category.ARM_T3,
+            Category.ARM_T4,
+            Category.ARM_T5
+    };
 
-		try {
-			Armor a = (Armor)Category.ARMOR.classes[Random.chances(floorSetTierProbs[floorSet])].newInstance();
-			a.random();
-			return a;
-		} catch (Exception e) {
-			ShatteredPixelDungeon.reportException(e);
-			return null;
-		}
-	}
+    public static Weapon randomWeapon(){
+        return randomWeapon(Dungeon.depth / 5);
+    }
 
-	public static final Category[] wepTiers = new Category[]{
-			Category.WEP_T1,
-			Category.WEP_T2,
-			Category.WEP_T3,
-			Category.WEP_T4,
-			Category.WEP_T5
-	};
+    public static Weapon randomWeapon(int floorSet) {
 
-	public static Weapon randomWeapon(){
-		return randomWeapon(Dungeon.depth / 5);
-	}
-	
-	public static Weapon randomWeapon(int floorSet) {
+        floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 
-		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
+        try {
+            Category c = wepTiers[Random.chances(floorSetTierProbs[floorSet])];
+            Weapon w = (Weapon)c.classes[Random.chances(c.probs)].newInstance();
+            w.random();
+            return w;
+        } catch (Exception e) {
+            ShatteredPixelDungeon.reportException(e);
+            return null;
+        }
+    }
 
-		try {
-			Category c = wepTiers[Random.chances(floorSetTierProbs[floorSet])];
-			Weapon w = (Weapon)c.classes[Random.chances(c.probs)].newInstance();
-			w.random();
-			return w;
-		} catch (Exception e) {
-			ShatteredPixelDungeon.reportException(e);
-			return null;
-		}
-	}
+    public static Armor randomArmor(){
+        return randomArmor(Dungeon.depth / 5);
+    }
+
+    public static Armor randomArmor(int floorSet) {
+
+        floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
+
+        try {
+            Category c = armTiers[Random.chances(floorSetTierProbs[floorSet])];
+            Armor a = (Armor) c.classes[Random.chances(c.probs)].newInstance();
+            a.random();
+            return a;
+        } catch (Exception e) {
+            ShatteredPixelDungeon.reportException(e);
+            return null;
+        }
+    }
 
 	//enforces uniqueness of artifacts throughout a run.
 	public static Artifact randomArtifact() {

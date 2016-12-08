@@ -29,7 +29,7 @@ public class PlateArmor extends Armor {
 	}
 	
 	public PlateArmor() {
-		super( 5 );
+		super( 0 , 4 );
 	}
 
 }

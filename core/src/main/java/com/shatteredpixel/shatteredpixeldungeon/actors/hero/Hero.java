@@ -286,28 +286,31 @@ public class Hero extends Char {
 	
 	@Override
 	public int defenseSkill( Char enemy ) {
-		
-		int bonus = RingOfEvasion.getBonus(this, RingOfEvasion.Evasion.class);
 
-		float evasion = (float)Math.pow( 1.125, bonus );
-		if (paralysed > 0) {
-			evasion /= 2;
-		}
-		
-		int aEnc = belongings.armor != null ? belongings.armor.STRReq() - STR() : 10 - STR();
-		
-		if (aEnc > 0) {
-			return (int)(defenseSkill * evasion / Math.pow( 1.5, aEnc ));
-		} else {
+		float multiplier = (float) Math.pow( 1.125, RingOfEvasion.getBonus(this, RingOfEvasion.Evasion.class) );
+        int flatBonus = 0;
 
-			bonus = 0;
-			if (heroClass == HeroClass.ROGUE) bonus += -aEnc;
+        if (paralysed > 0) {
+            multiplier /= 2;
+        }
 
-			if (belongings.armor != null && belongings.armor.hasGlyph(Swiftness.class))
-				bonus += 5 + belongings.armor.level()*1.5f;
+        if (belongings.armor != null) {
+            if (belongings.armor.type == 1) {
+                multiplier += 0.05 * tier() + 0.05 * belongings.armor.level();
+            }
+            if (belongings.armor.hasGlyph(Swiftness.class)) {
+                flatBonus += 1 + belongings.armor.level();
+            }
+            if (heroClass == HeroClass.ROGUE) {
+                flatBonus += STR() - belongings.armor.STRReq();
+            }
+        } else {
+            if (heroClass == HeroClass.ROGUE) {
+                flatBonus += STR() - 10;
+            }
+        }
 
-			return Math.round((defenseSkill + bonus) * evasion);
-		}
+        return (int)((defenseSkill + flatBonus) * multiplier);
 	}
 	
 	@Override
