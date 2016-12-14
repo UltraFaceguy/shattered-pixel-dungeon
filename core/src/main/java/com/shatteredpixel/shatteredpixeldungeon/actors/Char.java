@@ -266,19 +266,19 @@ public abstract class Char extends Actor {
 		if (src instanceof Hunger || SHLD == 0){
 			HP -= dmg;
 		} else if (SHLD >= dmg){
+            sprite.showStatus(CharSprite.DEFAULT, Integer.toString(dmg));
             fullyShielded = true;
 			SHLD -= dmg;
 		} else if (SHLD > 0) {
+            sprite.showStatus(CharSprite.DEFAULT, Integer.toString(SHLD));
 			HP -= (dmg - SHLD);
 			SHLD = 0;
             dmg -= SHLD;
 		}
 
 		if (dmg > 0 || src instanceof Char) {
-            if (fullyShielded) {
-                sprite.showStatus(CharSprite.DEFAULT, Integer.toString(dmg));
-            } else {
-                sprite.showStatus(CharSprite.WARNING, Integer.toString(dmg));
+            if (!fullyShielded) {
+				sprite.showStatus(CharSprite.WARNING, Integer.toString(dmg));
             }
 		}
 
