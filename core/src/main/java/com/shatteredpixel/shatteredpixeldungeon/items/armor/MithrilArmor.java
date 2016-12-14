@@ -25,7 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class MithrilArmor extends Armor {
 
 	{
-		image = ItemSpriteSheet.ARMOR_PLATE;
+		image = ItemSpriteSheet.ARMOR_MITHRIL;
 	}
 
 	public MithrilArmor() {
