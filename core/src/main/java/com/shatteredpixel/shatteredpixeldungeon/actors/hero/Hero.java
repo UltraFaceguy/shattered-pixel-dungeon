@@ -296,17 +296,17 @@ public class Hero extends Char {
 
         if (belongings.armor != null) {
             if (belongings.armor.type == 1) {
-                multiplier += 0.05 * tier() + 0.05 * belongings.armor.level();
+                flatBonus += tier() + belongings.armor.level();
             }
             if (belongings.armor.hasGlyph(Swiftness.class)) {
-                flatBonus += 1 + belongings.armor.level();
+                flatBonus += 1 + (belongings.armor.level() + 1) / 2;
             }
             if (heroClass == HeroClass.ROGUE) {
                 flatBonus += STR() - belongings.armor.STRReq();
             }
         } else {
             if (heroClass == HeroClass.ROGUE) {
-                flatBonus += STR() - 10;
+                flatBonus += STR() - belongings.armor.STRReq();
             }
         }
 
@@ -1287,7 +1287,7 @@ public class Hero extends Char {
 		stealth += RingOfEvasion.getBonus(this, RingOfEvasion.Evasion.class);
 
 		if (belongings.armor != null && belongings.armor.hasGlyph(Obfuscation.class)){
-			stealth += belongings.armor.level();
+			stealth += 1 + (belongings.armor.level() + 1) / 2;
 		}
 		return stealth;
 	}
