@@ -20,12 +20,20 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
  public class Healing extends Buff {
 
      protected int level;
      private static final String LEVEL	= "level";
+
+     @Override
+     public int icon() {
+         return BuffIndicator.HEALING;
+     }
 
      @Override
      public void storeInBundle( Bundle bundle ) {
@@ -39,24 +47,41 @@ import com.watabou.utils.Bundle;
          level = bundle.getInt( LEVEL );
      }
 
-	@Override
-	public boolean act() {
-		if (!target.isAlive()) {
-			return true;
-		}
-	    if (target.HP == target.HT) {
-            level -= target.HT / 20;
-        } else {
-            int restore = Math.min(1 + level / 2, 1 + target.HT / 10);
+     public void set( int level ) {
+         this.level = Math.max(this.level, level);
+     }
 
-            level -= restore;
-            target.heal(restore);
-        }
+     @Override
+     public boolean act() {
+         if (target.isAlive()) {
+             if (target.HP == target.HT) {
+                 level -= target.HT / 20;
+             } else {
+                 int restore = 1 + Random.Int(level / 5);
 
-        if (level <= 0) {
-            detach();
-        }
-		
-		return true;
-	}
-}
+                 level -= restore;
+                 target.heal(restore);
+             }
+
+             spend( TICK );
+
+             if (level <= 0) {
+                 detach();
+             }
+         } else {
+             detach();
+         }
+
+         return true;
+     }
+
+     @Override
+     public String toString() {
+         return Messages.get(this, "name");
+     }
+
+     @Override
+     public String desc() {
+         return Messages.get(this, "desc", level);
+     }
+ }

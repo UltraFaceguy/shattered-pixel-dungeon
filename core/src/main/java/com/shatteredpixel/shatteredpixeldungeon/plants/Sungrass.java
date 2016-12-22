@@ -90,8 +90,9 @@ public class Sungrass extends Plant {
 				} else {
 					target.heal(amount);
 					level -= amount;
-					if (healCurr < 12)
+					if (healCurr < target.HT / 10) {
 						healCurr++;
+					}
 				}
 				if (target.HP == target.HT && target instanceof Hero){
 					((Hero)target).resting = false;
@@ -120,7 +121,7 @@ public class Sungrass extends Plant {
 		
 		@Override
 		public int icon() {
-			return BuffIndicator.HEALING;
+			return BuffIndicator.SUN_HEAL;
 		}
 		
 		@Override
