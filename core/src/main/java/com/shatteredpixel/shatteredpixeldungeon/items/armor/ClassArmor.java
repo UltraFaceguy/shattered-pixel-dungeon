@@ -44,8 +44,8 @@ abstract public class ClassArmor extends Armor {
 	private int armorTier;
     private int armorType;
 	
-	public ClassArmor() {
-		super( -1, 6 );
+	public ClassArmor(int type, int tier) {
+		super( type, tier );
 	}
 	
 	public static ClassArmor upgrade ( Hero owner, Armor armor ) {
@@ -54,26 +54,24 @@ abstract public class ClassArmor extends Armor {
 		
 		switch (owner.heroClass) {
 		case WARRIOR:
-			classArmor = new WarriorArmor();
+			classArmor = new WarriorArmor(armor.type, armor.tier);
 			BrokenSeal seal = armor.checkSeal();
 			if (seal != null) {
 				classArmor.affixSeal(seal);
 			}
 			break;
 		case ROGUE:
-			classArmor = new RogueArmor();
+			classArmor = new RogueArmor(armor.type, armor.tier);
 			break;
 		case MAGE:
-			classArmor = new MageArmor();
+			classArmor = new MageArmor(armor.type, armor.tier);
 			break;
 		case HUNTRESS:
-			classArmor = new HuntressArmor();
+			classArmor = new HuntressArmor(armor.type, armor.tier);
 			break;
 		}
 
 		classArmor.level(armor.level());
-		classArmor.armorTier = armor.tier;
-		classArmor.armorType = armor.type;
 		classArmor.inscribe( armor.glyph );
 		
 		return classArmor;

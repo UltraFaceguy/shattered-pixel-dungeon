@@ -42,6 +42,10 @@ public class RogueArmor extends ClassArmor {
 	{
 		image = ItemSpriteSheet.ARMOR_ROGUE;
 	}
+
+	public RogueArmor(int type, int tier) {
+		super( type, tier+1 );
+	}
 	
 	@Override
 	public void doSpecial() {

@@ -39,6 +39,10 @@ public class HuntressArmor extends ClassArmor {
 	{
 		image = ItemSpriteSheet.ARMOR_HUNTRESS;
 	}
+
+	public HuntressArmor(int type, int tier) {
+		super( type, tier+1 );
+	}
 	
 	private HashMap<Callback, Mob> targets = new HashMap<Callback, Mob>();
 	

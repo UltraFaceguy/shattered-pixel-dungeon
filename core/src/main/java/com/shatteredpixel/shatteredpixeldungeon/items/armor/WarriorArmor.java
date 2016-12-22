@@ -27,7 +27,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -45,6 +44,10 @@ public class WarriorArmor extends ClassArmor {
 	{
 		image = ItemSpriteSheet.ARMOR_WARRIOR;
 	}
+
+    public WarriorArmor(int type, int tier) {
+        super( type, tier+1 );
+    }
 
 	@Override
 	public void doSpecial() {
