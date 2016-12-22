@@ -24,6 +24,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -42,12 +44,9 @@ public class PotionOfHealing extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-		fullHeal( Dungeon.hero );
+		hero.heal(hero.HT / 4);
+		Buff.affect( hero, Healing.class);
 		GLog.p( Messages.get(this, "heal") );
-	}
-	
-	public static void fullHeal( Hero hero ) {
-		hero.heal(hero.HT);
 	}
 
 	@Override
