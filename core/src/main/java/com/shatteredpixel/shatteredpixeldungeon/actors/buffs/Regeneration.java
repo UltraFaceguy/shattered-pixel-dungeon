@@ -44,13 +44,27 @@ public class Regeneration extends Buff {
 
 			ChaliceOfBlood.chaliceRegen regenBuff = Dungeon.hero.buff( ChaliceOfBlood.chaliceRegen.class);
 
-			if (regenBuff != null)
-				if (regenBuff.isCursed())
-					spend( REGENERATION_DELAY * 1.5f );
-				else
-					spend( REGENERATION_DELAY - regenBuff.itemLevel()*0.9f );
-			else
-				spend( REGENERATION_DELAY );
+			float chaliceMult = 1.0f;
+            float levelMult = 1.0f;
+
+            // 0 -> -50% delay as the hero approaches 30
+            if (target instanceof Hero) {
+                float lvl = ((Hero) target).lvl;
+                levelMult -= 0.5f * (lvl / 30);
+            }
+
+            // +50% delay if cursed, -9% delay per level
+			if (regenBuff != null) {
+                if (regenBuff.isCursed()) {
+                    chaliceMult += 0.5f;
+                } else {
+                    chaliceMult -= regenBuff.itemLevel() * 0.9f;
+                }
+            }
+
+            // Max regen should be -95% (0.5 from max level * 0.1 from max chalice)
+            // That's 20x base! Wow!
+			spend( REGENERATION_DELAY * levelMult * chaliceMult );
 			
 		} else {
 			
