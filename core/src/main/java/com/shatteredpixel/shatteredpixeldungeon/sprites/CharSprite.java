@@ -259,9 +259,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public int blood() {
 		return 0xFFBB0000;
 	}
-	
+
 	public void flash() {
 		ra = ba = ga = 1f;
+		flashTime = FLASH_INTERVAL;
+	}
+
+	public void darkFlash() {
+		ra = ba = ga = 0f;
 		flashTime = FLASH_INTERVAL;
 	}
 	
