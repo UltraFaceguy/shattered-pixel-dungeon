@@ -299,14 +299,14 @@ public class Hero extends Char {
                 flatBonus += tier() + belongings.armor.level();
             }
             if (belongings.armor.hasGlyph(Swiftness.class)) {
-                flatBonus += 1 + (belongings.armor.level() + 1) / 2;
+                flatBonus += 1 + (belongings.armor.level() / 2);
             }
             if (heroClass == HeroClass.ROGUE) {
                 flatBonus += STR() - belongings.armor.STRReq();
             }
         } else {
             if (heroClass == HeroClass.ROGUE) {
-                flatBonus += STR() - belongings.armor.STRReq();
+                flatBonus += STR() - 8;
             }
         }
 
