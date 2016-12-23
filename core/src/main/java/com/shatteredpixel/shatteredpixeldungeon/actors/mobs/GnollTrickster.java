@@ -45,7 +45,7 @@ public class GnollTrickster extends Gnoll {
 		spriteClass = GnollTricksterSprite.class;
 
 		HP = HT = 20;
-		defenseSkill = 5;
+		defenseSkill = 6;
 
 		EXP = 5;
 
@@ -61,7 +61,7 @@ public class GnollTrickster extends Gnoll {
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 16;
+		return 20;
 	}
 
 	@Override
@@ -100,7 +100,9 @@ public class GnollTrickster extends Gnoll {
 	public void die( Object cause ) {
 		super.die( cause );
 
-		Ghost.Quest.process();
+		if (Dungeon.depth < 5) {
+			Ghost.Quest.process();
+		}
 	}
 
 	private static final String COMBO = "combo";

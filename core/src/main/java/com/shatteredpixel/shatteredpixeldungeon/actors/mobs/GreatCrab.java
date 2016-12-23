@@ -38,7 +38,7 @@ public class GreatCrab extends Crab {
 	{
 		spriteClass = GreatCrabSprite.class;
 
-		HP = HT = 25;
+		HP = HT = 26;
 		defenseSkill = 0; //see damage()
 		baseSpeed = 1f;
 
@@ -84,7 +84,9 @@ public class GreatCrab extends Crab {
 	public void die( Object cause ) {
 		super.die( cause );
 
-		Ghost.Quest.process();
+		if (Dungeon.depth < 5) {
+			Ghost.Quest.process();
+		}
 
 		Dungeon.level.drop( new MysteryMeat(), pos );
 		Dungeon.level.drop( new MysteryMeat(), pos ).sprite.drop();

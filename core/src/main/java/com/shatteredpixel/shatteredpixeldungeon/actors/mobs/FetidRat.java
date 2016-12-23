@@ -20,6 +20,7 @@
  */
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
@@ -39,8 +40,8 @@ public class FetidRat extends Rat {
 	{
 		spriteClass = FetidRatSprite.class;
 
-		HP = HT = 20;
-		defenseSkill = 5;
+		HP = HT = 25;
+		defenseSkill = 4;
 
 		EXP = 4;
 
@@ -55,7 +56,7 @@ public class FetidRat extends Rat {
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return 14;
 	}
 
 	@Override
@@ -83,8 +84,9 @@ public class FetidRat extends Rat {
 	@Override
 	public void die( Object cause ) {
 		super.die( cause );
-
-		Ghost.Quest.process();
+		if (Dungeon.depth < 5) {
+			Ghost.Quest.process();
+		}
 	}
 
 	private static final HashSet<Class<?>> IMMUNITIES = new HashSet<>();
