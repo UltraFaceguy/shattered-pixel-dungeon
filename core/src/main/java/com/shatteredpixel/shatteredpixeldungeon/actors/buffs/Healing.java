@@ -57,7 +57,7 @@ import com.watabou.utils.Random;
              if (target.HP == target.HT) {
                  level -= target.HT / 20;
              } else {
-                 int restore = 1 + Random.Int(level / 5);
+                 int restore = 1 + Random.Int(level / 4);
 
                  level -= restore;
                  target.heal(restore);
