@@ -92,7 +92,7 @@ public class DewVial extends Item {
 					value++;
 				}
 				value += RingOfTranquility.getBonus(hero, RingOfTranquility.DewBonus.class);
-				value *= Math.pow(volume, 1.5);
+				value *= Math.pow(volume, 1.2);
 				if (value >= 0) {
 					hero.heal(value);
 				} else {
