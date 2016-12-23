@@ -21,8 +21,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
@@ -62,9 +65,10 @@ public class WarlockSprite extends MobSprite {
 			new Callback() {
 				@Override
 				public void call() {
-					((Warlock)ch).onZapComplete();
+					((Warlock)ch).zapComplete();
 				}
 			} );
+
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

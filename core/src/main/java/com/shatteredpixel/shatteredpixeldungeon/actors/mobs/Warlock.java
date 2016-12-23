@@ -24,6 +24,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -75,48 +77,49 @@ public class Warlock extends Mob implements Callback {
 	
 	@Override
 	protected boolean canAttack( Char enemy ) {
-		return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
+        return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
-	
+
 	protected boolean doAttack( Char enemy ) {
 
 		if (Dungeon.level.adjacent( pos, enemy.pos )) {
-			
+
 			return super.doAttack( enemy );
-			
+
 		} else {
-			
+
 			boolean visible = Level.fieldOfView[pos] || Level.fieldOfView[enemy.pos];
 			if (visible) {
 				sprite.zap( enemy.pos );
 			}
-			
+
+			spend( TIME_TO_ZAP );
+
+			if (hit( this, enemy, true )) {
+				if (enemy == Dungeon.hero) {
+					Buff.prolong( enemy, Weakness.class, 6f );
+				}
+
+                enemy.sprite.darkFlash();
+
+				int dmg = Random.Int( 12, 18 );
+				enemy.damage( dmg, this );
+
+				if (!enemy.isAlive() && enemy == Dungeon.hero) {
+					Dungeon.fail( getClass() );
+					GLog.n( Messages.get(this, "bolt_kill") );
+				}
+			} else {
+				enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
+			}
+
+            zapComplete();
+
 			return !visible;
 		}
 	}
 	
-	private void castShadowBolt() {
-		spend( TIME_TO_ZAP );
-		
-		if (hit( this, enemy, true )) {
-			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {
-				Buff.prolong( enemy, Weakness.class, Weakness.duration( enemy ) );
-			}
-			
-			int dmg = Random.Int( 12, 18 );
-			enemy.damage( dmg, this );
-			
-			if (!enemy.isAlive() && enemy == Dungeon.hero) {
-				Dungeon.fail( getClass() );
-				GLog.n( Messages.get(this, "bolt_kill") );
-			}
-		} else {
-			enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
-		}
-	}
-	
-	public void onZapComplete() {
-        castShadowBolt();
+	public void zapComplete() {
 		next();
 	}
 
