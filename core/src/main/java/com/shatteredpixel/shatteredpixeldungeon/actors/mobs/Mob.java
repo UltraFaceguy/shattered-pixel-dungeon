@@ -590,7 +590,14 @@ public abstract class Mob extends Char {
 
 			Item item = Random.element( items );
 			Dungeon.level.drop( item, cell ).sprite.drop( pos );
+			items.remove(item);
 		}
+
+        if (!items.isEmpty()) {
+            for (Item item : items) {
+                Dungeon.level.drop( item, pos ).sprite.drop( pos );
+            }
+        }
 
 		GameScene.bossSlain();
 	}
