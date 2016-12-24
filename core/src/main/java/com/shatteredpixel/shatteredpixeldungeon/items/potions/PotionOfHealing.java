@@ -38,7 +38,12 @@ public class PotionOfHealing extends Potion {
 	public void apply( Hero hero ) {
 		setKnown();
 		hero.heal(1 + hero.HT / 4);
-		Buff.prolong( hero, Healing.class, 1 + hero.HT / 4);
+		Healing buff = hero.buff(Healing.class);
+		if (buff == null) {
+			Buff.affect(hero, Healing.class).set(1 + hero.HT / 4);
+		} else {
+            buff.extend(1 + hero.HT / 4);
+        }
 		GLog.p( Messages.get(this, "heal") );
 	}
 

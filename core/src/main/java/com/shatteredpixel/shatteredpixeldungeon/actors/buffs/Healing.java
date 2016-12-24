@@ -51,6 +51,10 @@ import com.watabou.utils.Random;
          this.level = Math.max(this.level, level);
      }
 
+     public void extend( int level ) {
+         this.level = this.level + level;
+     }
+
      @Override
      public boolean act() {
          if (target.isAlive()) {

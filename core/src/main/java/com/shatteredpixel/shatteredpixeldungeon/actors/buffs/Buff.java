@@ -128,7 +128,7 @@ public class Buff extends Actor {
 	}
 
 	//postpones an already active buff, or creates & attaches a new buff and delays that.
-	public static<T extends Buff> T prolong( Char target, Class<T> buffClass, float duration ) {
+	public static<T extends FlavourBuff> T prolong( Char target, Class<T> buffClass, float duration ) {
 		T buff = affect( target, buffClass );
 		buff.postpone( duration );
 		return buff;
