@@ -43,6 +43,10 @@ public class Sungrass extends Plant {
 	@Override
 	public void activate() {
 		Char ch = Actor.findChar(pos);
+
+		if (ch == null) {
+			return;
+		}
 		
 		if (ch == Dungeon.hero) {
 			Buff.affect( ch, Health.class ).boost(ch.HT / 2);
