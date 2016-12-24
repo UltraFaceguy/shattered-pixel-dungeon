@@ -563,8 +563,6 @@ public abstract class Mob extends Char {
 
 	public void bossDie () {
 
-        GameScene.bossSlain();
-
 		ArrayList<Integer> passable = new ArrayList<Integer>();
 		for (Integer ofs : PathFinder.NEIGHBOURS8) {
 			int cell = pos + ofs;
@@ -592,8 +590,9 @@ public abstract class Mob extends Char {
 
 			Item item = Random.element( items );
 			Dungeon.level.drop( item, cell ).sprite.drop( pos );
-			items.remove( item );
 		}
+
+		GameScene.bossSlain();
 	}
 	
 	protected Object loot = null;
