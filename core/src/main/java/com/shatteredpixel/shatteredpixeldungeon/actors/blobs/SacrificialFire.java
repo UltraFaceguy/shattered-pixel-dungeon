@@ -45,7 +45,7 @@ import com.watabou.utils.PathFinder;
 public class SacrificialFire extends Blob {
 
     protected int pos;
-    public int tributes = 5;
+    private int tributes = 5;
 
     @Override
     protected void evolve() {
@@ -84,7 +84,10 @@ public class SacrificialFire extends Blob {
         emitter.pour( SacrificialParticle.FACTORY, 0.04f );
     }
 
-    public static void affectCell( int cell ) {
+    public void affectCell( int cell ) {
+        if (volume == 0) {
+            return;
+        }
         SacrificialFire fire = (SacrificialFire) Dungeon.level.blobs.get( SacrificialFire.class );
         if (fire != null && fire.pos == cell) {
             Char ch = Actor.findChar( cell );
