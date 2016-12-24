@@ -133,6 +133,7 @@ public class SacrificialFire extends Blob {
         }
         if (tributes <= 0) {
             volume = 0;
+            Journal.remove( Feature.ALTER_OF_SACRIFICE );
             GLog.w( Messages.get(this, "extinguish") );
         }
     }
