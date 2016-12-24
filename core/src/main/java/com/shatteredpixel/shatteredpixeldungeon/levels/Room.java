@@ -97,7 +97,6 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 		RAT_KING	( RatKingPainter.class ),
 		WEAK_FLOOR	( WeakFloorPainter.class ),
 		PIT			( PitPainter.class ),
-		ALTAR		( AltarPainter.class ),
 
 		//prison quests
 		MASS_GRAVE  ( MassGravePainter.class ),
@@ -129,12 +128,12 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 
 	private static final ArrayList<Type> ALL_SPEC = new ArrayList<Type>( Arrays.asList(
 		Type.WEAK_FLOOR, Type.MAGIC_WELL, Type.CRYPT, Type.POOL, Type.GARDEN, Type.LIBRARY, Type.ARMORY,
-		Type.TREASURY, Type.TRAPS, Type.STORAGE, Type.STATUE, Type.LABORATORY, Type.VAULT
+		Type.TREASURY, Type.TRAPS, Type.STORAGE, Type.STATUE, Type.LABORATORY, Type.VAULT, Type.ALTER
 	) );
 	
 	public static ArrayList<Type> SPECIALS = new ArrayList<Type>( Arrays.asList(
 		Type.WEAK_FLOOR, Type.MAGIC_WELL, Type.CRYPT, Type.POOL, Type.GARDEN, Type.LIBRARY, Type.ARMORY,
-		Type.TREASURY, Type.TRAPS, Type.STORAGE, Type.STATUE, Type.LABORATORY, Type.VAULT
+		Type.TREASURY, Type.TRAPS, Type.STORAGE, Type.STATUE, Type.LABORATORY, Type.VAULT, Type.ALTER
 	) );
 	
 	public Type type = Type.NULL;
