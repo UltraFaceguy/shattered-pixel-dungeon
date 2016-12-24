@@ -26,7 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.watabou.utils.Point;
 
-//import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 
 public class AltarPainter extends Painter {
 
@@ -52,13 +52,12 @@ public class AltarPainter extends Painter {
 		fill( level, c.x - 1, c.y - 1, 3, 3, Terrain.EMBERS );
 		set( level, c, Terrain.PEDESTAL );
 
-		//TODO: find some use for sacrificial fire... but not the vanilla one. scroll of wipe out is too strong.
-		/*SacrificialFire fire = (SacrificialFire)level.blobs.get( SacrificialFire.class );
+		SacrificialFire fire = (SacrificialFire)level.blobs.get( SacrificialFire.class );
 		if (fire == null) {
 			fire = new SacrificialFire();
 		}
-		fire.seed( c.x + c.y * Level.WIDTH, 5 + Dungeon.depth * 5 );
-		level.blobs.put( SacrificialFire.class, fire );*/
+		fire.seed( level, c.x + c.y * level.width(), 1 );
+		level.blobs.put( SacrificialFire.class, fire );
 
 		door.set( Room.Door.Type.EMPTY );
 	}

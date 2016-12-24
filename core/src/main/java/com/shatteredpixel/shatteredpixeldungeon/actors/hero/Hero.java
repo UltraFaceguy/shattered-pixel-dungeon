@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
@@ -1298,6 +1299,14 @@ public class Hero extends Char {
 		curAction = null;
 
 		Ankh ankh = null;
+
+        if (buff(SacrificialFire.Marked.class) != null) {
+            SacrificialFire.Marked mark = buff(SacrificialFire.Marked.class);
+            if (mark.checkAlterTribute()) {
+                HP = 1;
+                return;
+            }
+        }
 
 		//look for ankhs in player inventory, prioritize ones which are blessed.
 		for (Item item : belongings){

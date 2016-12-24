@@ -33,6 +33,7 @@ public class Journal {
 		WELL_OF_AWARENESS,
 		WELL_OF_TRANSMUTATION,
 		WELL_OF_POWER,
+		ALTER_OF_SACRIFICE,
 		ALCHEMY,
 		GARDEN,
 		STATUE,
@@ -84,7 +85,7 @@ public class Journal {
 	public static ArrayList<Record> records;
 	
 	public static void reset() {
-		records = new ArrayList<Journal.Record>();
+		records = new ArrayList<>();
 	}
 	
 	private static final String JOURNAL	= "journal";

@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
@@ -805,6 +806,10 @@ public abstract class Level implements Bundlable {
 		case Terrain.WELL:
 			WellWater.affectCell( cell );
 			break;
+
+		case Terrain.PEDESTAL:
+			SacrificialFire.affectCell( cell );
+			break;
 			
 		case Terrain.ALCHEMY:
 			if (ch == null) {
@@ -863,6 +868,10 @@ public abstract class Level implements Bundlable {
 		case Terrain.DOOR:
 			Door.enter( cell );
 			break;
+
+        case Terrain.PEDESTAL:
+            SacrificialFire.affectCell( cell );
+            break;
 		}
 		
 		if (trap != null) {

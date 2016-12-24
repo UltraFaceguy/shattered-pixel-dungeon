@@ -89,6 +89,7 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 		TRAPS		( TrapsPainter.class ),
 		STORAGE		( StoragePainter.class ),
 		MAGIC_WELL	( MagicWellPainter.class ),
+		ALTER		( AltarPainter.class ),
 		GARDEN		( GardenPainter.class ),
 		CRYPT		( CryptPainter.class ),
 		STATUE		( StatuePainter.class ),
