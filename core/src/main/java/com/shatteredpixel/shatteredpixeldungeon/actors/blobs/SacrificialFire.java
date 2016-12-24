@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialPar
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -45,20 +46,6 @@ public class SacrificialFire extends Blob {
 
     protected int pos;
     public int tributes = 5;
-
-    @Override
-    public void restoreFromBundle( Bundle bundle ) {
-        super.restoreFromBundle( bundle );
-
-        if (volume > 0) {
-            for (int i = 0; i < cur.length; i++) {
-                if (cur[i] > 0) {
-                    pos = i;
-                    break;
-                }
-            }
-        }
-    }
 
     @Override
     protected void evolve() {
@@ -97,11 +84,6 @@ public class SacrificialFire extends Blob {
         emitter.pour( SacrificialParticle.FACTORY, 0.04f );
     }
 
-    @Override
-    public String tileDesc() {
-        return Messages.get(this, "desc");
-    }
-
     public static void affectCell( int cell ) {
         SacrificialFire fire = (SacrificialFire) Dungeon.level.blobs.get( SacrificialFire.class );
         if (fire != null && fire.pos == cell) {
@@ -135,6 +117,7 @@ public class SacrificialFire extends Blob {
 
             tributeFlare();
             Sample.INSTANCE.play( Assets.SND_CURSED );
+            GLog.n( Messages.get(this, "hero") );
         } else {
             Dungeon.hero.HT += 1;
             Dungeon.hero.HP += 1;
@@ -145,6 +128,7 @@ public class SacrificialFire extends Blob {
         }
         if (tributes <= 0) {
             volume = 0;
+            GLog.w( Messages.get(this, "extinguish") );
         }
     }
 
@@ -153,6 +137,38 @@ public class SacrificialFire extends Blob {
             int p = pos + PathFinder.NEIGHBOURS8[i];
             CellEmitter.get(p).burst( SacrificialParticle.FACTORY, 5 );
         }
+    }
+
+    private static final String TRIBUTE = "tribute";
+
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( TRIBUTE, tributes);
+    }
+
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        super.restoreFromBundle( bundle );
+        if (volume > 0) {
+            for (int i = 0; i < cur.length; i++) {
+                if (cur[i] > 0) {
+                    pos = i;
+                    break;
+                }
+            }
+        }
+        tributes = bundle.getInt( TRIBUTE );
+    }
+
+    @Override
+    public String toString() {
+        return Messages.get(this, "name");
+    }
+
+    @Override
+    public String tileDesc() {
+        return Messages.get(this, "desc");
     }
 
     public static class Marked extends FlavourBuff {
@@ -166,7 +182,7 @@ public class SacrificialFire extends Blob {
 
         @Override
         public String toString() {
-            return Messages.get(this, "desc");
+            return Messages.get(this, "name");
         }
 
         @Override
