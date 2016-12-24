@@ -50,15 +50,15 @@ public class Regeneration extends Buff {
             // 0 -> -50% delay as the hero approaches 30
             if (target instanceof Hero) {
                 float lvl = ((Hero) target).lvl;
-                levelMult -= 0.5f * (lvl / 30);
+                levelMult = 1 - (0.5f * (lvl / 30));
             }
 
             // +50% delay if cursed, -9% delay per level
 			if (regenBuff != null) {
                 if (regenBuff.isCursed()) {
-                    chaliceMult += 0.5f;
+                    chaliceMult = 1.5f;
                 } else {
-                    chaliceMult -= regenBuff.itemLevel() * 0.9f;
+                    chaliceMult = 1 - (regenBuff.itemLevel() * 0.09f);
                 }
             }
 
