@@ -84,12 +84,12 @@ public class SacrificialFire extends Blob {
         emitter.pour( SacrificialParticle.FACTORY, 0.04f );
     }
 
-    public void affectCell( int cell ) {
-        if (volume == 0) {
+    public static void affectCell( int cell ) {
+        SacrificialFire fire = (SacrificialFire) Dungeon.level.blobs.get( SacrificialFire.class );
+        if (fire == null || fire.volume == 0) {
             return;
         }
-        SacrificialFire fire = (SacrificialFire) Dungeon.level.blobs.get( SacrificialFire.class );
-        if (fire != null && fire.pos == cell) {
+        if (fire.pos == cell) {
             Char ch = Actor.findChar( cell );
             if (ch == null) {
                 return;
