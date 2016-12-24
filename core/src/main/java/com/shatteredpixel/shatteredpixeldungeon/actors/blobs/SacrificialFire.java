@@ -109,13 +109,15 @@ public class SacrificialFire extends Blob {
             Dungeon.hero.HP += 5 + tributes;
             tributes = 0;
 
-            Buff.append(ch, Blindness.class, 10f);
+            Buff.append(ch, Blindness.class, 15f);
 
             for (Mob mob : Dungeon.level.mobs) {
                 mob.beckon( pos );
             }
 
             tributeFlare();
+
+            ((Hero) ch).spend( 3f );
             Sample.INSTANCE.play( Assets.SND_CURSED );
             GLog.n( Messages.get(this, "hero") );
         } else {
