@@ -67,7 +67,7 @@ public class Armor extends EquipableItem {
 
 	protected static final String AC_DETACH       = "DETACH";
 
-    public int type = 0;
+    public int type;
 	public int tier;
 	
 	private int hitsToKnow = HITS_TO_KNOW;
@@ -80,6 +80,13 @@ public class Armor extends EquipableItem {
         this.tier = tier;
 	}
 
+    public Armor() {
+        this.type = -1;
+        this.tier = 1;
+    }
+
+	private static final String ARMOR_TIER	    = "armortier";
+	private static final String ARMOR_TYPE	    = "armortype";
 	private static final String UNFAMILIRIARITY	= "unfamiliarity";
 	private static final String GLYPH			= "glyph";
 	private static final String SEAL            = "seal";
@@ -87,6 +94,8 @@ public class Armor extends EquipableItem {
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
+		bundle.put( ARMOR_TIER, tier );
+		bundle.put( ARMOR_TYPE, type );
 		bundle.put( UNFAMILIRIARITY, hitsToKnow );
 		bundle.put( GLYPH, glyph );
 		bundle.put( SEAL, seal);
@@ -100,6 +109,8 @@ public class Armor extends EquipableItem {
 		}
 		inscribe((Glyph) bundle.get(GLYPH));
 		seal = (BrokenSeal)bundle.get(SEAL);
+		tier = bundle.getInt(ARMOR_TIER);
+		type = bundle.getInt(ARMOR_TYPE);
 	}
 
 	@Override
@@ -213,7 +224,7 @@ public class Armor extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.armor == this;
+		return hero.belongings != null && hero.belongings.armor == this;
 	}
 
 	public final int DRMax(){

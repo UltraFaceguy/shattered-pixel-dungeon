@@ -37,10 +37,6 @@ public class MageArmor extends ClassArmor {
 	{
 		image = ItemSpriteSheet.ARMOR_MAGE;
 	}
-
-	public MageArmor(int type, int tier) {
-		super( type, tier+1 );
-	}
 	
 	@Override
 	public void doSpecial() {

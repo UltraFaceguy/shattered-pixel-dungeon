@@ -40,51 +40,36 @@ abstract public class ClassArmor extends Armor {
 
 		bones = false;
 	}
-
-	private int armorTier;
-    private int armorType;
-	
-	public ClassArmor(int type, int tier) {
-		super( type, tier );
-	}
 	
 	public static ClassArmor upgrade ( Hero owner, Armor armor ) {
 		
 		ClassArmor classArmor = null;
 		
 		switch (owner.heroClass) {
-		case WARRIOR:
-			classArmor = new WarriorArmor(armor.type, armor.tier);
-			BrokenSeal seal = armor.checkSeal();
-			if (seal != null) {
-				classArmor.affixSeal(seal);
-			}
-			break;
-		case ROGUE:
-			classArmor = new RogueArmor(armor.type, armor.tier);
-			break;
-		case MAGE:
-			classArmor = new MageArmor(armor.type, armor.tier);
-			break;
-		case HUNTRESS:
-			classArmor = new HuntressArmor(armor.type, armor.tier);
-			break;
-		}
+		    case WARRIOR:
+		    	classArmor = new WarriorArmor();
+		    	BrokenSeal seal = armor.checkSeal();
+		    	if (seal != null) {
+		    		classArmor.affixSeal(seal);
+		    	}
+		    	break;
+		    case ROGUE:
+		    	classArmor = new RogueArmor();
+		    	break;
+		    case MAGE:
+		    	classArmor = new MageArmor();
+		    	break;
+		    case HUNTRESS:
+		    	classArmor = new HuntressArmor();
+		    	break;
+        }
 
-		classArmor.level(armor.level());
+        classArmor.tier = armor.tier + 1;
+        classArmor.type = armor.type;
+		classArmor.level( armor.level() );
 		classArmor.inscribe( armor.glyph );
 		
 		return classArmor;
-	}
-
-    private static final String ARMOR_TIER	= "armortier";
-    private static final String ARMOR_TYPE	= "armortype";
-
-	@Override
-	public void storeInBundle( Bundle bundle ) {
-		super.storeInBundle( bundle );
-        bundle.put( ARMOR_TIER, armorTier );
-        bundle.put( ARMOR_TYPE, armorType );
 	}
 
 	@Override
@@ -96,14 +81,13 @@ abstract public class ClassArmor extends Armor {
 			int DR = bundle.getInt( "DR" );
 			if (DR % 5 == 0){
 				level((DR - 10)/5);
-				armorTier = 5;
+				this.tier = 5;
+				this.type = 0;
 			} else {
 				level((DR - 8)/4);
-				armorTier = 4;
+				this.tier = 4;
+				this.type = 0;
 			}
-		} else {
-            armorTier = bundle.getInt( ARMOR_TIER );
-            armorType = bundle.getInt( ARMOR_TYPE );
 		}
 	}
 	
