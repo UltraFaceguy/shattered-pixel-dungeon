@@ -45,7 +45,11 @@ public abstract class Actor implements Bundlable {
 	protected int actPriority = Integer.MAX_VALUE;
 
 	protected abstract boolean act();
-	
+
+    protected void force( float time ) {
+        this.time = now + time;
+    }
+
 	protected void spend( float time ) {
 		this.time += time;
 	}

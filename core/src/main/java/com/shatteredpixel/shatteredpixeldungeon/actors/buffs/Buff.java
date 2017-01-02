@@ -44,10 +44,6 @@ public class Buff extends Actor {
 	public HashSet<Class<?>> resistances = new HashSet<Class<?>>();
 
 	public HashSet<Class<?>> immunities = new HashSet<Class<?>>();
-
-    public boolean applyProc() {
-        return !target.immunities().contains( getClass() );
-    }
 	
 	public boolean attachTo( Char target ) {
 
@@ -105,7 +101,6 @@ public class Buff extends Actor {
 		try {
 			T buff = buffClass.newInstance();
 			buff.attachTo( target );
-            buff.applyProc();
 			return buff;
 		} catch (Exception e) {
 			ShatteredPixelDungeon.reportException(e);
@@ -117,7 +112,6 @@ public class Buff extends Actor {
 	private static<T extends Buff> T newBuff( Char target, Class<T> buffClass ) {
 		T buff = target.buff( buffClass );
 		if (buff != null) {
-            buff.applyProc();
 			return buff;
 		} else {
 			return create( target, buffClass );
@@ -135,6 +129,13 @@ public class Buff extends Actor {
     public static<T extends FlavourBuff> T add(Char target, Class<T> buffClass, float duration ) {
         T buff = newBuff( target, buffClass );
         buff.spend( duration );
+        return buff;
+    }
+
+    // Forces a buff to have a specific duration
+    public static<T extends FlavourBuff> T set( Char target, Class<T> buffClass, float duration ) {
+        T buff = newBuff( target, buffClass );
+        buff.force( duration );
         return buff;
     }
 
