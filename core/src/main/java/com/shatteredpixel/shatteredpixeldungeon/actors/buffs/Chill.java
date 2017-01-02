@@ -44,20 +44,6 @@ public class Chill extends FlavourBuff {
 		type = buffType.NEGATIVE;
 	}
 
-    @Override
-    public boolean applyProc() {
-        if (!super.applyProc()) {
-            return false;
-        }
-
-        if (target.buff(Chill.class) != null) {
-            if (target.buff(Chill.class).speedFactor() <= 0.3f) {
-                Buff.affect(target, Frost.class, 2f);
-            }
-        }
-        return true;
-    }
-
 	@Override
 	public boolean attachTo(Char target) {
 		//can't chill what's frozen!
