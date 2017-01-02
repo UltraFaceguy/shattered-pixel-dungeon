@@ -144,7 +144,6 @@ public enum HeroClass {
 			new WandOfMagicMissile().identify().collect();
 		}
 
-        new WandOfFrost().identify().collect();
 		(hero.belongings.weapon = staff).identify();
 		hero.belongings.weapon.activate(hero);
 
