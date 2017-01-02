@@ -43,7 +43,7 @@ public class Dreamfoil extends Plant {
 
 		if (ch != null) {
 			if (ch instanceof Mob)
-				Buff.affect(ch, MagicalSleep.class);
+				Buff.apply(ch, MagicalSleep.class);
 			else if (ch instanceof Hero){
 				GLog.i( Messages.get(this, "refreshed") );
 				PotionOfCleansing.cleanse((Hero) ch);

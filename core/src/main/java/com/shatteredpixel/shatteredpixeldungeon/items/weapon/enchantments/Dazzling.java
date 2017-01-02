@@ -42,8 +42,8 @@ public class Dazzling extends Weapon.Enchantment {
 
 		if (Random.Int( level + 5 ) >= 4) {
 
-			Buff.prolong( defender, Blindness.class, Random.Float( 1f, 1f + level ) );
-			Buff.prolong( defender, Cripple.class, Random.Float( 1f, 1f + level/2f ) );
+			Buff.add( defender, Blindness.class, Random.Float( 1f, 1f + level ) );
+			Buff.add( defender, Cripple.class, Random.Float( 1f, 1f + level/2f ) );
 			defender.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 
 		}

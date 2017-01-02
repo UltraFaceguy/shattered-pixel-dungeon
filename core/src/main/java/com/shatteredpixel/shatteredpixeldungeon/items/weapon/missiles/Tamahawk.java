@@ -36,12 +36,12 @@ public class Tamahawk extends MissileWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return 4;
+		return 10;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return 20;
+		return 22;
 	}
 
 	@Override
@@ -59,14 +59,8 @@ public class Tamahawk extends MissileWeapon {
 	}
 	
 	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.affect( defender, Bleeding.class ).set( damage );
-		return super.proc( attacker, defender, damage );
-	}
-	
-	@Override
 	public Item random() {
-		quantity = Random.Int( 5, 12 );
+		quantity = Random.Int( 4, 10 );
 		return this;
 	}
 	

@@ -46,7 +46,7 @@ public class ScrollOfRage extends Scroll {
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
 			mob.beckon( curUser.pos );
 			if (Level.fieldOfView[mob.pos]) {
-				Buff.prolong(mob, Amok.class, 5f);
+				Buff.add(mob, Amok.class, 5f);
 			}
 		}
 

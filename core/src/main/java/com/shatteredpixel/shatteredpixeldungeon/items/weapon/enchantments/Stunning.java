@@ -42,7 +42,7 @@ public class Stunning extends Weapon.Enchantment {
 		
 		if (Random.Int( level + 8 ) >= 7) {
 			
-			Buff.prolong( defender, Paralysis.class, Random.Float( 1, 1.5f + level ) );
+			Buff.add( defender, Paralysis.class, Random.Float( 1, 1.5f + level ) );
 			defender.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 12 );
 
 		}

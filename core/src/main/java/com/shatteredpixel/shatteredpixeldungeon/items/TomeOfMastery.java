@@ -124,7 +124,7 @@ public class TomeOfMastery extends Item {
 		GLog.w( Messages.get(this, "way", way.title()) );
 		
 		if (way == HeroSubClass.BERSERKER) {
-			Buff.affect( curUser, Berserk.class );
+			Buff.apply( curUser, Berserk.class );
 		}
 	}
 }

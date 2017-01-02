@@ -119,7 +119,7 @@ public class PotionOfPurity extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		GLog.w( Messages.get(this, "no_smell") );
-		Buff.prolong( hero, GasesImmunity.class, GasesImmunity.DURATION );
+		Buff.add( hero, GasesImmunity.class, GasesImmunity.DURATION );
 		setKnown();
 	}
 	

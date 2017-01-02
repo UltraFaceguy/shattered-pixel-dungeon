@@ -82,7 +82,7 @@ public class WandOfCorruption extends Wand {
 			}
 
 			//otherwise corrupt the mob & spend charges
-			Buff.append(ch, Corruption.class);
+			Buff.apply(ch, Corruption.class);
 			ch.HP = ch.HT;
 			curCharges -= extraCharges;
 			usagesToKnow -= extraCharges;
@@ -97,7 +97,7 @@ public class WandOfCorruption extends Wand {
 		// lvl 1 - 40%
 		// lvl 2 - 50%
 		if (Random.Int( level() + 4 ) >= 3){
-			Buff.prolong( defender, Amok.class, 3+level());
+			Buff.add( defender, Amok.class, 3+level());
 		}
 	}
 

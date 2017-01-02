@@ -87,7 +87,7 @@ public class Burning extends Buff implements Hero.Doom {
 
 				if (hero.belongings.armor != null && hero.belongings.armor.hasGlyph(Brimstone.class)){
 
-					Buff.affect(target, Brimstone.BrimstoneShield.class);
+					Buff.apply(target, Brimstone.BrimstoneShield.class);
 
 				} else {
 

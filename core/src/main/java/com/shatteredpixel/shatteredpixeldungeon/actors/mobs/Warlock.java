@@ -24,8 +24,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -97,7 +95,7 @@ public class Warlock extends Mob implements Callback {
 
 			if (hit( this, enemy, true )) {
 				if (enemy == Dungeon.hero) {
-					Buff.prolong( enemy, Weakness.class, 6f );
+					Buff.add( enemy, Weakness.class, 6f );
 				}
 
                 enemy.sprite.darkFlash();

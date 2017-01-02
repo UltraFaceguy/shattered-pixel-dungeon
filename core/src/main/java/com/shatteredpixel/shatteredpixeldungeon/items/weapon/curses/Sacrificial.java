@@ -42,7 +42,7 @@ public class Sacrificial extends Weapon.Enchantment {
         // Reduce the chance of taking bleed every 2 weapon levels
         // Or I guess increase it for negative weapons :D
 		if (Random.Int(8 + weapon.level() / 2) == 0) {
-			Buff.affect(attacker, Bleeding.class).set(Math.max(3, attacker.HP / 5));
+			Buff.apply(attacker, Bleeding.class).set(Math.max(3, attacker.HP / 5));
 		}
 
         // Chance to restome 2 to 20% slain target's max HP

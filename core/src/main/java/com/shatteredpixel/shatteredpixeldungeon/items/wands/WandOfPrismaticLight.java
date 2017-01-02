@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
@@ -74,7 +73,7 @@ public class WandOfPrismaticLight extends DamageWand {
 		affectMap(beam);
 
 		if (Dungeon.level.viewDistance < 4)
-			Buff.prolong( curUser, Light.class, 10f+level()*5);
+			Buff.add( curUser, Light.class, 10f+level()*5);
 	}
 
 	private void affectTarget(Char ch){
@@ -82,7 +81,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 		//three in (5+lvl) chance of failing
 		if (Random.Int(5+level()) >= 3) {
-			Buff.prolong(ch, Blindness.class, 2f + (level() * 0.333f));
+			Buff.add(ch, Blindness.class, 2f + (level() * 0.333f));
 			ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 		}
 
@@ -138,7 +137,7 @@ public class WandOfPrismaticLight extends DamageWand {
 	@Override
 	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
 		//cripples enemy
-		Buff.prolong( defender, Cripple.class, 1f+staff.level());
+		Buff.add( defender, Cripple.class, 1f+staff.level());
 	}
 
 	@Override

@@ -43,8 +43,8 @@ public class MageArmor extends ClassArmor {
 		
 		for (Mob mob : Dungeon.level.mobs) {
 			if (Level.fieldOfView[mob.pos]) {
-				Buff.affect( mob, Burning.class ).reignite( mob );
-				Buff.prolong( mob, Roots.class, 3 );
+				Buff.apply( mob, Burning.class ).reignite( mob );
+				Buff.add( mob, Roots.class, 3 );
 			}
 		}
 

@@ -84,7 +84,7 @@ abstract public class MissileWeapon extends Weapon {
 
 				if (Random.Float() > Math.pow(0.7, bonus)){
 					if (enemy.isAlive())
-						Buff.affect(enemy, PinCushion.class).stick(this);
+						Buff.apply(enemy, PinCushion.class).stick(this);
 					else
 						Dungeon.level.drop( this, enemy.pos).sprite.drop();
 				}

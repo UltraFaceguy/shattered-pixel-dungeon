@@ -43,7 +43,7 @@ public class Blazing extends Weapon.Enchantment {
 		if (Random.Int( level + 3 ) >= 2) {
 			
 			if (Random.Int( 2 ) == 0) {
-				Buff.affect( defender, Burning.class ).reignite( defender );
+				Buff.apply( defender, Burning.class ).reignite( defender );
 			}
 			defender.damage( Random.Int( 1, level + 2 ), this );
 			

@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor.Glyph;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.watabou.utils.Random;
@@ -45,11 +44,11 @@ public class AntiEntropy extends Glyph {
 		if (Random.Int( 8 ) == 0) {
 
 			if (Dungeon.level.adjacent( attacker.pos, defender.pos )) {
-				Buff.prolong(attacker, Frost.class, Frost.duration(attacker) * Random.Float(0.5f, 1f));
+				Buff.add(attacker, Frost.class, Frost.duration(attacker) * Random.Float(0.5f, 1f));
 				CellEmitter.get(attacker.pos).start(SnowParticle.FACTORY, 0.2f, 6);
 			}
 			
-			Buff.affect( defender, Burning.class ).reignite( defender );
+			Buff.apply( defender, Burning.class ).reignite( defender );
 			defender.sprite.emitter().burst( FlameParticle.FACTORY, 5 );
 
 		}

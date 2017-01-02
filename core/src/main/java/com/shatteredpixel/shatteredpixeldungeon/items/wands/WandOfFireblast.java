@@ -81,7 +81,7 @@ public class WandOfFireblast extends DamageWand {
 				int damage = damageRoll();
 
 				ch.damage(damage, this);
-				Buff.affect( ch, Burning.class ).reignite( ch );
+				Buff.apply( ch, Burning.class ).reignite( ch );
 				switch(chargesPerCast()){
 					case 1:
 						break; //no effects

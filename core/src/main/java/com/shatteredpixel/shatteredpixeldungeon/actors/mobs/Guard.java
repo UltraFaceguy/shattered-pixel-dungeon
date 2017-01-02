@@ -114,7 +114,7 @@ public class Guard extends Mob {
 							public void call() {
 								enemy.pos = newPosFinal;
 								Dungeon.level.press(newPosFinal, enemy);
-								Cripple.prolong(enemy, Cripple.class, 4f);
+								Cripple.add(enemy, Cripple.class, 4f);
 								if (enemy == Dungeon.hero) {
 									Dungeon.hero.interrupt();
 									Dungeon.observe();

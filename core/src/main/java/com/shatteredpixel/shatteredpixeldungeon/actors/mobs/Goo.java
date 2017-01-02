@@ -129,7 +129,7 @@ public class Goo extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		if (Random.Int( 3 ) == 0) {
-			Buff.affect( enemy, Ooze.class );
+			Buff.apply( enemy, Ooze.class );
 			enemy.sprite.burst( 0x000000, 5 );
 		}
 

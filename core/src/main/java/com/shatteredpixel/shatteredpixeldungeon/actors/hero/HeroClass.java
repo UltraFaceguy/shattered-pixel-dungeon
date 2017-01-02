@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knuckles;
@@ -105,6 +106,10 @@ public enum HeroClass {
 	}
 
 	private static void initWarrior( Hero hero ) {
+		hero.HP = hero.HT = 20;
+		hero.attackSkill = 10;
+		hero.defenseSkill = 5;
+
 		(hero.belongings.weapon = new WornShortsword()).identify();
 		Dart darts = new Dart( 8 );
 		darts.identify().collect();
@@ -126,6 +131,10 @@ public enum HeroClass {
 	}
 
 	private static void initMage( Hero hero ) {
+		hero.HP = hero.HT = 10;
+		hero.attackSkill = 9;
+		hero.defenseSkill = 5;
+
 		MagesStaff staff;
 
 		if ( Badges.isUnlocked(Badges.Badge.TUTORIAL_MAGE) ){
@@ -135,6 +144,7 @@ public enum HeroClass {
 			new WandOfMagicMissile().identify().collect();
 		}
 
+        new WandOfFrost().identify().collect();
 		(hero.belongings.weapon = staff).identify();
 		hero.belongings.weapon.activate(hero);
 
@@ -144,6 +154,10 @@ public enum HeroClass {
 	}
 
 	private static void initRogue( Hero hero ) {
+		hero.HP = hero.HT = 15;
+		hero.attackSkill = 10;
+		hero.defenseSkill = 6;
+
 		(hero.belongings.weapon = new Dagger()).identify();
 
 		CloakOfShadows cloak = new CloakOfShadows();
@@ -160,6 +174,9 @@ public enum HeroClass {
 	}
 
 	private static void initHuntress( Hero hero ) {
+		hero.HP = hero.HT = 15;
+		hero.attackSkill = 12;
+		hero.defenseSkill = 5;
 
 		(hero.belongings.weapon = new Knuckles()).identify();
 		Boomerang boomerang = new Boomerang();

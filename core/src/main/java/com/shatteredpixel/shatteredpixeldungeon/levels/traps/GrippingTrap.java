@@ -44,10 +44,10 @@ public class GrippingTrap extends Trap {
 		if (c != null) {
 			int damage = Math.max( Dungeon.depth / 5, Dungeon.depth - ( c.drRoll() / 2 ) );
 			if (damage > 0) {
-				Buff.affect(c, Bleeding.class).set(Dungeon.depth / 5 + damage);
+				Buff.apply(c, Bleeding.class).set(Dungeon.depth / 5 + damage);
 			}
-			Buff.prolong( c, Cripple.class, 15f);
-			Buff.prolong( c, Roots.class, 5f);
+			Buff.add( c, Cripple.class, 15f);
+			Buff.add( c, Roots.class, 5f);
 			Wound.hit( c );
 		} else {
 			Wound.hit( pos );

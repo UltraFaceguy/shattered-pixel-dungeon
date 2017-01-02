@@ -176,7 +176,7 @@ public class WandOfRegrowth extends Wand {
 		int maxValue = damage * (level + 2) / (level + 6);
 		int effValue = Math.min( Random.IntRange(0, maxValue), attacker.HT - attacker.HP );
 
-		Buff.affect(attacker, Sungrass.Health.class).boost( effValue );
+		Buff.apply(attacker, Sungrass.Health.class).boost( effValue );
 
 	}
 

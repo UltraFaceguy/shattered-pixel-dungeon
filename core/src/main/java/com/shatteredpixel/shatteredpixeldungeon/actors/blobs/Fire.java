@@ -89,7 +89,7 @@ public class Fire extends Blob {
 	private void burn( int pos ) {
 		Char ch = Actor.findChar( pos );
 		if (ch != null) {
-			Buff.affect( ch, Burning.class ).reignite( ch );
+			Buff.apply( ch, Burning.class ).reignite( ch );
 		}
 		
 		Heap heap = Dungeon.level.heaps.get( pos );

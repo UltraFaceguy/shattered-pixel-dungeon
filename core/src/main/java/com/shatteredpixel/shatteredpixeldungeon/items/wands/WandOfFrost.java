@@ -28,7 +28,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -36,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
@@ -43,6 +46,8 @@ public class WandOfFrost extends DamageWand {
 
 	{
 		image = ItemSpriteSheet.WAND_FROST;
+
+        collisionProperties = Ballistica.PROJECTILE;
 	}
 
 	public int min(int lvl){
@@ -50,43 +55,47 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	public int max(int lvl){
-		return 8+5*lvl;
+		return 6+3*lvl;
 	}
 
 	@Override
 	protected void onZap(Ballistica bolt) {
 
-		Heap heap = Dungeon.level.heaps.get(bolt.collisionPos);
+		int pos = bolt.collisionPos;
+		Heap heap = Dungeon.level.heaps.get(pos);
+
 		if (heap != null) {
 			heap.freeze();
 		}
 
-		Char ch = Actor.findChar(bolt.collisionPos);
-		if (ch != null){
+		for (int i : PathFinder.NEIGHBOURS9) {
+			if (Level.passable[pos + i]) {
+				CellEmitter.get( pos + i ).start( SnowParticle.FACTORY, 0.1f, 8 );
+				Char ch = Actor.findChar(pos + i);
 
-			int damage = damageRoll();
+                if (ch == null) {
+                    continue;
+                }
 
-			if (ch.buff(Frost.class) != null){
-				return; //do nothing, can't affect a frozen target
-			}
-			if (ch.buff(Chill.class) != null){
-				//7.5% less damage per turn of chill remaining
-				float chill = ch.buff(Chill.class).cooldown();
-				damage = (int)Math.round(damage * Math.pow(0.925f, chill));
-			} else {
-				ch.sprite.burst( 0xFF99CCFF, level() / 2 + 2 );
-			}
-
-			processSoulMark(ch, chargesPerCast());
-			ch.damage(damage, this);
-
-			if (ch.isAlive()){
-				if (Level.water[ch.pos])
-					Buff.prolong(ch, Chill.class, 4+level());
-				else
-					Buff.prolong(ch, Chill.class, 2+level());
+                if (ch.pos == pos) {
+                    Buff.add(ch, Chill.class, 3 + (float)level() / 2);
+                    directHit(ch);
+                } else {
+                    Buff.add(ch, Chill.class, 1 + (float)level() / 3);
+                }
 			}
 		}
+	}
+
+	private void directHit(Char ch) {
+		int damage = damageRoll();
+
+        if (ch.buff(Frost.class) != null) {
+            Buff.affect(ch, Frost.class, 2f);
+            return;
+        }
+
+		ch.damage(damage, this);
 	}
 
 	@Override

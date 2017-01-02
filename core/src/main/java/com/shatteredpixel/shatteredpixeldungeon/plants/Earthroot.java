@@ -44,7 +44,7 @@ public class Earthroot extends Plant {
 		Char ch = Actor.findChar(pos);
 		
 		if (ch != null && ch == Dungeon.hero) {
-			Buff.affect( ch, Armor.class ).level(ch.HT);
+			Buff.apply( ch, Armor.class ).level(ch.HT);
 		}
 		
 		if (Dungeon.visible[pos]) {

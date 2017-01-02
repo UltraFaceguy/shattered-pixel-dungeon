@@ -98,8 +98,8 @@ public class Chasm {
 		hero.sprite.burst( hero.sprite.blood(), 10 );
 		Camera.main.shake( 4, 0.2f );
 		
-		Buff.prolong( hero, Cripple.class, Cripple.DURATION );
-		Buff.affect( hero, Bleeding.class).set( hero.HT / 6 );
+		Buff.add( hero, Cripple.class, Cripple.DURATION );
+		Buff.apply( hero, Bleeding.class).set( hero.HT / 6 );
 		hero.damage( Random.NormalIntRange( hero.HP / 4, hero.HT / 4 ), new Hero.Doom() {
 			@Override
 			public void onDeath() {

@@ -91,13 +91,13 @@ public class HighGrass {
 
 			// Barkskin
 			if (hero.subClass == HeroSubClass.WARDEN) {
-				Buff.affect(ch, Barkskin.class).level(ch.HT / 3);
+				Buff.apply(ch, Barkskin.class).level(ch.HT / 3);
 				leaves += 4;
 			}
 
 			//Camouflage
 			if (hero.belongings.armor != null && hero.belongings.armor.hasGlyph(Camouflage.class)){
-				Buff.affect(hero, Camouflage.Camo.class).set(3 + hero.belongings.armor.level());
+				Buff.apply(hero, Camouflage.Camo.class).set(3 + hero.belongings.armor.level());
 				leaves += 4;
 			}
 		}

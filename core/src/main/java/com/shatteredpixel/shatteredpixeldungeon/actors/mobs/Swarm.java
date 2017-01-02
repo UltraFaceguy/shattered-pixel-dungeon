@@ -126,13 +126,13 @@ public class Swarm extends Mob {
 		clone.generation = generation + 1;
 		clone.EXP = 0;
 		if (buff( Burning.class ) != null) {
-			Buff.affect( clone, Burning.class ).reignite( clone );
+			Buff.apply( clone, Burning.class ).reignite( clone );
 		}
 		if (buff( Poison.class ) != null) {
-			Buff.affect( clone, Poison.class ).set(2);
+			Buff.apply( clone, Poison.class ).set(2);
 		}
 		if (buff(Corruption.class ) != null) {
-			Buff.affect( clone, Corruption.class);
+			Buff.apply( clone, Corruption.class);
 		}
 		return clone;
 	}

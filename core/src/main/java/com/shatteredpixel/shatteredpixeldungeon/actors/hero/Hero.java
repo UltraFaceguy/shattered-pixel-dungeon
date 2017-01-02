@@ -137,8 +137,8 @@ public class Hero extends Char {
 	public HeroClass heroClass = HeroClass.ROGUE;
 	public HeroSubClass subClass = HeroSubClass.NONE;
 	
-	private int attackSkill = 10;
-	private int defenseSkill = 5;
+	public int attackSkill = 10;
+	public int defenseSkill = 5;
 
 	public boolean ready = false;
 	private boolean damageInterrupt = true;
@@ -252,8 +252,8 @@ public class Hero extends Char {
 	}
 	
 	public void live() {
-		Buff.affect( this, Regeneration.class );
-		Buff.affect( this, Hunger.class );
+		Buff.apply( this, Regeneration.class );
+		Buff.apply( this, Hunger.class );
 	}
 	
 	public int tier() {
@@ -307,7 +307,7 @@ public class Hero extends Char {
             }
         } else {
             if (heroClass == HeroClass.ROGUE) {
-                flatBonus += STR() - 8;
+                flatBonus += STR() - 9;
             }
         }
 
@@ -349,7 +349,7 @@ public class Hero extends Char {
 		}
 		if (dmg < 0) dmg = 0;
 		if (subClass == HeroSubClass.BERSERKER){
-			berserk = Buff.affect(this, Berserk.class);
+			berserk = Buff.apply(this, Berserk.class);
 			dmg = berserk.damageFactor(dmg);
 		}
 		return buff( Fury.class ) != null ? (int)(dmg * 1.5f) : dmg;
@@ -916,7 +916,7 @@ public class Hero extends Char {
 		switch (subClass) {
 		case SNIPER:
 			if (rangedWeapon != null) {
-				Buff.prolong( this, SnipersMark.class, attackDelay() * 1.1f ).object = enemy.id();
+				Buff.add( this, SnipersMark.class, attackDelay() * 1.1f ).object = enemy.id();
 			}
 			break;
 		default:
@@ -977,7 +977,7 @@ public class Hero extends Char {
 		}
 
 		if (subClass == HeroSubClass.BERSERKER && berserk == null){
-			berserk = Buff.affect(this, Berserk.class);
+			berserk = Buff.apply(this, Berserk.class);
 		}
 
 		super.damage( dmg, src );
@@ -1197,7 +1197,7 @@ public class Hero extends Char {
 		if (horn != null) horn.gainCharge(percent);
 
 		if (subClass == HeroSubClass.BERSERKER){
-			berserk = Buff.affect(this, Berserk.class);
+			berserk = Buff.apply(this, Berserk.class);
 			berserk.recover(percent);
 		}
 		
@@ -1214,7 +1214,7 @@ public class Hero extends Char {
 				defenseSkill++;
 
 			} else {
-				Buff.prolong(this, Bless.class, 30f);
+				Buff.add(this, Bless.class, 30f);
 				this.exp = 0;
 
 				GLog.p( Messages.get(this, "level_cap"));
@@ -1454,7 +1454,7 @@ public class Hero extends Char {
 
 		if (subClass == HeroSubClass.GLADIATOR){
 			if (hit) {
-				Buff.affect( this, Combo.class ).hit();
+				Buff.apply( this, Combo.class ).hit();
 			} else {
 				Combo combo = buff(Combo.class);
 				if (combo != null) combo.miss();

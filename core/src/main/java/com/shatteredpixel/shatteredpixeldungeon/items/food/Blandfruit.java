@@ -96,10 +96,10 @@ public class Blandfruit extends Food {
 				FrozenCarpaccio.effect(hero);
 			} else if (potionAttrib instanceof PotionOfLiquidFlame){
 				GLog.i(Messages.get(this, "fire_msg"));
-				Buff.affect(hero, FireImbue.class).set(FireImbue.DURATION);
+				Buff.apply(hero, FireImbue.class).set(FireImbue.DURATION);
 			} else if (potionAttrib instanceof PotionOfToxicGas) {
 				GLog.i(Messages.get(this, "toxic_msg"));
-				Buff.affect(hero, ToxicImbue.class).set(ToxicImbue.DURATION);
+				Buff.apply(hero, ToxicImbue.class).set(ToxicImbue.DURATION);
 			} else if (potionAttrib instanceof PotionOfParalyticGas) {
 				GLog.i(Messages.get(this, "para_msg"));
 				Buff.affect(hero, EarthImbue.class, EarthImbue.DURATION);

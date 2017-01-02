@@ -40,7 +40,7 @@ public class PotionOfHealing extends Potion {
 		hero.heal(1 + hero.HT / 4);
 		Healing buff = hero.buff(Healing.class);
 		if (buff == null) {
-			Buff.affect(hero, Healing.class).set(1 + hero.HT / 4);
+			Buff.apply(hero, Healing.class).set(1 + hero.HT / 4);
 		} else {
             buff.extend(1 + hero.HT / 4);
         }

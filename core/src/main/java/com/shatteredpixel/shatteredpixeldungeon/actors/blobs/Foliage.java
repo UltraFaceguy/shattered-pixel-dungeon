@@ -65,7 +65,7 @@ public class Foliage extends Blob {
 		
 		Hero hero = Dungeon.hero;
 		if (hero.isAlive() && hero.visibleEnemies() == 0 && cur[hero.pos] > 0) {
-			Buff.affect( hero, Shadows.class ).prolong();
+			Buff.apply( hero, Shadows.class ).prolong();
 		}
 
 		if (visible) {

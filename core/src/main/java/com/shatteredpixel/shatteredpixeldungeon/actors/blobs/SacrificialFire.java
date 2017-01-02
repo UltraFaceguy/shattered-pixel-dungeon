@@ -54,11 +54,7 @@ public class SacrificialFire extends Blob {
 
         Char ch = Actor.findChar( pos );
         if (ch != null) {
-            if (ch.buff(Marked.class) == null) {
-                Buff.append(ch, Marked.class, 1f);
-            } else {
-                Buff.prolong(ch, Marked.class, 1f);
-            }
+            Buff.add(ch, Marked.class, 1f);
         }
 
         if (Dungeon.visible[pos]) {
@@ -98,11 +94,7 @@ public class SacrificialFire extends Blob {
             ch.sprite.flash();
             Sample.INSTANCE.play( Assets.SND_BURNING );
 
-            if (ch.buff( Marked.class ) == null) {
-                Buff.append( ch, Marked.class, 1f );
-            } else {
-                Buff.prolong( ch, Marked.class, 1f );
-            }
+            Buff.add(ch, Marked.class, 1f);
         }
     }
 
@@ -112,7 +104,7 @@ public class SacrificialFire extends Blob {
             Dungeon.hero.HP += 5 + tributes;
             tributes = 0;
 
-            Buff.append(ch, Blindness.class, 15f);
+            Buff.add(ch, Blindness.class, 15f);
 
             for (Mob mob : Dungeon.level.mobs) {
                 mob.beckon( pos );

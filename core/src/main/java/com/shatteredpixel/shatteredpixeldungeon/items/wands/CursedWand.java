@@ -111,11 +111,11 @@ public class CursedWand {
 							switch (Random.Int(2)){
 								case 0:
 									if (target != null)
-										Buff.affect(target, Burning.class).reignite(target);
+										Buff.apply(target, Burning.class).reignite(target);
 									Buff.affect(user, Frost.class, Frost.duration(user) * Random.Float(3f, 5f));
 									break;
 								case 1:
-									Buff.affect(user, Burning.class).reignite(user);
+									Buff.apply(user, Burning.class).reignite(user);
 									if (target != null)
 										Buff.affect(target, Frost.class, Frost.duration(target) * Random.Float(3f, 5f));
 									break;
@@ -273,7 +273,7 @@ public class CursedWand {
 			//shock and recharge
 			case 3:
 				new LightningTrap().set( user.pos ).activate();
-				Buff.prolong(user, Recharging.class, 20f);
+				Buff.add(user, Recharging.class, 20f);
 				ScrollOfRecharging.charge(user);
 				SpellSprite.show(user, SpellSprite.CHARGE);
 				wand.wandUsed();

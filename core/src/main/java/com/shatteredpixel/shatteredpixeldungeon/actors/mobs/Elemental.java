@@ -72,7 +72,7 @@ public class Elemental extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		if (Random.Int( 2 ) == 0) {
-			Buff.affect( enemy, Burning.class ).reignite( enemy );
+			Buff.apply( enemy, Burning.class ).reignite( enemy );
 		}
 		
 		return damage;

@@ -59,19 +59,19 @@ public class MysteryMeat extends Food {
 		switch (Random.Int( 5 )) {
 			case 0:
 				GLog.w( Messages.get(MysteryMeat.class, "hot") );
-				Buff.affect( hero, Burning.class ).reignite( hero );
+				Buff.apply( hero, Burning.class ).reignite( hero );
 				break;
 			case 1:
 				GLog.w( Messages.get(MysteryMeat.class, "legs") );
-				Buff.prolong( hero, Roots.class, Paralysis.duration( hero ) );
+				Buff.add( hero, Roots.class, Paralysis.duration( hero ) );
 				break;
 			case 2:
 				GLog.w( Messages.get(MysteryMeat.class, "not_well") );
-				Buff.affect( hero, Poison.class ).set( Poison.durationFactor( hero ) * hero.HT / 5 );
+				Buff.apply( hero, Poison.class ).set( Poison.durationFactor( hero ) * hero.HT / 5 );
 				break;
 			case 3:
 				GLog.w( Messages.get(MysteryMeat.class, "stuffed") );
-				Buff.prolong( hero, Slow.class, Slow.duration( hero ) );
+				Buff.add( hero, Slow.class, Slow.duration( hero ) );
 				break;
 		}
 	}

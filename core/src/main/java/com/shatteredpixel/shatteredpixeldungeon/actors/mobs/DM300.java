@@ -129,7 +129,7 @@ public class DM300 extends Mob {
 
 		Char ch = Actor.findChar( cell );
 		if (ch != null && ch != this) {
-			Buff.prolong( ch, Paralysis.class, 2 );
+			Buff.add( ch, Paralysis.class, 2 );
 		}
 	}
 

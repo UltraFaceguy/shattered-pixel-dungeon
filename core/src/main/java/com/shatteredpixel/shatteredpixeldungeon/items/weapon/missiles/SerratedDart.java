@@ -68,8 +68,8 @@ public class SerratedDart extends MissileWeapon {
 
     @Override
     public int proc( Char attacker, Char defender, int damage ) {
-        Buff.affect(defender, Bleeding.class).set(damage + defender.HT / 8);
-        Buff.prolong(defender, Cripple.class, 6);
+        Buff.apply(defender, Bleeding.class).set(damage + defender.HT / 8);
+        Buff.add(defender, Cripple.class, 6);
         return super.proc( attacker, defender, damage );
     }
 	

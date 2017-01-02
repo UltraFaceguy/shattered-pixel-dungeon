@@ -73,7 +73,7 @@ public class IncendiaryDart extends MissileWeapon {
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.affect( defender, Burning.class ).reignite( defender );
+		Buff.apply( defender, Burning.class ).reignite( defender );
 		return super.proc( attacker, defender, damage );
 	}
 	

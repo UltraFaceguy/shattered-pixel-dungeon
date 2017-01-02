@@ -51,7 +51,7 @@ public class ChillingTrap extends Trap{
 
 		Char ch = Actor.findChar( pos );
 		if (ch != null){
-			Chill.prolong(ch, Chill.class, 5f + Random.Int(Dungeon.depth));
+			Chill.add(ch, Chill.class, 5f + Random.Int(Dungeon.depth));
 			ch.damage(Random.NormalIntRange(1 , Dungeon.depth), this);
 			if (!ch.isAlive() && ch == Dungeon.hero){
 				Dungeon.fail( getClass() );

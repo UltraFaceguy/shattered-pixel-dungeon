@@ -449,7 +449,7 @@ public abstract class Level implements Bundlable {
 	public void seal(){
 		if (!locked) {
 			locked = true;
-			Buff.affect(Dungeon.hero, LockedFloor.class);
+			Buff.apply(Dungeon.hero, LockedFloor.class);
 		}
 	}
 

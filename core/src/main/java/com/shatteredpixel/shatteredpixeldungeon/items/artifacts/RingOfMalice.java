@@ -103,7 +103,7 @@ public class RingOfMalice extends Artifact {
                 clone.duplicate( curUser, level() );
 
                 GameScene.add( clone );
-                Buff.append(clone, Corruption.class);
+                Buff.apply(clone, Corruption.class);
 
                 clone.sprite.interruptMotion();
                 clone.move( respawnPoints.get( index ) );

@@ -43,7 +43,7 @@ public class ConfusionGas extends Blob {
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
 					if (!ch.immunities().contains(this.getClass()))
-						Buff.prolong( ch, Vertigo.class, 2 );
+						Buff.add( ch, Vertigo.class, 2 );
 				}
 			}
 		}

@@ -59,7 +59,7 @@ public class Javelin extends MissileWeapon {
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.prolong( defender, Cripple.class, Cripple.DURATION );
+		Buff.add( defender, Cripple.class, Cripple.DURATION );
 		return super.proc( attacker, defender, damage );
 	}
 	

@@ -54,7 +54,7 @@ public class FrostTrap extends Trap {
 		Char ch = Actor.findChar(pos);
 		if (ch != null){
 			ch.damage(Random.NormalIntRange(1 , Dungeon.depth), this);
-			Chill.prolong(ch, Frost.class, 10f + Random.Int(Dungeon.depth));
+			Chill.add(ch, Frost.class, 10f + Random.Int(Dungeon.depth));
 			if (!ch.isAlive() && ch == Dungeon.hero){
 				Dungeon.fail( getClass() );
 				GLog.n( Messages.get(this, "ondeath") );

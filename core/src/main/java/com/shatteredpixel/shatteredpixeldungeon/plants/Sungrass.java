@@ -49,7 +49,7 @@ public class Sungrass extends Plant {
 		}
 		
 		if (ch == Dungeon.hero) {
-			Buff.affect( ch, Health.class ).boost(ch.HT / 2);
+			Buff.apply( ch, Health.class ).boost(ch.HT / 2);
 		}
 		
 		if (Dungeon.visible[pos]) {

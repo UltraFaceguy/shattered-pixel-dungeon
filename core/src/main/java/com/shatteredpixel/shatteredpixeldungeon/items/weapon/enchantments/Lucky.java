@@ -47,7 +47,7 @@ public class Lucky extends Weapon.Enchantment {
 		}
 
 		if (attacker == Dungeon.hero && Dungeon.hero.subClass == HeroSubClass.BERSERKER ){
-			damage = Buff.affect(Dungeon.hero, Berserk.class).damageFactor(damage);
+			damage = Buff.apply(Dungeon.hero, Berserk.class).damageFactor(damage);
 		}
 
 		return Math.max(0, damage);

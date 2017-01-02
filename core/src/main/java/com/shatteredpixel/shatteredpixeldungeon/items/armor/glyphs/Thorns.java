@@ -38,7 +38,7 @@ public class Thorns extends Armor.Glyph {
 
 		if ( Random.Int( level/2 + 6) >= 5) {
 
-			Buff.affect( attacker, Bleeding.class).set( Math.max( 3 + (level/2), damage + level));
+			Buff.apply( attacker, Bleeding.class).set( Math.max( 3 + (level/2), damage + level));
 
 		}
 

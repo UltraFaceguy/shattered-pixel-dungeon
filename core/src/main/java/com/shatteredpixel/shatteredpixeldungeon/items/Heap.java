@@ -215,7 +215,7 @@ public class Heap implements Bundlable {
 		if (type == Type.MIMIC) {
 			Mimic m = Mimic.spawnAt( pos, items );
 			if (m != null) {
-				Buff.affect( m, Burning.class ).reignite( m );
+				Buff.apply( m, Burning.class ).reignite( m );
 				m.sprite.emitter().burst( FlameParticle.FACTORY, 5 );
 				destroy();
 			}
@@ -312,7 +312,7 @@ public class Heap implements Bundlable {
 		if (type == Type.MIMIC) {
 			Mimic m = Mimic.spawnAt( pos, items );
 			if (m != null) {
-				Buff.prolong( m, Frost.class, Frost.duration( m ) * Random.Float( 1.0f, 1.5f ) );
+				Buff.add( m, Frost.class, Frost.duration( m ) * Random.Float( 1.0f, 1.5f ) );
 				destroy();
 			}
 		}

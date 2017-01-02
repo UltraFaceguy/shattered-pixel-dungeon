@@ -44,6 +44,10 @@ public class Buff extends Actor {
 	public HashSet<Class<?>> resistances = new HashSet<Class<?>>();
 
 	public HashSet<Class<?>> immunities = new HashSet<Class<?>>();
+
+    public boolean applyProc() {
+        return !target.immunities().contains( getClass() );
+    }
 	
 	public boolean attachTo( Char target ) {
 
@@ -55,10 +59,13 @@ public class Buff extends Actor {
 		target.add( this );
 
 		if (target.buffs().contains(this)){
-			if (target.sprite != null) fx( true );
+			if (target.sprite != null) {
+                fx( true );
+            }
 			return true;
-		} else
-			return false;
+		} else {
+            return false;
+        }
 	}
 	
 	public void detach() {
@@ -78,7 +85,7 @@ public class Buff extends Actor {
 
 	public void fx(boolean on) {
 		//do nothing by default
-	};
+	}
 
 	public String heroMessage(){
 		return null;
@@ -93,11 +100,12 @@ public class Buff extends Actor {
 		return new DecimalFormat("#.##").format(input);
 	}
 
-	//creates a fresh instance of the buff and attaches that, this allows duplication.
-	public static<T extends Buff> T append( Char target, Class<T> buffClass ) {
+	// Creates a fresh instance of the buff and attaches that, this allows duplication.
+	public static<T extends Buff> T create(Char target, Class<T> buffClass ) {
 		try {
 			T buff = buffClass.newInstance();
 			buff.attachTo( target );
+            buff.applyProc();
 			return buff;
 		} catch (Exception e) {
 			ShatteredPixelDungeon.reportException(e);
@@ -105,35 +113,37 @@ public class Buff extends Actor {
 		}
 	}
 
-	public static<T extends FlavourBuff> T append( Char target, Class<T> buffClass, float duration ) {
-		T buff = append( target, buffClass );
-		buff.spend( duration );
-		return buff;
-	}
-
-	//same as append, but prevents duplication.
-	public static<T extends Buff> T affect( Char target, Class<T> buffClass ) {
+	// Returns either the buff of type buffClass, or makes a new one
+	private static<T extends Buff> T newBuff( Char target, Class<T> buffClass ) {
 		T buff = target.buff( buffClass );
 		if (buff != null) {
+            buff.applyProc();
 			return buff;
 		} else {
-			return append( target, buffClass );
+			return create( target, buffClass );
 		}
 	}
-	
-	public static<T extends FlavourBuff> T affect( Char target, Class<T> buffClass, float duration ) {
-		T buff = affect( target, buffClass );
-		buff.spend( duration );
-		return buff;
-	}
 
-	//postpones an already active buff, or creates & attaches a new buff and delays that.
-	public static<T extends FlavourBuff> T prolong( Char target, Class<T> buffClass, float duration ) {
-		T buff = affect( target, buffClass );
-		buff.postpone( duration );
-		return buff;
-	}
-	
+    // Refreshes the current buff to a new duration if higher or creates a new buff from duration
+    public static<T extends FlavourBuff> T affect( Char target, Class<T> buffClass, float duration ) {
+        T buff = newBuff( target, buffClass );
+        buff.postpone( duration );
+        return buff;
+    }
+
+    // Adds to the duration of an active buff, or creates a new one with that duration
+    public static<T extends FlavourBuff> T add(Char target, Class<T> buffClass, float duration ) {
+        T buff = newBuff( target, buffClass );
+        buff.spend( duration );
+        return buff;
+    }
+
+    // Apply (or refresh) a standard buff
+    public static<T extends Buff> T apply( Char target, Class<T> buffClass) {
+        return newBuff( target, buffClass );
+    }
+
+    // When the buff is done, it detaches
 	public static void detach( Buff buff ) {
 		if (buff != null) {
 			buff.detach();

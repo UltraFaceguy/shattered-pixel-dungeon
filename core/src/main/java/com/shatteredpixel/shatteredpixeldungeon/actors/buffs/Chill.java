@@ -44,10 +44,28 @@ public class Chill extends FlavourBuff {
 		type = buffType.NEGATIVE;
 	}
 
+    @Override
+    public boolean applyProc() {
+        if (!super.applyProc()) {
+            return false;
+        }
+
+        if (target.buff(Chill.class) != null) {
+            if (target.buff(Chill.class).speedFactor() <= 0.3f) {
+                Buff.affect(target, Frost.class, 2f);
+            }
+        }
+        return true;
+    }
+
 	@Override
 	public boolean attachTo(Char target) {
 		//can't chill what's frozen!
-		if (target.buff(Frost.class) != null) return false;
+        //THE HELL I CAN'T!
+		if (target.buff(Frost.class) != null) {
+            Buff.affect(target, Frost.class, 1f);
+            return false;
+        }
 
 		if (super.attachTo(target)){
 			Burning.detach( target, Burning.class );
@@ -90,9 +108,9 @@ public class Chill extends FlavourBuff {
 		}
 	}
 
-	//reduces speed by 10% for every turn remaining, capping at 50%
+	// Reduces speed by 10% for every turn remaining, minimum 25%, max 75%
 	public float speedFactor(){
-		return Math.max(0.5f, 1 - cooldown()*0.1f);
+		return Math.max (Math.min(0.75f, 1 - ((cooldown()+1) * 0.1f)), 0.25f);
 	}
 
 	@Override
@@ -102,8 +120,11 @@ public class Chill extends FlavourBuff {
 
 	@Override
 	public void fx(boolean on) {
-		if (on) target.sprite.add(CharSprite.State.CHILLED);
-		else target.sprite.remove(CharSprite.State.CHILLED);
+		if (on) {
+			target.sprite.add(CharSprite.State.CHILLED);
+		} else {
+			target.sprite.remove(CharSprite.State.CHILLED);
+		}
 	}
 
 	@Override

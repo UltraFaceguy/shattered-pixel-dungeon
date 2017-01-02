@@ -179,7 +179,7 @@ public class Armor extends EquipableItem {
 
 	@Override
 	public void activate(Char ch) {
-		if (seal != null) Buff.affect(ch, BrokenSeal.WarriorShield.class).setArmor(this);
+		if (seal != null) Buff.apply(ch, BrokenSeal.WarriorShield.class).setArmor(this);
 	}
 
 	public void affixSeal(BrokenSeal seal){
@@ -190,7 +190,7 @@ public class Armor extends EquipableItem {
 			Badges.validateItemLevelAquired(this);
 		}
 		if (isEquipped(Dungeon.hero)){
-			Buff.affect(Dungeon.hero, BrokenSeal.WarriorShield.class).setArmor(this);
+			Buff.apply(Dungeon.hero, BrokenSeal.WarriorShield.class).setArmor(this);
 		}
 	}
 
