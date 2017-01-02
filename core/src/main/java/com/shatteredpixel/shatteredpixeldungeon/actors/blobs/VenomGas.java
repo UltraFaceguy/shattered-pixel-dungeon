@@ -38,27 +38,26 @@ public class VenomGas extends Blob {
 	protected void evolve() {
 		super.evolve();
 
-		if (volume == 0){
+		if (volume == 0) {
 			strength = 0;
-		} else {
-			Char ch;
-			int cell;
+			return;
+		}
+		Char ch;
+		int cell;
 
-			for (int i = area.left; i < area.right; i++){
-				for (int j = area.top; j < area.bottom; j++){
-					cell = i + j*Dungeon.level.width();
-					if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
-						if (!ch.immunities().contains(this.getClass()))
-							Buff.apply(ch, Venom.class).set(2f, strength);
-					}
+		for (int i = area.left; i < area.right; i++){
+			for (int j = area.top; j < area.bottom; j++){
+				cell = i + j*Dungeon.level.width();
+				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
+					if (!ch.immunities().contains(this.getClass()))
+						Buff.apply(ch, Venom.class).set(2f, strength);
 				}
 			}
 		}
 	}
 
 	public void setStrength(int str){
-		if (str > strength)
-			strength = str;
+		strength = Math.max(str, strength);
 	}
 
 	private static final String STRENGTH = "strength";
