@@ -77,25 +77,26 @@ public class WandOfFrost extends DamageWand {
                     continue;
                 }
 
+                if (ch.buff(Chill.class) != null) {
+                    if (ch.buff(Chill.class).speedFactor() <= 0.3f) {
+                        Buff.affect(ch, Frost.class, 2f);
+                        continue;
+                    }
+                }
+
+                if (ch.buff(Frost.class) != null) {
+                    Buff.affect(ch, Frost.class, 2f);
+                    continue;
+                }
+
                 if (ch.pos == pos) {
                     Buff.add(ch, Chill.class, 3 + (float)level() / 2);
-                    directHit(ch);
+                    ch.damage(damageRoll(), this);
                 } else {
                     Buff.add(ch, Chill.class, 1 + (float)level() / 3);
                 }
 			}
 		}
-	}
-
-	private void directHit(Char ch) {
-		int damage = damageRoll();
-
-        if (ch.buff(Frost.class) != null) {
-            Buff.affect(ch, Frost.class, 2f);
-            return;
-        }
-
-		ch.damage(damage, this);
 	}
 
 	@Override
