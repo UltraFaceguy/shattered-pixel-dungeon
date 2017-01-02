@@ -24,7 +24,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -51,6 +53,11 @@ public class ChillingTrap extends Trap{
 
 		Char ch = Actor.findChar( pos );
 		if (ch != null){
+			if (ch.buff(Chill.class) != null) {
+				if (ch.buff(Chill.class).speedFactor() <= 0.3f) {
+					Buff.affect(ch, Frost.class, 2f);
+				}
+			}
 			Chill.add(ch, Chill.class, 5f + Random.Int(Dungeon.depth));
 			ch.damage(Random.NormalIntRange(1 , Dungeon.depth), this);
 			if (!ch.isAlive() && ch == Dungeon.hero){
