@@ -133,7 +133,7 @@ public class Buff extends Actor {
     }
 
     // Forces a buff to have a specific duration
-    public static<T extends FlavourBuff> T set( Char target, Class<T> buffClass, float duration ) {
+    public static<T extends FlavourBuff> T setDuration( Char target, Class<T> buffClass, float duration ) {
         T buff = newBuff( target, buffClass );
         buff.force( duration );
         return buff;
