@@ -79,13 +79,21 @@ public class WandOfFrost extends DamageWand {
 
                 if (ch.buff(Chill.class) != null) {
                     if (ch.buff(Chill.class).speedFactor() <= 0.3f) {
-                        Buff.affect(ch, Frost.class, 2f);
+                        if (Level.water[ch.pos]) {
+                            Buff.affect(ch, Frost.class, Random.Float(3.5f, 6.0f));
+                        } else {
+                            Buff.affect(ch, Frost.class, Random.Float(1.0f, 2.0f));
+                        }
                         continue;
                     }
                 }
 
                 if (ch.buff(Frost.class) != null) {
-                    Buff.affect(ch, Frost.class, 2f);
+                    if (Level.water[ch.pos]) {
+                        Buff.affect(ch, Frost.class, Random.Float(3.5f, 6.0f));
+                    } else {
+                        Buff.affect(ch, Frost.class, Random.Float(1.0f, 2.0f));
+                    }
                     continue;
                 }
 
