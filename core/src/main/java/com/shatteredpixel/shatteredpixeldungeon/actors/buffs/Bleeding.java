@@ -70,9 +70,9 @@ public class Bleeding extends Buff {
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			if ((level = Random.NormalIntRange( level / 2, level - 1 )) > 0) {
-				
+			if (level > 0) {
 				target.damage( level, this );
+				level = Random.Int(level / 2, level - 1);
 				if (target.sprite.visible) {
 					Splash.at( target.sprite.center(), -PointF.PI / 2, PointF.PI / 6,
 							target.sprite.blood(), Math.min( 10 * level / target.HT, 10 ) );
