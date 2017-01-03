@@ -38,7 +38,7 @@ public class Lucky extends Weapon.Enchantment {
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
 		int level = Math.max( 0, weapon.level() );
 
-		if (Random.Int(100) < (55 + level)){
+		if (Random.Int(100) < (52 + level * 2)){
 			int exStr = 0;
 			if (attacker == Dungeon.hero) exStr = Math.max(0, Dungeon.hero.STR() - weapon.STRReq());
 			damage = weapon.imbue.damageFactor(weapon.max()) + exStr - defender.drRoll();
