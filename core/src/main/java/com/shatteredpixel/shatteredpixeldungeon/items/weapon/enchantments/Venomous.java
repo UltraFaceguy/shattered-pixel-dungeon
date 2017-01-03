@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Venom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -36,13 +37,17 @@ public class Venomous extends Weapon.Enchantment {
 	
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		// lvl 0 - 33%
-		// lvl 1 - 50%
-		// lvl 2 - 60%
+		// lvl 0 - 20%
+		// lvl 1 - 33%
+		// lvl 2 - 42%
+		if (defender.immunities().contains(Venom.class)) {
+			return damage;
+		}
+
 		int level = Math.max( 0, weapon.level() );
 		
-		if (Random.Int( level + 3 ) >= 2) {
-            Buff.apply(defender, Poison.class).extend(2 + (level / 2) + Poison.durationFactor(defender));
+		if (Random.Int( level + 5 ) >= 5) {
+			Buff.apply(defender, Venom.class).set(2f, 1 + level / 2);
 			CellEmitter.center(defender.pos).burst( PoisonParticle.SPLASH, 5 );
 		}
 
