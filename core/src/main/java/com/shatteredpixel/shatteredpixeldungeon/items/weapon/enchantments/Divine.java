@@ -35,13 +35,13 @@ public class Divine extends Weapon.Enchantment {
 	
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		// lvl 0 - 12%
-		// lvl 1 - 22%
-		// lvl 2 - 30%
+		// lvl 0 - 14%
+		// lvl 1 - 25%
+		// lvl 2 - 33%
 		int level = Math.max( 0, weapon.level() );
 		
-		if (Random.Int(9 + level) > 7) {
-			Buff.add(attacker, Bless.class, 1 + Random.Int(1 + level / 2));
+		if (Random.Int(level + 8) >= 7) {
+			Buff.affect(attacker, Bless.class, 2 + Random.Int(1 + level / 2));
             CellEmitter.get(attacker.pos).start(Speck.factory(Speck.LIGHT), 0.1f, 4);
 		}
 
