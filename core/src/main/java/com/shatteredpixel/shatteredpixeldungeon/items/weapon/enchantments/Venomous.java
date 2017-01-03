@@ -46,7 +46,7 @@ public class Venomous extends Weapon.Enchantment {
 
 		int level = Math.max( 0, weapon.level() );
 		
-		if (Random.Int( level + 5 ) >= 5) {
+		if (Random.Int( level + 5 ) >= 4) {
 			Buff.apply(defender, Venom.class).set(2f, 1 + level / 2);
 			CellEmitter.center(defender.pos).burst( PoisonParticle.SPLASH, 5 );
 		}
