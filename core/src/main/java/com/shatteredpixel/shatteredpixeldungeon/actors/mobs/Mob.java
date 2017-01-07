@@ -66,12 +66,6 @@ public abstract class Mob extends Char {
 		name = Messages.get(this, "name");
 		actPriority = 2; //hero gets priority over mobs.
 	}
-	
-	private static final String	TXT_DIED	= "You hear something died in the distance";
-	
-	protected static final String TXT_NOTICE1	= "?!";
-	protected static final String TXT_RAGE		= "#$%^";
-	protected static final String TXT_EXP		= "%+dEXP";
 
 	public AiState SLEEPING     = new Sleeping();
 	public AiState HUNTING		= new Hunting();
@@ -531,7 +525,11 @@ public abstract class Mob extends Char {
 
 			int exp = exp();
 			if (exp > 0) {
-				Dungeon.hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "exp", exp) );
+				if (Dungeon.visible[this.pos]) {
+					this.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+				} else {
+					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+				}
 				Dungeon.hero.earnExp( exp );
 			}
 		}
