@@ -43,20 +43,6 @@ public class CellSelector extends TouchArea {
 		
 		dragThreshold = PixelScene.defaultZoom * DungeonTilemap.SIZE / 2;
 	}
-	
-	@Override
-	protected void onClick( Touch touch ) {
-		if (dragging) {
-			
-			dragging = false;
-			
-		} else {
-			
-			select( ((DungeonTilemap)target).screenToTile(
-				(int)touch.current.x,
-				(int)touch.current.y ) );
-		}
-	}
 
 	private float zoom( float value ) {
 
@@ -120,18 +106,34 @@ public class CellSelector extends TouchArea {
 	@Override
 	protected void onTouchUp( Touch t ) {
 		if (pinching && (t == touch || t == another)) {
-			
 			pinching = false;
-			
+
 			zoom(Math.round( camera.zoom ));
-			
+
 			dragging = true;
+
 			if (t == touch) {
 				touch = another;
 			}
 			another = null;
 			lastPos.set( touch.current );
+            return;
 		}
+
+        if (dragging) {
+            dragging = false;
+            return;
+        }
+
+        if (camera.scrollMag != null) {
+            camera.scrollMag = null;
+            return;
+        }
+
+        select( ((DungeonTilemap)target).screenToTile(
+                (int)touch.current.x,
+                (int)touch.current.y ) );
+
 	}
 	
 	private boolean dragging = false;
@@ -141,6 +143,7 @@ public class CellSelector extends TouchArea {
 	protected void onDrag( Touch t ) {
 		 
 		camera.target = null;
+        camera.scrollMag = null;
 
 		if (pinching) {
 
@@ -158,7 +161,7 @@ public class CellSelector extends TouchArea {
 				lastPos.set( t.current );
 				
 			} else if (dragging) {
-				camera.scroll.offset( PointF.diff( lastPos, t.current ).invScale( camera.zoom ) );
+				camera.scrollMag = PointF.diff( lastPos, t.current ).invScale( camera.zoom );
 				lastPos.set( t.current );
 			}
 		}

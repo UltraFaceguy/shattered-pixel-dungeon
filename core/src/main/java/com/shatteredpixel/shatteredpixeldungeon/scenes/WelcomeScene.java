@@ -36,7 +36,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 
 import javax.microedition.khronos.opengles.GL10;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class WelcomeScene extends PixelScene {
@@ -58,6 +57,8 @@ public class WelcomeScene extends PixelScene {
 
 		int w = Camera.main.width;
 		int h = Camera.main.height;
+
+        Camera.smooth = ShatteredPixelDungeon.smoothCam();
 
 		Image title = BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON );
 		title.brightness(0.6f);

@@ -121,7 +121,7 @@ public class ScrollPane extends Component {
 
 				dragging = false;
 				thumb.am = THUMB_ALPHA;
-
+				camera.tweenTarget = camera.screenToCamera( camera.width / 2, camera.height / 2 );
 			} else {
 
 				PointF p = content.camera.screenToCamera( (int)touch.current.x, (int)touch.current.y );

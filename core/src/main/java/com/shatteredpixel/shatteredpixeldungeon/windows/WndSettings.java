@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
+import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.RenderedText;
@@ -103,33 +104,39 @@ public class WndSettings extends WndTabbed {
 		public ScreenTab() {
 			super();
 
-			OptionSlider scale = new OptionSlider(Messages.get(this, "scale"),
-					(int)Math.ceil(2* Game.density)+ "X",
-					PixelScene.maxDefaultZoom + "X",
-					(int)Math.ceil(2* Game.density),
-					PixelScene.maxDefaultZoom ) {
-				@Override
-				protected void onChange() {
-					if (getSelectedValue() != ShatteredPixelDungeon.scale()) {
-						ShatteredPixelDungeon.scale(getSelectedValue());
-						ShatteredPixelDungeon.switchNoFade((Class<? extends PixelScene>) ShatteredPixelDungeon.scene().getClass(), new Game.SceneChangeCallback() {
-							@Override
-							public void beforeCreate() {
-								//do nothing
-							}
+            boolean scaleSliderEnabled = false;
+            if ((int)Math.ceil(2* Game.density) < PixelScene.maxDefaultZoom) {
+                scaleSliderEnabled = true;
+            }
 
-							@Override
-							public void afterCreate() {
-								Game.scene().add(new WndSettings());
-							}
-						});
-					}
-				}
-			};
-			scale.setSelectedValue(PixelScene.defaultZoom);
-			scale.setRect(0, 0, WIDTH, SLIDER_HEIGHT);
-			if ((int)Math.ceil(2* Game.density) < PixelScene.maxDefaultZoom)
-				add(scale);
+            if (scaleSliderEnabled) {
+                OptionSlider scale = new OptionSlider(Messages.get(this, "scale"),
+                        (int) Math.ceil(2 * Game.density) + "X",
+                        PixelScene.maxDefaultZoom + "X",
+                        (int) Math.ceil(2 * Game.density),
+                        PixelScene.maxDefaultZoom) {
+                    @Override
+                    protected void onChange() {
+                        if (getSelectedValue() != ShatteredPixelDungeon.scale()) {
+                            ShatteredPixelDungeon.scale(getSelectedValue());
+                            ShatteredPixelDungeon.switchNoFade((Class<? extends PixelScene>) ShatteredPixelDungeon.scene().getClass(), new Game.SceneChangeCallback() {
+                                @Override
+                                public void beforeCreate() {
+                                    //do nothing
+                                }
+
+                                @Override
+                                public void afterCreate() {
+                                    Game.scene().add(new WndSettings());
+                                }
+                            });
+                        }
+                    }
+                };
+                scale.setSelectedValue(PixelScene.defaultZoom);
+                scale.setRect(0, 0, WIDTH, SLIDER_HEIGHT);
+                add(scale);
+            }
 
 			OptionSlider brightness = new OptionSlider(Messages.get(this, "brightness"),
 					Messages.get(this, "dark"), Messages.get(this, "bright"), -2, 2) {
@@ -139,8 +146,19 @@ public class WndSettings extends WndTabbed {
 				}
 			};
 			brightness.setSelectedValue(ShatteredPixelDungeon.brightness());
-			brightness.setRect(0, scale.bottom() + GAP_TINY, WIDTH, SLIDER_HEIGHT);
+			brightness.setRect(0, scaleSliderEnabled ? SLIDER_HEIGHT + GAP_TINY : 0, WIDTH, SLIDER_HEIGHT);
 			add(brightness);
+
+			CheckBox smoothCam = new CheckBox( Messages.get(this, "smooth_cam") ) {
+				@Override
+				protected void onClick() {
+					super.onClick();
+					ShatteredPixelDungeon.smoothCam(checked());
+				}
+			};
+            smoothCam.setRect( 0, brightness.bottom() + GAP_TINY, WIDTH, BTN_HEIGHT );
+            smoothCam.checked(ShatteredPixelDungeon.smoothCam());
+            add(smoothCam);
 
 			CheckBox chkImmersive = new CheckBox( Messages.get(this, "soft_keys") ) {
 				@Override
@@ -149,7 +167,7 @@ public class WndSettings extends WndTabbed {
 					ShatteredPixelDungeon.immerse(checked());
 				}
 			};
-			chkImmersive.setRect( 0, brightness.bottom() + GAP_SML, WIDTH, BTN_HEIGHT );
+			chkImmersive.setRect( 0, smoothCam.bottom() + GAP_TINY, WIDTH, BTN_HEIGHT );
 			chkImmersive.checked(ShatteredPixelDungeon.immersed());
 			chkImmersive.enable(android.os.Build.VERSION.SDK_INT >= 19);
 			add(chkImmersive);

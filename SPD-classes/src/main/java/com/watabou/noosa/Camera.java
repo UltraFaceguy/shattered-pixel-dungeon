@@ -40,7 +40,9 @@ public class Camera extends Gizmo {
 	public boolean fullScreen;
 
 	public float zoom;
-	
+
+    public static boolean smooth;
+
 	public int x;
 	public int y;
 	public int width;
@@ -52,7 +54,10 @@ public class Camera extends Gizmo {
 	public float[] matrix;
 	
 	public PointF scroll;
+    public PointF tweenTarget;
 	public Visual target;
+
+    public PointF scrollMag;
 	
 	private float shakeMagX		= 10f;
 	private float shakeMagY		= 10f;
@@ -123,6 +128,7 @@ public class Camera extends Gizmo {
 		screenHeight = (int)(height * zoom);
 		
 		scroll = new PointF();
+        tweenTarget = new PointF();
 		
 		matrix = new float[16];
 		Matrix.setIdentity( matrix );
@@ -155,14 +161,34 @@ public class Camera extends Gizmo {
 		screenWidth = (int)(width * zoom);
 		screenHeight = (int)(height * zoom);
 	}
+
+    private void scrollDecay() {
+        if (scrollMag == null) {
+            return;
+        }
+
+        scroll.offset( scrollMag );
+
+        if (!smooth) {
+            scrollMag = null;
+        } else {
+            scrollMag.scale(0.9f);
+            if (scrollMag.length() <= 0.05f) {
+                scrollMag = null;
+            }
+        }
+    }
 	
 	@Override
 	public void update() {
 		super.update();
-		
+
 		if (target != null) {
 			focusOn( target );
-		}
+		} else {
+            scrollDecay();
+            tweenTarget = Camera.main.center().offset( scroll );
+        }
 		
 		if ((shakeTime -= Game.elapsed) > 0) {
 			float damping = shakeTime / shakeDuration;
@@ -175,14 +201,18 @@ public class Camera extends Gizmo {
 		
 		updateMatrix();
 	}
-	
-	public PointF center() {
-		return new PointF( width / 2, height / 2 );
-	}
+
+    public PointF center() {
+        return new PointF( width / 2, height / 2 );
+    }
 	
 	public boolean hitTest( float x, float y ) {
 		return x >= this.x && y >= this.y && x < this.x + screenWidth && y < this.y + screenHeight;
 	}
+
+    public void updateTween(PointF target) {
+        tweenTarget = PointF.inter(tweenTarget, target, 0.2f);
+    }
 	
 	public void focusOn( float x, float y ) {
 		scroll.set( x - width / 2, y - height / 2 );
@@ -193,7 +223,12 @@ public class Camera extends Gizmo {
 	}
 	
 	public void focusOn( Visual visual ) {
-		focusOn( visual.center() );
+        if (smooth) {
+            updateTween(visual.center());
+            focusOn(tweenTarget);
+            return;
+        }
+        focusOn( visual.center() );
 	}
 	
 	public PointF screenToCamera( int x, int y ) {
