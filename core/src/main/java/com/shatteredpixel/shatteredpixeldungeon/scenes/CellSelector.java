@@ -79,10 +79,28 @@ public class CellSelector extends TouchArea {
 	private Touch another;
 	private float startZoom;
 	private float startSpan;
-	
+
+
+    @Override
+    protected void onClick( Touch touch ) {
+        if (dragging) {
+            dragging = false;
+            return;
+        }
+
+        if (camera.scrollMag != null) {
+            camera.scrollMag = null;
+            return;
+        }
+
+        select(((DungeonTilemap) target).screenToTile(
+                (int) touch.current.x,
+                (int) touch.current.y));
+
+    }
+
 	@Override
 	protected void onTouchDown( Touch t ) {
-
 		if (t != touch && another == null) {
 					
 			if (!touch.down) {
@@ -97,7 +115,6 @@ public class CellSelector extends TouchArea {
 			startSpan = PointF.distance( touch.current, another.current );
 			startZoom = camera.zoom;
 
-			dragging = false;
 		} else if (t != touch) {
 			reset();
 		}
@@ -117,23 +134,7 @@ public class CellSelector extends TouchArea {
 			}
 			another = null;
 			lastPos.set( touch.current );
-            return;
 		}
-
-        if (dragging) {
-            dragging = false;
-            return;
-        }
-
-        if (camera.scrollMag != null) {
-            camera.scrollMag = null;
-            return;
-        }
-
-        select( ((DungeonTilemap)target).screenToTile(
-                (int)touch.current.x,
-                (int)touch.current.y ) );
-
 	}
 	
 	private boolean dragging = false;
@@ -143,7 +144,6 @@ public class CellSelector extends TouchArea {
 	protected void onDrag( Touch t ) {
 		 
 		camera.target = null;
-        camera.scrollMag = null;
 
 		if (pinching) {
 

@@ -473,6 +473,7 @@ public class ShatteredPixelDungeon extends Game {
 
     public static void smoothCam( boolean value ) {
         Preferences.INSTANCE.put( Preferences.KEY_SMOOTH, value );
+		Camera.main.tweenTarget = Camera.main.center().offset( Camera.main.scroll );
         Camera.smooth = value;
     }
 
