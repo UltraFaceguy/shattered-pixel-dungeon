@@ -101,6 +101,9 @@ public class CellSelector extends TouchArea {
 
 	@Override
 	protected void onTouchDown( Touch t ) {
+
+        camera.scrollMag = null;
+
 		if (t != touch && another == null) {
 					
 			if (!touch.down) {
@@ -161,7 +164,10 @@ public class CellSelector extends TouchArea {
 				lastPos.set( t.current );
 				
 			} else if (dragging) {
-				camera.scrollMag = PointF.diff( lastPos, t.current ).invScale( camera.zoom );
+                PointF newMag = PointF.diff( lastPos, t.current ).invScale( camera.zoom );
+                if (camera.scrollMag == null || camera.scrollMag.length() * 0.6 <= newMag.length()) {
+                    camera.scrollMag = newMag;
+                }
 				lastPos.set( t.current );
 			}
 		}
