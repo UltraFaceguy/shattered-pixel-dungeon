@@ -172,8 +172,8 @@ public class Camera extends Gizmo {
         if (!smooth) {
             scrollMag = null;
         } else {
-            scrollMag.scale(0.9f);
-            if (scrollMag.length() <= 0.05f) {
+            scrollMag.scale(0.925f);
+            if (scrollMag.length() <= 0.15f) {
                 scrollMag = null;
             }
         }

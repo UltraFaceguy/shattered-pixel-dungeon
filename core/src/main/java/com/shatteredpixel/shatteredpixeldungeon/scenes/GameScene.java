@@ -155,7 +155,7 @@ public class GameScene extends PixelScene {
 		
 		super.create();
 		Camera.main.zoom( GameMath.gate(minZoom, defaultZoom + ShatteredPixelDungeon.zoom(), maxZoom));
-
+		Camera.smooth = ShatteredPixelDungeon.smoothCam();
 		scene = this;
 
 		terrain = new Group();
