@@ -270,7 +270,7 @@ public class Armor extends EquipableItem {
 
 		if (inscribe && (glyph == null || glyph.curse())){
 			inscribe( Glyph.random() );
-		} else if (!inscribe && Random.Float() > Math.pow(0.9, level())){
+		} else if (!inscribe && Random.Float() > Math.pow(0.9, Math.max(0 , level() - 2))){
 			inscribe(null);
 		}
 
@@ -363,24 +363,28 @@ public class Armor extends EquipableItem {
 	@Override
 	public Item random() {
 		float roll = Random.Float();
-		if (roll < 0.3f){
-			//30% chance to be level 0 and cursed
+        // 75% to be +0
+		if (roll < 0.75f){
+
+		} else {
+            // 20% chance to be +1
+            // 4% chance to be +2
+            // 0.8% chance to be +3
+            // 0.016% chance to be +4...
+			upgrade(1);
+			while (Random.Float() < 0.2f) {
+				upgrade(1);
+			}
+		}
+
+        // 33% chance of curse, if not cursed, 16.67% chance of glyph'd
+		if (Random.Int(3) == 0) {
 			inscribe(Glyph.randomCurse());
 			cursed = true;
 			return this;
-		} else if (roll < 0.75f){
-			//45% chance to be level 0
-		} else if (roll < 0.95f){
-			//15% chance to be +1
-			upgrade(1);
-		} else {
-			//5% chance to be +2
-			upgrade(2);
-		}
-
-		//if not cursed, 16.67% chance to be inscribed (11.67% overall)
-		if (Random.Int(6) == 0)
-			inscribe();
+		} else if (Random.Int(6) == 0) {
+            inscribe();
+        }
 
 		return this;
 	}
