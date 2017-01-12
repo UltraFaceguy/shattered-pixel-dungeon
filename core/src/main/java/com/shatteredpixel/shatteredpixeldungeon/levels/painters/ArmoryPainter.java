@@ -21,6 +21,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.painters;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Weightstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -53,7 +54,7 @@ public class ArmoryPainter extends Painter {
 			set( level, statue, Terrain.STATUE );
 		}
 		
-		int n = Random.IntRange( 1, 2 );
+		int n = Random.IntRange( 2, 4 );
 		for (int i=0; i < n; i++) {
 			int pos;
 			do {
@@ -67,11 +68,16 @@ public class ArmoryPainter extends Painter {
 	}
 	
 	private static Item prize( Level level ) {
-		return Random.Int( 6 ) == 0 ?
-				new Bomb().random() :
-				Generator.random( Random.oneOf(
-						Generator.Category.ARMOR,
-						Generator.Category.WEAPON
-				) );
+		int rand = Random.Int( 3 );
+
+        switch (rand) {
+            case 0:
+                return Generator.randomArmor();
+            case 1:
+                return Generator.randomWeapon();
+            case 2:
+                return new Bomb().random();
+        }
+        return Generator.random();
 	}
 }

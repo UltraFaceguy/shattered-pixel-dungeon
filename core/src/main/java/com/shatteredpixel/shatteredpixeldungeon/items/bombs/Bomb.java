@@ -89,7 +89,7 @@ public class Bomb extends Item {
 	@Override
 	protected void onThrow( int cell ) {
 		if (!Level.pit[ cell ] && lightingFuse) {
-			Actor.addDelayed(fuse = new Fuse().ignite(this), 3f);
+			Actor.addDelayed(fuse = new Fuse().ignite(this), 2f);
 		}
 		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
 			ArrayList<Integer> candidates = new ArrayList<>();
@@ -175,12 +175,8 @@ public class Bomb extends Item {
 	
 	@Override
 	public Item random() {
-		switch(Random.Int( 2 )) {
-			default:
-				return this;
-			case 1:
-				return new DoubleBomb();
-		}
+        quantity = Random.Int( 1, 4 );
+		return this;
 	}
 
 	@Override
@@ -220,7 +216,7 @@ public class Bomb extends Item {
 	private static class Fuse extends Actor {
 
 		{
-			actPriority = 1; //as if it were a buff
+			actPriority = 3;
 		}
 
 		private Bomb bomb;
