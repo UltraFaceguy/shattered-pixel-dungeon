@@ -573,7 +573,7 @@ public abstract class Mob extends Char {
 		ArrayList<Item> items = new ArrayList<Item>();
 		items.add(Generator.randomWeapon());
 		items.add(Generator.randomArmor());
-		items.add(Generator.random());
+		items.add(Generator.random(Generator.Category.RING));
 		items.add(Generator.random());
         if (Random.Int(4) == 0) {
             items.add(new ScrollOfUpgrade());
