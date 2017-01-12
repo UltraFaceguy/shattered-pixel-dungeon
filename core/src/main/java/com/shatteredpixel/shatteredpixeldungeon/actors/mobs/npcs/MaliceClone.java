@@ -34,14 +34,11 @@ public class MaliceClone extends NPC {
         state = HUNTING;
     }
 
-    private Hero copiedHero;
-
     public int tier;
 
-    private static final String TIER	= "tier";
+    private static final String TIER	    = "tier";
 
     public void duplicate( Hero hero, int level ) {
-        copiedHero = hero;
         // (20% of hero's HP) plus (5 per artifact level, scaled based on percent hero HP)
         float health = hero.HP / 5 + (hero.HP / hero.HT) * (level * 5);
         HT = HP = Math.max((int)health, hero.HT / 10);
@@ -62,27 +59,22 @@ public class MaliceClone extends NPC {
 
     @Override
     public int attackSkill( Char target ) {
-        return copiedHero.attackSkill( copiedHero );
+        return Dungeon.hero.attackSkill;
     }
 
     @Override
     public int damageRoll() {
-        return copiedHero.damageRoll();
-    }
-
-    @Override
-    public int attackProc( Char enemy, int damage ) {
-        return copiedHero.attackProc( enemy, damage );
+        return Dungeon.hero.damageRoll();
     }
 
     @Override
     public int defenseSkill( Char enemy ) {
-        return copiedHero.defenseSkill( enemy );
+        return Dungeon.hero.defenseSkill( enemy );
     }
 
     @Override
     public int drRoll() {
-        return copiedHero.drRoll();
+        return Dungeon.hero.drRoll();
     }
 
     @Override
