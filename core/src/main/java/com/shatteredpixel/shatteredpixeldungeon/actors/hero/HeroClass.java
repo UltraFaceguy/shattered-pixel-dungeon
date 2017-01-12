@@ -28,15 +28,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knuckles;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ShortWhip;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Boomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Dart;
@@ -47,8 +48,9 @@ public enum HeroClass {
 
 	WARRIOR( "warrior" ),
 	MAGE( "mage" ),
-	ROGUE( "rogue" ),
-	HUNTRESS( "huntress" );
+    ROGUE( "rogue" ),
+	HUNTRESS( "huntress"),
+    TAMER( "tamer" );
 
 	private String title;
 
@@ -75,9 +77,13 @@ public enum HeroClass {
 				initRogue( hero );
 				break;
 
-			case HUNTRESS:
-				initHuntress( hero );
-				break;
+            case HUNTRESS:
+                initHuntress( hero );
+                break;
+
+            case TAMER:
+                initTamer( hero );
+                break;
 		}
 
 		hero.updateAwareness();
@@ -185,6 +191,24 @@ public enum HeroClass {
 
 		new PotionOfMindVision().setKnown();
 	}
+
+    private static void initTamer( Hero hero ) {
+        hero.HP = hero.HT = 15;
+        hero.attackSkill = 10;
+        hero.defenseSkill = 2;
+
+        (hero.belongings.weapon = new ShortWhip()).identify();
+
+        CloakOfShadows cloak = new CloakOfShadows();
+        (hero.belongings.misc1 = cloak).identify();
+        hero.belongings.misc1.activate( hero );
+
+        MysteryMeat meats = new MysteryMeat();
+        meats.quantity(4);
+        meats.collect();
+
+        new PotionOfHealing().setKnown();
+    }
 	
 	public String title() {
 		return Messages.get(HeroClass.class, title);
@@ -193,14 +217,16 @@ public enum HeroClass {
 	public String spritesheet() {
 		
 		switch (this) {
-		case WARRIOR:
-			return Assets.WARRIOR;
-		case MAGE:
-			return Assets.MAGE;
-		case ROGUE:
-			return Assets.ROGUE;
-		case HUNTRESS:
-			return Assets.HUNTRESS;
+		    case WARRIOR:
+			    return Assets.WARRIOR;
+		    case MAGE:
+			    return Assets.MAGE;
+		    case ROGUE:
+			    return Assets.ROGUE;
+            case HUNTRESS:
+                return Assets.HUNTRESS;
+            case TAMER:
+                return Assets.HUNTRESS;
 		}
 		
 		return null;
@@ -209,39 +235,47 @@ public enum HeroClass {
 	public String[] perks() {
 		
 		switch (this) {
-		case WARRIOR:
-			return new String[]{
-					Messages.get(HeroClass.class, "warrior_perk1"),
-					Messages.get(HeroClass.class, "warrior_perk2"),
-					Messages.get(HeroClass.class, "warrior_perk3"),
-					Messages.get(HeroClass.class, "warrior_perk4"),
-					Messages.get(HeroClass.class, "warrior_perk5"),
-			};
-		case MAGE:
-			return new String[]{
-					Messages.get(HeroClass.class, "mage_perk1"),
-					Messages.get(HeroClass.class, "mage_perk2"),
-					Messages.get(HeroClass.class, "mage_perk3"),
-					Messages.get(HeroClass.class, "mage_perk4"),
-					Messages.get(HeroClass.class, "mage_perk5"),
-			};
-		case ROGUE:
-			return new String[]{
-					Messages.get(HeroClass.class, "rogue_perk1"),
-					Messages.get(HeroClass.class, "rogue_perk2"),
-					Messages.get(HeroClass.class, "rogue_perk3"),
-					Messages.get(HeroClass.class, "rogue_perk4"),
-					Messages.get(HeroClass.class, "rogue_perk5"),
-					Messages.get(HeroClass.class, "rogue_perk6"),
-			};
-		case HUNTRESS:
-			return new String[]{
-					Messages.get(HeroClass.class, "huntress_perk1"),
-					Messages.get(HeroClass.class, "huntress_perk2"),
-					Messages.get(HeroClass.class, "huntress_perk3"),
-					Messages.get(HeroClass.class, "huntress_perk4"),
-					Messages.get(HeroClass.class, "huntress_perk5"),
-			};
+            case WARRIOR:
+                return new String[]{
+                        Messages.get(HeroClass.class, "warrior_perk1"),
+                        Messages.get(HeroClass.class, "warrior_perk2"),
+                        Messages.get(HeroClass.class, "warrior_perk3"),
+                        Messages.get(HeroClass.class, "warrior_perk4"),
+                        Messages.get(HeroClass.class, "warrior_perk5"),
+                };
+            case MAGE:
+                return new String[]{
+                        Messages.get(HeroClass.class, "mage_perk1"),
+                        Messages.get(HeroClass.class, "mage_perk2"),
+                        Messages.get(HeroClass.class, "mage_perk3"),
+                        Messages.get(HeroClass.class, "mage_perk4"),
+                        Messages.get(HeroClass.class, "mage_perk5"),
+                };
+            case ROGUE:
+                return new String[]{
+                        Messages.get(HeroClass.class, "rogue_perk1"),
+                        Messages.get(HeroClass.class, "rogue_perk2"),
+                        Messages.get(HeroClass.class, "rogue_perk3"),
+                        Messages.get(HeroClass.class, "rogue_perk4"),
+                        Messages.get(HeroClass.class, "rogue_perk5"),
+                        Messages.get(HeroClass.class, "rogue_perk6"),
+                };
+            case HUNTRESS:
+                return new String[]{
+                        Messages.get(HeroClass.class, "huntress_perk1"),
+                        Messages.get(HeroClass.class, "huntress_perk2"),
+                        Messages.get(HeroClass.class, "huntress_perk3"),
+                        Messages.get(HeroClass.class, "huntress_perk4"),
+                        Messages.get(HeroClass.class, "huntress_perk5"),
+                };
+            case TAMER:
+                return new String[]{
+                        Messages.get(HeroClass.class, "tamer_perk1"),
+                        Messages.get(HeroClass.class, "tamer_perk2"),
+                        Messages.get(HeroClass.class, "tamer_perk3"),
+                        Messages.get(HeroClass.class, "tamer_perk4"),
+                        Messages.get(HeroClass.class, "tamer_perk5"),
+                };
 		}
 		
 		return null;
