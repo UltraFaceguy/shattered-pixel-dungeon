@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.RingOfMalice;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MaliceSprite;
 import com.watabou.utils.Bundle;
 
@@ -39,9 +40,8 @@ public class MaliceClone extends NPC {
     private static final String TIER	    = "tier";
 
     public void duplicate( Hero hero, int level ) {
-        // (20% of hero's HP) plus (5 per artifact level, scaled based on percent hero HP)
-        float health = hero.HP / 5 + (hero.HP / hero.HT) * (level * 5);
-        HT = HP = Math.max((int)health, hero.HT / 10);
+        // 10 + level * 3 + 10% of the Hero's current HP
+        HT = HP = 10 + hero.HP / 10 + level * 3;
         tier = hero.tier();
     }
 
@@ -65,6 +65,17 @@ public class MaliceClone extends NPC {
     @Override
     public int damageRoll() {
         return Dungeon.hero.damageRoll();
+    }
+
+    @Override
+    public int attackProc( Char enemy, int damage ) {
+        if (damage >= enemy.HP) {
+            RingOfMalice ringOfMalice = Dungeon.hero.belongings.getItem( RingOfMalice.class );
+            if (ringOfMalice != null) {
+                ringOfMalice.gainExp(5);
+            }
+        }
+        return damage;
     }
 
     @Override

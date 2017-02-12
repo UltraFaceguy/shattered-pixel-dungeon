@@ -111,15 +111,11 @@ public class RingOfMalice extends Artifact {
 
                 Sample.INSTANCE.play( Assets.SND_CURSED );
                 clone.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
+                hero.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
 
-                hero.HP = Math.max (hero.HP - (hero.HP / 5), 1);
+				hero.damage(Math.min(hero.HP / 10, hero.HP - 1), this);
 
-                exp += 20;
-                if (exp >= (level() + 1) * 40 && level() < levelCap) {
-                    upgrade();
-                    exp -= level() * 40;
-                    GLog.p( Messages.get(this, "levelup") );
-                }
+                gainExp(20);
 
 				Invisibility.dispel();
                 hero.spend( 1f );
@@ -128,6 +124,17 @@ public class RingOfMalice extends Artifact {
 			}
 		}
 	}
+
+    public void gainExp(int exp) {
+        this.exp += exp;
+
+        if (this.exp >= (level() + 1) * 35 && level() < levelCap) {
+            upgrade();
+            this.exp -= level() * 35;
+            GLog.p( Messages.get(this, "levelup") );
+        }
+    }
+
 
 	@Override
 	protected ArtifactBuff passiveBuff() {
