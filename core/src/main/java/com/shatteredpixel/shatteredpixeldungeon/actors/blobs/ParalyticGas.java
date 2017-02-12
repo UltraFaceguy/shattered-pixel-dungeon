@@ -43,7 +43,7 @@ public class ParalyticGas extends Blob {
 				cell = i + j * Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar(cell)) != null) {
 					if (!ch.immunities().contains(this.getClass()))
-						Buff.add(ch, Paralysis.class, Paralysis.duration(ch));
+						Buff.affect(ch, Paralysis.class, Paralysis.duration(ch));
 				}
 			}
 		}

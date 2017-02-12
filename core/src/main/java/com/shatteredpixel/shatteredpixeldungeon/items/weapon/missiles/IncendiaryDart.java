@@ -40,12 +40,12 @@ public class IncendiaryDart extends MissileWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return 2;
+		return 3;
 	}
 
 	@Override
