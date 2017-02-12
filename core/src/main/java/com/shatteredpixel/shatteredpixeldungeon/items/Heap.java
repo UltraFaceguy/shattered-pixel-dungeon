@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.SmallBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
@@ -277,11 +278,7 @@ public class Heap implements Bundlable {
 			return;
 		}
 
-		if (type != Type.HEAP) {
-
-			return;
-
-		} else {
+		if (type == Type.HEAP) {
 
 			for (Item item : items.toArray( new Item[0] )) {
 
@@ -291,7 +288,11 @@ public class Heap implements Bundlable {
 
 				} else if (item instanceof Bomb) {
 					items.remove( item );
-					((Bomb) item).detonate(pos);
+                    if (item instanceof SmallBomb) {
+                        ((SmallBomb) item).detonate(pos);
+                    } else {
+                        ((Bomb) item).detonate(pos);
+                    }
 
 				//unique and upgraded items can endure the blast
 				} else if (!(item.level() > 0 || item.unique))
@@ -460,8 +461,10 @@ public class Heap implements Bundlable {
 		if (sprite != null) {
 			sprite.kill();
 		}
-		items.clear();
-		items = null;
+        if (items != null){
+            items.clear();
+            items = null;
+        }
 	}
 
 	@Override

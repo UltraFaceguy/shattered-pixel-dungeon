@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -111,7 +110,7 @@ public class Bomb extends Item {
 		return super.doPickUp(hero);
 	}
 
-	public void detonate(int cell){
+	public void detonate(int cell) {
 		//We're blowing up, so no need for a fuse anymore.
 		this.fuse = null;
 
@@ -144,7 +143,7 @@ public class Bomb extends Item {
 				Char ch = Actor.findChar( c );
 				if (ch != null) {
 					//those not at the center of the blast take damage less consistently.
-					int maxDamage = 10 + Dungeon.depth + (ch.HT / 5);
+					int maxDamage = 10 + Dungeon.depth * 2 + (ch.HT / 10);
                     int minDamage = c == cell ? maxDamage / 2 : maxDamage / 4;
 
 					int dmg = Random.NormalIntRange( minDamage, maxDamage ) - ch.drRoll();
@@ -186,7 +185,7 @@ public class Bomb extends Item {
 
 	@Override
 	public int price() {
-		return 20 * quantity;
+		return 15 * quantity;
 	}
 	
 	@Override
@@ -216,7 +215,7 @@ public class Bomb extends Item {
 	private static class Fuse extends Actor {
 
 		{
-			actPriority = 3;
+			actPriority = 1;
 		}
 
 		private Bomb bomb;

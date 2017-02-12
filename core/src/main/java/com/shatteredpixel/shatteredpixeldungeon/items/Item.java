@@ -31,7 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Boomerang;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.BounceBackWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -188,7 +188,7 @@ public class Item implements Bundlable {
 			}
 			
 			items.add( this );
-			if (stackable || this instanceof Boomerang) Dungeon.quickslot.replaceSimilar(this);
+			if (stackable || this instanceof BounceBackWeapon) Dungeon.quickslot.replaceSimilar(this);
 			updateQuickslot();
 			Collections.sort( items, itemComparator );
 			return true;
@@ -214,7 +214,7 @@ public class Item implements Bundlable {
 		} else
 		if (quantity == 1) {
 
-			if (stackable || this instanceof Boomerang){
+			if (stackable || this instanceof BounceBackWeapon){
 				Dungeon.quickslot.convertToPlaceholder(this);
 			}
 

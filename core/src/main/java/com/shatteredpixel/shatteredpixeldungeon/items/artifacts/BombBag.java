@@ -53,7 +53,7 @@ public class BombBag extends Artifact {
 
 		charge = 2;
         partialCharge = 0;
-        chargeCap = 2 + (2+level()) / 3;
+        chargeCap = 2 + visiblyUpgraded();
 
 		defaultAction = AC_THROWBOMB;
 		usesTargeting = true;
@@ -62,9 +62,22 @@ public class BombBag extends Artifact {
 	}
 
     @Override
+    public void level(int value) {
+        super.level(value);
+        chargeCap = 2 + visiblyUpgraded();
+    }
+
+    @Override
+    public Item upgrade() {
+        super.upgrade();
+        chargeCap = 2 + visiblyUpgraded();
+        return this;
+    }
+
+    @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        chargeCap = 2 + (2+level()) / 3;
+        chargeCap = 2 + visiblyUpgraded();
     }
 
 	@Override
@@ -105,7 +118,6 @@ public class BombBag extends Artifact {
 		} else if (action.equals(AC_FILL)){
 
             GameScene.selectItem(itemSelector, mode, Messages.get(this, "prompt"));
-            chargeCap = 2 + (2+level()) / 3;
 
         }
 	}
@@ -123,9 +135,7 @@ public class BombBag extends Artifact {
 
 
             SmallBomb sb = new SmallBomb();
-            sb.bombLevel = level();
             sb.cast( curUser, target );
-            curUser.spendAndNext(1f);
         }
 
         @Override
@@ -142,19 +152,24 @@ public class BombBag extends Artifact {
     public class bombRecharge extends ArtifactBuff {
         @Override
         public boolean act() {
-            LockedFloor lock = target.buff(LockedFloor.class);
-            if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
-                partialCharge += (1 + level() * 0.1) * (1 / (150f - (chargeCap - charge) * 15f));
+            if (charge < chargeCap) {
+                LockedFloor lock = target.buff(LockedFloor.class);
+                if (lock == null || lock.regenOn())
+                    partialCharge += (1f / (50 - (chargeCap-charge)));
 
                 if (partialCharge >= 1) {
-                    partialCharge --;
-                    charge ++;
-
+                    charge++;
+                    partialCharge -= 1;
                     if (charge == chargeCap){
                         partialCharge = 0;
                     }
+
                 }
-            }
+            } else
+                partialCharge = 0;
+
+            if (cooldown > 0)
+                cooldown --;
 
             updateQuickslot();
 
@@ -175,8 +190,12 @@ public class BombBag extends Artifact {
                     Hero hero = Dungeon.hero;
                     hero.sprite.operate( hero.pos );
                     hero.busy();
-                    hero.spend( 1f );
+                    hero.spend( TIME_TO_PICK_UP );
+
                     curItem.upgrade();
+                    if ( ((BombBag)curItem).charge < ((BombBag)curItem).chargeCap ) {
+                        ((BombBag)curItem).charge++;
+                    }
                     GLog.p(Messages.get(BombBag.class, "levelup"));
                     item.detach(hero.belongings.backpack);
                 }
