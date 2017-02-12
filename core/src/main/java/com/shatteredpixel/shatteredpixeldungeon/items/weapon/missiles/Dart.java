@@ -34,7 +34,7 @@ public class Dart extends MissileWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return 1;
+		return 2;
 	}
 
 	@Override

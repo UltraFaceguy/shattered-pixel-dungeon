@@ -37,12 +37,12 @@ public class CurareDart extends MissileWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return 1;
+		return 3;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return 3;
+		return 4;
 	}
 
 	@Override
