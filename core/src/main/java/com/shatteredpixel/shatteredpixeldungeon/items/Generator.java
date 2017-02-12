@@ -140,6 +140,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.SerratedDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tamahawk;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingDisk;
 import com.shatteredpixel.shatteredpixeldungeon.plants.BlandfruitBush;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
@@ -317,9 +318,10 @@ public class Generator {
                 RunicBlade.class,
                 AssassinsBlade.class,
                 Javelin.class,
-                SerratedDart.class
+                SerratedDart.class,
+				ThrowingDisk.class
         };
-        Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6, 2 };
+        Category.WEP_T4.probs = new float[]{ 6, 5, 5, 4, 4, 6, 2, 2 };
 
         Category.WEP_T5.classes = new Class<?>[]{
                 Greatsword.class,

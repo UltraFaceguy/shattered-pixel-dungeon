@@ -22,14 +22,20 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class Boomerang extends BounceBackWeapon {
+public class ThrowingDisk extends BounceBackWeapon {
 
 	{
-		image = ItemSpriteSheet.BOOMERANG;
+		image = ItemSpriteSheet.THROWING_DISK;
 
-		unique = true;
-		bones = false;
+		stackable = false;
+
+		levelKnown = false;
+		cursedKnown = false;
+
+		unique = false;
+		bones = true;
 	}
+    private int tier = 4;
 
 	@Override
 	public int min(int lvl) {
@@ -38,13 +44,31 @@ public class Boomerang extends BounceBackWeapon {
 
 	@Override
 	public int max(int lvl) {
-		return  4 + 2 * lvl;
+		return  10 + 4 * lvl;
 	}
 
 	@Override
 	public int STRReq(int lvl) {
-		lvl = Math.max(0, lvl);
-		//strength req decreases at +1,+3,+6,+10,etc.
-		return 10 - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
+        lvl = Math.max(0, lvl);
+        //strength req decreases at +1,+3,+6,+10,etc.
+        return (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
+
+    @Override
+    public int price() {
+        int price = 20 * tier;
+        if (hasGoodEnchant()) {
+            price *= 1.5;
+        }
+        if (cursedKnown && (cursed || hasCurseEnchant())) {
+            price /= 2;
+        }
+        if (levelKnown && level() > 0) {
+            price *= (level() + 1);
+        }
+        if (price < 1) {
+            price = 1;
+        }
+        return price;
+    }
 }

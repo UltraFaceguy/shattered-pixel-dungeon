@@ -121,6 +121,7 @@ public class ItemSpriteSheet {
 	public static final int JAVELIN         = MISSILE_WEP+5;
 	public static final int TOMAHAWK        = MISSILE_WEP+6;
 	public static final int SERRATED_DART   = MISSILE_WEP+7;
+	public static final int THROWING_DISK   = MISSILE_WEP+8;
 
 	private static final int ARMOR          =                               xy(1, 11);  //16 slots
 	public static final int ARMOR_CLOTH     = ARMOR+0;
