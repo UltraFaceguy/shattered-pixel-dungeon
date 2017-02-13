@@ -255,6 +255,7 @@ public class ItemSpriteSheet {
 	public static final int PUMPKIN_PIE = FOOD+7;
 	public static final int CANDY_CANE  = FOOD+8;
 	public static final int CHEESE      = FOOD+9;
+	public static final int MUSHROOM    = FOOD+10;
 
 	private static final int QUEST  =                                       xy(1, 26);  //32 slots
 	public static final int SKULL   = QUEST+0;

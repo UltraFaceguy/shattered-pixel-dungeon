@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.plants.BlandfruitBush;
+import com.shatteredpixel.shatteredpixeldungeon.plants.MushroomCluster;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
@@ -79,15 +80,16 @@ public class WandOfRegrowth extends Wand {
 			}
 		}
 
-		float numPlants, numDews, numPods, numStars;
+		float numPlants, numDews, numPods, numStars, numMush;
 
 		int chrgUsed = chargesPerCast();
 		//numbers greater than n*100% means n guaranteed plants, e.g. 210% = 2 plants w/10% chance for 3 plants.
 		numPlants = 0.2f + chrgUsed*chrgUsed*0.020f; //scales from 22% to 220%
 		numDews = 0.05f + chrgUsed*chrgUsed*0.016f; //scales from 6.6% to 165%
+		numMush = 0.05f + chrgUsed*chrgUsed*0.016f; //scales from 6.6% to 165%
 		numPods = 0.02f + chrgUsed*chrgUsed*0.013f; //scales from 3.3% to 135%
 		numStars = (chrgUsed*chrgUsed*chrgUsed/5f)*0.005f; //scales from 0.1% to 100%
-		placePlants(numPlants, numDews, numPods, numStars);
+		placePlants(numPlants, numDews, numPods, numStars, numMush);
 
 		for (int i : affectedCells){
 			int c = Dungeon.level.map[i];
@@ -121,7 +123,7 @@ public class WandOfRegrowth extends Wand {
 			visualCells.add(cell);
 	}
 
-	private void placePlants(float numPlants, float numDews, float numPods, float numStars){
+	private void placePlants(float numPlants, float numDews, float numPods, float numStars, float numMush){
 		Iterator<Integer> cells = affectedCells.iterator();
 		Level floor = Dungeon.level;
 
@@ -151,6 +153,11 @@ public class WandOfRegrowth extends Wand {
 
 		while (cells.hasNext() && Random.Float() <= numStars){
 			floor.plant(new Starflower.Seed(), cells.next());
+			numStars --;
+		}
+
+		while (cells.hasNext() && Random.Float() <= numMush){
+			floor.plant(new MushroomCluster.Seed(), cells.next());
 			numStars --;
 		}
 

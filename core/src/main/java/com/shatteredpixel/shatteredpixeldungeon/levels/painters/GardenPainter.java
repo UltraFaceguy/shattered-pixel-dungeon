@@ -23,10 +23,12 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.painters;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Foliage;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMushroom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.plants.BlandfruitBush;
+import com.shatteredpixel.shatteredpixeldungeon.plants.MushroomCluster;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.watabou.utils.Random;
 
@@ -46,6 +48,7 @@ public class GardenPainter extends Painter {
 			}
 		} else {
 			int bushes = Random.Int(3);
+			level.plant(new MushroomCluster.Seed(), level.pointToCell(room.random()));
 			if (bushes == 0) {
 				level.plant(new Sungrass.Seed(), level.pointToCell(room.random()));
 			} else if (bushes == 1) {
