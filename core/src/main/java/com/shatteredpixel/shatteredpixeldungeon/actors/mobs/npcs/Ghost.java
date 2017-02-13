@@ -36,10 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.NewShortsword;
@@ -277,28 +273,29 @@ public class Ghost extends NPC {
 				processed = false;
 				depth = Dungeon.depth;
 
-				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
+				//50%:tier2, 35%:tier3, 15%:tier4
 				float itemTierRoll = Random.Float();
-				int wepTier;
+				int tier;
 
 				if (itemTierRoll < 0.5f) {
-					wepTier = 2;
-					armor = new LeatherArmor();
-				} else if (itemTierRoll < 0.8f) {
-					wepTier = 3;
-					armor = new MailArmor();
-				} else if (itemTierRoll < 0.95f) {
-					wepTier = 4;
-					armor = new ScaleArmor();
+					tier = 2;
+				} else if (itemTierRoll < 0.85f) {
+					tier = 3;
 				} else {
-					wepTier = 5;
-					armor = new PlateArmor();
+					tier = 4;
 				}
 
 				try {
 					do {
-						weapon = (Weapon) Generator.wepTiers[wepTier - 1].classes[Random.chances(Generator.wepTiers[wepTier - 1].probs)].newInstance();
+						weapon = (Weapon) Generator.wepTiers[tier - 1].classes[Random.chances(Generator.wepTiers[tier - 1].probs)].newInstance();
 					} while (!(weapon instanceof MeleeWeapon));
+				} catch (Exception e){
+					ShatteredPixelDungeon.reportException(e);
+					weapon = new NewShortsword();
+				}
+
+				try {
+					armor = (Armor) Generator.armTiers[tier - 1].classes[Random.chances(Generator.armTiers[tier - 1].probs)].newInstance();
 				} catch (Exception e){
 					ShatteredPixelDungeon.reportException(e);
 					weapon = new NewShortsword();
@@ -319,8 +316,8 @@ public class Ghost extends NPC {
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
 
-				//10% to be enchanted
-				if (Random.Int(10) == 0){
+				//20% to be enchanted
+				if (Random.Int(5) == 0){
 					weapon.enchant();
 					armor.inscribe();
 				}
