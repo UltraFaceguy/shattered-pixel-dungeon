@@ -183,7 +183,7 @@ public abstract class Char extends Actor {
 			
 			if (visibleFight) {
 				String defense = enemy.defenseVerb();
-				enemy.sprite.showStatus( CharSprite.NEUTRAL, defense );
+				enemy.sprite.showStatus( CharSprite.DEFAULT, defense );
 				
 				Sample.INSTANCE.play(Assets.SND_MISS);
 			}
