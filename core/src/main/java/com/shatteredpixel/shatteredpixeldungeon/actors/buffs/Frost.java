@@ -95,7 +95,7 @@ public class Frost extends FlavourBuff {
 		super.detach();
 		if (target.paralysed > 0)
 			target.paralysed--;
-		Chill.affect(target, Chill.class, 6f);
+		Chill.affect(target, Chill.class, 10f);
 	}
 	
 	@Override
