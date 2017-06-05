@@ -147,8 +147,13 @@ public abstract class RegularLevel extends Level {
 			}
 		}
 		
-		specials = new ArrayList<Room.Type>( Room.SPECIALS );
+		specials = new ArrayList<>( Room.SPECIALS );
+		if (Dungeon.depth == 1) {
+            // Not enough rats to sacrifice, tbh.
+			specials.remove( Room.Type.ALTER );
+		}
 		if (Dungeon.bossLevel( Dungeon.depth + 1 )) {
+            // No falling into weird key rooms on boss levels please.
 			specials.remove( Room.Type.WEAK_FLOOR );
 		}
 		if (Dungeon.isChallenged( Challenges.NO_ARMOR )){
