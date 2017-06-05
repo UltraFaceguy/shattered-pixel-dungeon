@@ -77,32 +77,29 @@ public class WandOfFrost extends DamageWand {
                     continue;
                 }
 
-                if (ch.buff(Chill.class) != null) {
-                    if (ch.buff(Chill.class).speedFactor() <= 0.3f) {
-                        if (Level.water[ch.pos]) {
-                            Buff.affect(ch, Frost.class, Random.Float(3.5f, 6.0f));
-                        } else {
-                            Buff.affect(ch, Frost.class, Random.Float(1.0f, 2.0f));
-                        }
-                        continue;
-                    }
-                }
+				if (ch.buff(Frost.class) != null) {
+					if (Level.water[ch.pos]) {
+						Buff.affect(ch, Frost.class, Random.Float(3.0f, 5.0f));
+					} else {
+						Buff.affect(ch, Frost.class, Random.Float(2.0f, 3.0f));
+					}
+					continue;
+				}
 
-                if (ch.buff(Frost.class) != null) {
-                    if (Level.water[ch.pos]) {
-                        Buff.affect(ch, Frost.class, Random.Float(3.5f, 6.0f));
-                    } else {
-                        Buff.affect(ch, Frost.class, Random.Float(1.0f, 2.0f));
-                    }
-                    continue;
-                }
+				if (Level.water[ch.pos]) {
+					Buff.add(ch, Chill.class, Random.Float(3.0f, 4.5f));
+				} else {
+					Buff.add(ch, Chill.class, Random.Float(2.0f, 3.0f));
+				}
 
                 if (ch.pos == pos) {
                     Buff.add(ch, Chill.class, 3 + (float)level() / 2);
                     ch.damage(damageRoll(), this);
-                } else {
-                    Buff.add(ch, Chill.class, 1 + (float)level() / 3);
                 }
+
+				if (ch.buff(Chill.class).cooldown() >= 9) {
+					Buff.affect(ch, Frost.class, 3 + (float)level() / 2);
+				}
 			}
 		}
 	}
