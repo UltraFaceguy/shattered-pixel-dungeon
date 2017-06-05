@@ -526,9 +526,9 @@ public abstract class Mob extends Char {
 			int exp = exp();
 			if (exp > 0) {
 				if (Dungeon.visible[this.pos]) {
-					this.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+					this.sprite.showStatus(CharSprite.EXPERIENCE, Messages.get(this, "exp", exp));
 				} else {
-					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+					Dungeon.hero.sprite.showStatus(CharSprite.EXPERIENCE, Messages.get(this, "exp", exp));
 				}
 				Dungeon.hero.earnExp( exp );
 			}
