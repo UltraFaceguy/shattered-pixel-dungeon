@@ -96,7 +96,7 @@ public class Chill extends FlavourBuff {
 
 	// Reduces speed by 10% for every turn remaining, minimum 25%, max 75%
 	public float speedFactor(){
-		return Math.max (Math.min(0.75f, 1 - ((cooldown()+1) * 0.1f)), 0.25f);
+		return Math.max (Math.min(0.5f, 1 - cooldown() * 0.1f), 0.1f);
 	}
 
 	@Override
