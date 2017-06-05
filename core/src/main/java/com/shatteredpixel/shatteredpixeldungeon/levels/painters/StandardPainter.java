@@ -41,8 +41,8 @@ public class StandardPainter extends Painter {
 			door.set( Room.Door.Type.REGULAR );
 		}
 		
-		if (!Dungeon.bossLevel() && Random.Int( 5 ) == 0) {
-			switch (Random.Int( 6 )) {
+		if (!Dungeon.bossLevel() && Random.Int( 4 ) == 0) {
+			switch (Random.Int( 7 )) {
 			case 0:
 				if (level.feeling != Level.Feeling.GRASS) {
 					if (Math.min( room.width(), room.height() ) >= 4 && Math.max( room.width(), room.height() ) >= 6) {
@@ -81,7 +81,7 @@ public class StandardPainter extends Painter {
 				} else {
 					// Fissure
 				}
-			case 5:
+			default:
 				if (!Dungeon.bossLevel() && !Dungeon.bossLevel( Dungeon.depth + 1 ) &&
 					Math.min( room.width(), room.height() ) >= 5) {
 					paintFissure( level, room );
