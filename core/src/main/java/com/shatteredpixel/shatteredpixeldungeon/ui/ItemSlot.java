@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.BounceBackWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -186,7 +187,7 @@ public class ItemSlot extends Button {
 		boolean isWeapon = item instanceof Weapon;
 		if (isArmor || isWeapon) {
 
-			if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon))) {
+			if (item.levelKnown || (isWeapon && !(item instanceof MeleeWeapon) && !(item instanceof BounceBackWeapon))) {
 
 				int str = isArmor ? ((Armor)item).STRReq() : ((Weapon)item).STRReq();
 				topRight.text( Messages.format( TXT_STRENGTH, str ) );
