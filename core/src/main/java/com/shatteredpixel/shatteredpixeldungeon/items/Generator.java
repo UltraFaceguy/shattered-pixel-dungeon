@@ -44,7 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.RingOfMalice;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SigilOfMalice;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -402,7 +402,7 @@ public class Generator {
 			DriedRose.class, //starts with no chance of spawning, chance is set directly after beating ghost quest.
 			LloydsBeacon.class,
             EtherealChains.class,
-			RingOfMalice.class,
+			SigilOfMalice.class,
 			BombBag.class
 			};
 		Category.ARTIFACT.probs = INITIAL_ARTIFACT_PROBS.clone();

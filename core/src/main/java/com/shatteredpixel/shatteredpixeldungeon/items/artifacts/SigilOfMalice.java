@@ -43,10 +43,10 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class RingOfMalice extends Artifact {
+public class SigilOfMalice extends Artifact {
 
 	{
-		image = ItemSpriteSheet.ARTIFACT_RING;
+		image = ItemSpriteSheet.ARTIFACT_SIGIL;
 
         exp = 0;
         levelCap = 10;

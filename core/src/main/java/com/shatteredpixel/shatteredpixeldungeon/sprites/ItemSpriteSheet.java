@@ -194,7 +194,7 @@ public class ItemSpriteSheet {
 	public static final int ARTIFACT_ROSE1      = ARTIFACTS+20;
 	public static final int ARTIFACT_ROSE2      = ARTIFACTS+21;
 	public static final int ARTIFACT_ROSE3      = ARTIFACTS+22;
-	public static final int ARTIFACT_RING       = ARTIFACTS+23;
+	public static final int ARTIFACT_SIGIL = ARTIFACTS+23;
 	public static final int ARTIFACT_BOMB       = ARTIFACTS+24;
 
 	                                                                                    //32 free slots

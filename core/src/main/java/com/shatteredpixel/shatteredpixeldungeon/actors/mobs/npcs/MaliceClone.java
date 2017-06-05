@@ -23,7 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.RingOfMalice;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SigilOfMalice;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MaliceSprite;
 import com.watabou.utils.Bundle;
 
@@ -70,9 +70,9 @@ public class MaliceClone extends NPC {
     @Override
     public int attackProc( Char enemy, int damage ) {
         if (damage >= enemy.HP) {
-            RingOfMalice ringOfMalice = Dungeon.hero.belongings.getItem( RingOfMalice.class );
-            if (ringOfMalice != null) {
-                ringOfMalice.gainExp(5);
+            SigilOfMalice sigil = Dungeon.hero.belongings.getItem( SigilOfMalice.class );
+            if (sigil != null) {
+                sigil.gainExp(10);
             }
         }
         return damage;
