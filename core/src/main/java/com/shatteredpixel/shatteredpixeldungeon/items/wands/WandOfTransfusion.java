@@ -88,9 +88,7 @@ public class WandOfTransfusion extends Wand {
 				int missingHP = ch.HT - ch.HP;
 				//heals 30%+3%*lvl missing HP.
 				int healing = (int)Math.ceil((missingHP * (0.30f+(0.03f*level()))));
-				ch.HP += healing;
-				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1 + level() / 2);
-				ch.sprite.showStatus(CharSprite.POSITIVE, "+%dHP", healing);
+				ch.heal(healing);
 
 			//harms the undead
 			} else if (ch.properties().contains(Char.Property.UNDEAD)){
