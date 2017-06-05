@@ -39,7 +39,7 @@ import com.watabou.noosa.audio.Sample;
 public class WndSettings extends WndTabbed {
 
 	private static final int WIDTH		    = 120;
-	private static final int HEIGHT         = 130;
+	private static final int HEIGHT         = 140;
 	private static final int SLIDER_HEIGHT	= 24;
 	private static final int BTN_HEIGHT	    = 18;
 	private static final int GAP_TINY 		= 2;
