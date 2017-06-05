@@ -39,19 +39,13 @@ public class Sacrificial extends Weapon.Enchantment {
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage ) {
 
-        // Reduce the chance of taking bleed every 2 weapon levels
-        // Or I guess increase it for negative weapons :D
-		if (Random.Int(8 + weapon.level() / 2) == 0) {
+		if (Random.Int(8) == 0) {
 			Buff.apply(attacker, Bleeding.class).set(Math.max(3, attacker.HP / 5));
 		}
 
-        // Chance to restome 2 to 20% slain target's max HP
-        // Should be completely disabled on negative level weapons
-        // +0 - 16%
-        // +1 - 28%
-        // +2 - 37%
-		if (Random.Int(6 + weapon.level()) <= weapon.level() && damage > defender.HP) {
-            int healing = Random.NormalIntRange(2, 3 + (defender.HT / 5));
+        // Chance to restore 2 to 20% slain target's max HP
+		if (Random.Int(4) == 0 && damage > defender.HP) {
+            int healing = Random.NormalIntRange(2, 3 + (defender.HT / 6));
 			attacker.heal( healing );
             defender.sprite.emitter().burst(SacrificialParticle.FACTORY, 5 );
         }
