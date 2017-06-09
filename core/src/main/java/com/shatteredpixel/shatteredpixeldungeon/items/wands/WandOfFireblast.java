@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -78,9 +79,8 @@ public class WandOfFireblast extends DamageWand {
 			Char ch = Actor.findChar( cell );
 			if (ch != null) {
 
-				int damage = damageRoll();
-
-				ch.damage(damage, this);
+				processSoulMark(ch, chargesPerCast());
+				ch.damage(damageRoll(), this);
 				Buff.apply( ch, Burning.class ).reignite( ch );
 				switch(chargesPerCast()){
 					case 1:
@@ -159,9 +159,18 @@ public class WandOfFireblast extends DamageWand {
 
 		for (int cell : visualCells){
 			//this way we only get the cells at the tip, much better performance.
-			MagicMissile.fire(curUser.sprite.parent, bolt.sourcePos, cell, null);
+			((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+					MagicMissile.FIRE_CONE,
+					curUser.sprite,
+					cell,
+					null
+			);
 		}
-		MagicMissile.fire( curUser.sprite.parent, bolt.sourcePos, bolt.path.get(dist), callback );
+		MagicMissile.boltFromChar( curUser.sprite.parent,
+				MagicMissile.FIRE_CONE,
+				curUser.sprite,
+				bolt.path.get(dist/2),
+				callback );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 

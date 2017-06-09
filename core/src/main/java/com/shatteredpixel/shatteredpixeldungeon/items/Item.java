@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -428,7 +429,6 @@ public class Item implements Bundlable {
 	private static final String LEVEL_KNOWN		= "levelKnown";
 	private static final String CURSED			= "cursed";
 	private static final String CURSED_KNOWN	= "cursedKnown";
-	private static final String OLDSLOT			= "quickslot";
 	private static final String QUICKSLOT		= "quickslotpos";
 	
 	@Override
@@ -460,10 +460,7 @@ public class Item implements Bundlable {
 
 		//only want to populate slot on first load.
 		if (Dungeon.hero == null) {
-			//support for pre-0.2.3 saves and rankings
-			if (bundle.contains(OLDSLOT)) {
-				Dungeon.quickslot.setSlot(0, this);
-			} else if (bundle.contains(QUICKSLOT)) {
+			if (bundle.contains(QUICKSLOT)) {
 				Dungeon.quickslot.setSlot(bundle.getInt(QUICKSLOT), this);
 			}
 		}
@@ -499,15 +496,32 @@ public class Item implements Bundlable {
 			}
 		}
 		final float finalDelay = delay;
-		
-		((MissileSprite)user.sprite.parent.recycle( MissileSprite.class )).
-			reset( user.pos, cell, this, new Callback() {
-				@Override
-				public void call() {
-					Item.this.detach( user.belongings.backpack ).onThrow( cell );
-					user.spendAndNext( finalDelay );
-				}
-			} );
+
+		if (enemy != null) {
+			((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+					reset(user.sprite,
+							enemy.sprite,
+							this,
+							new Callback() {
+						@Override
+						public void call() {
+							Item.this.detach(user.belongings.backpack).onThrow(cell);
+							user.spendAndNext(finalDelay);
+						}
+					});
+		} else {
+			((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+					reset(user.sprite,
+							cell,
+							this,
+							new Callback() {
+						@Override
+						public void call() {
+							Item.this.detach(user.belongings.backpack).onThrow(cell);
+							user.spendAndNext(finalDelay);
+						}
+					});
+		}
 	}
 	
 	protected static Hero curUser = null;

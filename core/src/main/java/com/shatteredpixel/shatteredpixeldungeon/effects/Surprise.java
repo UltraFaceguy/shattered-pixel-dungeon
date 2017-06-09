@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.Visual;
 
 public class Surprise extends Image {
 
@@ -44,6 +45,14 @@ public class Surprise extends Image {
 
 		x = (p % Dungeon.level.width()) * DungeonTilemap.SIZE + (DungeonTilemap.SIZE - width) / 2;
 		y = (p / Dungeon.level.width()) * DungeonTilemap.SIZE + (DungeonTilemap.SIZE - height) / 2;
+
+		time = TIME_TO_FADE;
+	}
+
+	public void reset(Visual v) {
+		revive();
+
+		point(v.center(this));
 
 		time = TIME_TO_FADE;
 	}
@@ -69,7 +78,7 @@ public class Surprise extends Image {
 		if (ch.sprite.parent != null) {
 			Surprise s = (Surprise) ch.sprite.parent.recycle(Surprise.class);
 			ch.sprite.parent.bringToFront(s);
-			s.reset(ch.pos);
+			s.reset(ch.sprite);
 			s.angle = angle;
 		}
 	}
@@ -80,9 +89,9 @@ public class Surprise extends Image {
 
 	public static void hit(int pos, float angle) {
 		Group parent = Dungeon.hero.sprite.parent;
-		Wound w = (Wound) parent.recycle(Wound.class);
-		parent.bringToFront(w);
-		w.reset(pos);
-		w.angle = angle;
+		Surprise s = (Surprise) parent.recycle(Surprise.class);
+		parent.bringToFront(s);
+		s.reset(pos);
+		s.angle = angle;
 	}
 }

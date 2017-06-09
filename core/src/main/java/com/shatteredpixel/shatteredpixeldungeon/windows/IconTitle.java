@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -78,20 +79,24 @@ public class IconTitle extends Component {
 
 		health.visible = !Float.isNaN( healthLvl );
 
-		imIcon.x = x;
-		imIcon.y = y;
+		imIcon.x = x + (Math.max(0, 8 - imIcon.width()/2));
+		imIcon.y = y + (Math.max(0, 8 - imIcon.height()/2));
+		PixelScene.align(imIcon);
 
-		tfLabel.maxWidth((int)(width - (imIcon.x + imIcon.width() + GAP)));
-		tfLabel.setPos(imIcon.x + imIcon.width() + GAP, imIcon.height > tfLabel.height() ?
-						imIcon.y + (imIcon.height() - tfLabel.height()) / 2 :
-						imIcon.y);
+		int imWidth = (int)Math.max(imIcon.width(), 16);
+		int imHeight = (int)Math.max(imIcon.height(), 16);
+
+		tfLabel.maxWidth((int)(width - (imWidth + GAP)));
+		tfLabel.setPos(x + imWidth + GAP, imHeight > tfLabel.height() ?
+						y +(imHeight - tfLabel.height()) / 2 :
+						y);
 		PixelScene.align(tfLabel);
 
 		if (health.visible) {
-			health.setRect( tfLabel.left(), Math.max( tfLabel.top() + tfLabel.height(), imIcon.y + imIcon.height() - health.height() ), tfLabel.maxWidth(), 0 );
-			height = health.bottom();
+			health.setRect( tfLabel.left(), tfLabel.bottom(), tfLabel.maxWidth(), 0 );
+			height = Math.max( imHeight, health.bottom() );
 		} else {
-			height = Math.max( imIcon.height(), tfLabel.height() );
+			height = Math.max( imHeight, tfLabel.height() );
 		}
 	}
 

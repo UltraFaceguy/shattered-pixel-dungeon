@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import android.opengl.GLES20;
@@ -33,7 +34,7 @@ public class TorchHalo extends Halo {
 	private float phase = 0;
 	
 	public TorchHalo( CharSprite sprite ) {
-		super( 24, 0xFFDDCC, 0.15f );
+		super( 20, 0xFFDDCC, 0.2f );
 		target = sprite;
 		am = 0;
 	}

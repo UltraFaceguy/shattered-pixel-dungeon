@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -37,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
@@ -98,6 +100,8 @@ public class CavesBossLevel extends Level {
 	@Override
 	protected boolean build() {
 		
+		setSize(32, 32);
+		
 		int topMost = Integer.MAX_VALUE;
 		
 		for (int i=0; i < 8; i++) {
@@ -142,7 +146,7 @@ public class CavesBossLevel extends Level {
 			Random.Int( ROOM_TOP + 1, ROOM_BOTTOM - 1 ) * width();
 		map[entrance] = Terrain.ENTRANCE;
 		
-		boolean[] patch = Patch.generate( this, 0.45f, 6 );
+		boolean[] patch = Patch.generate( width, height, 0.30f, 6, true );
 		for (int i=0; i < length(); i++) {
 			if (map[i] == Terrain.EMPTY && patch[i]) {
 				map[i] = Terrain.WATER;
@@ -157,12 +161,6 @@ public class CavesBossLevel extends Level {
 				setTrap(t, i);
 			}
 		}
-		
-		return true;
-	}
-	
-	@Override
-	protected void decorate() {
 		
 		for (int i=width() + 1; i < length() - width(); i++) {
 			if (map[i] == Terrain.EMPTY) {
@@ -185,8 +183,10 @@ public class CavesBossLevel extends Level {
 			}
 		}
 		
-		for (int i=0; i < length(); i++) {
-			if (map[i] == Terrain.WALL && Random.Int( 8 ) == 0) {
+		for (int i=0; i < length() - width(); i++) {
+			if (map[i] == Terrain.WALL
+					&& DungeonTileSheet.floorTile(map[i + width()])
+					&& Random.Int( 3 ) == 0) {
 				map[i] = Terrain.WALL_DECO;
 			}
 		}
@@ -196,6 +196,9 @@ public class CavesBossLevel extends Level {
 			sign = Random.Int( ROOM_LEFT, ROOM_RIGHT ) + Random.Int( ROOM_TOP, ROOM_BOTTOM ) * width();
 		} while (sign == entrance || map[sign] == Terrain.INACTIVE_TRAP);
 		map[sign] = Terrain.SIGN;
+		
+		
+		return true;
 	}
 	
 	@Override

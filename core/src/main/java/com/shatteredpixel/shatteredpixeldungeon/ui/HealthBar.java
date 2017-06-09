@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -60,8 +61,12 @@ public class HealthBar extends Component {
 		Bg.y = Shld.y = Hp.y = y;
 		
 		Bg.size( width, HEIGHT );
-		Shld.size( width * shield, HEIGHT );
-		Hp.size( width * health, HEIGHT );
+		
+		//logic here rounds up to the nearest pixel
+		float pixelWidth = width;
+		if (camera() != null) pixelWidth *= camera().zoom;
+		Shld.size( width * (float)Math.ceil(shield * pixelWidth)/pixelWidth, HEIGHT );
+		Hp.size( width * (float)Math.ceil(health * pixelWidth)/pixelWidth, HEIGHT );
 		
 		height = HEIGHT;
 	}

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -307,13 +308,16 @@ public abstract class Mob extends Char {
 		} else {
 
 			boolean newPath = false;
-			if (path == null || path.isEmpty() || !Dungeon.level.adjacent(pos, path.getFirst()))
+			//scrap the current path if it's empty, no longer connects to the current location
+			//or if it's extremely inefficient and checking again may result in a much better path
+			if (path == null || path.isEmpty()
+					|| !Dungeon.level.adjacent(pos, path.getFirst())
+					|| path.size() >= 2*Dungeon.level.distance(pos, target))
 				newPath = true;
 			else if (path.getLast() != target) {
 				//if the new target is adjacent to the end of the path, adjust for that
-				//rather than scrapping the whole path. Unless the path is too long,
-				//in which case re-checking will likely result in a better path
-				if (Dungeon.level.adjacent(target, path.getLast()) && path.size() < Dungeon.level.distance(pos, target)) {
+				//rather than scrapping the whole path.
+				if (Dungeon.level.adjacent(target, path.getLast())) {
 					int last = path.removeLast();
 
 					if (path.isEmpty()) {
@@ -354,7 +358,7 @@ public abstract class Mob extends Char {
 				int lookAhead = (int)GameMath.gate(1, path.size()-1, 4);
 				for (int i = 0; i < lookAhead; i++) {
 					int cell = path.get(i);
-					if (!Level.passable[cell] || ( Dungeon.visible[cell] && Actor.findChar(cell) != null)) {
+					if (!Level.passable[cell] || ( Level.fieldOfView[cell] && Actor.findChar(cell) != null)) {
 						newPath = true;
 						break;
 					}

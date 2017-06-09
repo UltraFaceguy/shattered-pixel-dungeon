@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 package com.watabou.noosa;
 
 import com.watabou.glwrap.Matrix;
-import com.watabou.utils.GameMath;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 
@@ -146,6 +145,14 @@ public class Visual extends Gizmo {
 		x = p.x - width / 2;
 		y = p.y - height / 2;
 		return p;
+	}
+
+	//returns the point needed to center the argument visual on this visual
+	public PointF center( Visual v ) {
+		return new PointF(
+				x + (width() - v.width())/2f,
+				y + (height() - v.height())/2f
+		);
 	}
 	
 	public float width() {

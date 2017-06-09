@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import android.graphics.Bitmap;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
@@ -32,10 +33,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.gltextures.TextureCache;
+import com.watabou.glwrap.Matrix;
+import com.watabou.glwrap.Vertexbuffer;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.MovieClip;
-import com.watabou.noosa.TextureFilm;
+import com.watabou.noosa.NoosaScript;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.PointF;
@@ -47,8 +51,6 @@ public class ItemSprite extends MovieClip {
 	
 	private static final float DROP_INTERVAL = 0.4f;
 	
-	protected static TextureFilm film;
-	
 	public Heap heap;
 	
 	private Glowing glowing;
@@ -59,6 +61,16 @@ public class ItemSprite extends MovieClip {
 	private boolean glowUp;
 	
 	private float dropInterval;
+
+	//the amount the sprite is raised from flat when viewed in a raised perspective
+	protected float perspectiveRaise    = 5 / 16f; //5 pixels
+
+	//the width and height of the shadow are a percentage of sprite size
+	//offset is the number of pixels the shadow is moved down or up (handy for some animations)
+	protected boolean renderShadow  = false;
+	protected float shadowWidth     = 1f;
+	protected float shadowHeight    = 0.25f;
+	protected float shadowOffset    = 0.5f;
 	
 	public ItemSprite() {
 		this( ItemSpriteSheet.SOMETHING, null );
@@ -67,25 +79,17 @@ public class ItemSprite extends MovieClip {
 	public ItemSprite( Item item ) {
 		super(Assets.ITEMS);
 
-		if (film == null) {
-			film = new TextureFilm( texture, SIZE, SIZE );
-		}
-
 		view (item);
 	}
 	
 	public ItemSprite( int image, Glowing glowing ) {
 		super( Assets.ITEMS );
 		
-		if (film == null) {
-			film = new TextureFilm( texture, SIZE, SIZE );
-		}
-		
 		view(image, glowing);
 	}
 	
 	public void originToCenter() {
-		origin.set(SIZE / 2);
+		origin.set(width / 2, height / 2);
 	}
 	
 	public void link() {
@@ -95,6 +99,7 @@ public class ItemSprite extends MovieClip {
 	public void link( Heap heap ) {
 		this.heap = heap;
 		view( heap.image(), heap.glowing() );
+		renderShadow = true;
 		place(heap.pos);
 	}
 	
@@ -125,14 +130,16 @@ public class ItemSprite extends MovieClip {
 		final int csize = DungeonTilemap.SIZE;
 		
 		return new PointF(
-			cell % Dungeon.level.width() * csize + (csize - SIZE) * 0.5f,
-			cell / Dungeon.level.width() * csize + (csize - SIZE) * 0.5f
+			cell % Dungeon.level.width() * csize + (csize - width()) * 0.5f,
+			cell / Dungeon.level.width() * csize + (csize - height()) - csize * perspectiveRaise
 		);
 	}
 	
 	public void place( int p ) {
-		if (Dungeon.level != null)
-			point( worldToCamera( p ) );
+		if (Dungeon.level != null) {
+			point(worldToCamera(p));
+			shadowOffset = 0.5f;
+		}
 	}
 	
 	public void drop() {
@@ -187,7 +194,7 @@ public class ItemSprite extends MovieClip {
 	public ItemSprite view( int image, Glowing glowing ) {
 		if (this.emitter != null) this.emitter.killAndErase();
 		emitter = null;
-		frame( film.get( image ) );
+		frame( image );
 		if ((this.glowing = glowing) == null) {
 			resetColor();
 		}
@@ -195,7 +202,13 @@ public class ItemSprite extends MovieClip {
 	}
 
 	public void frame( int image ){
-		frame( film.get( image ));
+		frame( ItemSpriteSheet.film.get( image ));
+
+		float height = ItemSpriteSheet.film.height( image );
+		//adds extra raise to very short items, so they are visible
+		if (height < 8f){
+			perspectiveRaise =  (5 + 8 - height) / 16f;
+		}
 	}
 
 	@Override
@@ -205,30 +218,83 @@ public class ItemSprite extends MovieClip {
 		emitter = null;
 	}
 
+	private float[] shadowMatrix = new float[16];
+
+	@Override
+	protected void updateMatrix() {
+		super.updateMatrix();
+		Matrix.copy(matrix, shadowMatrix);
+		Matrix.translate(shadowMatrix,
+				(width() * (1f - shadowWidth)) / 2f,
+				(height() * (1f - shadowHeight)) + shadowOffset);
+		Matrix.scale(shadowMatrix, shadowWidth, shadowHeight);
+	}
+
+	@Override
+	public void draw() {
+		if (texture == null || (!dirty && buffer == null))
+			return;
+
+		if (renderShadow) {
+			if (dirty) {
+				verticesBuffer.position(0);
+				verticesBuffer.put(vertices);
+				if (buffer == null)
+					buffer = new Vertexbuffer(verticesBuffer);
+				else
+					buffer.updateVertices(verticesBuffer);
+				dirty = false;
+			}
+
+			NoosaScript script = script();
+
+			texture.bind();
+
+			script.camera(camera());
+
+			updateMatrix();
+
+			script.uModel.valueM4(shadowMatrix);
+			script.lighting(
+					0, 0, 0, am * .6f,
+					0, 0, 0, aa * .6f);
+
+			script.drawQuad(buffer);
+		}
+
+		super.draw();
+
+	}
+
 	@Override
 	public void update() {
 		super.update();
 
 		visible = (heap == null || heap.seen);
 
-		if (dropInterval > 0 && (dropInterval -= Game.elapsed) <= 0) {
-			
-			speed.set( 0 );
-			acc.set( 0 );
-			place( heap.pos );
+		if (dropInterval > 0){
+			shadowOffset -= speed.y * Game.elapsed * 0.8f;
 
-			if (visible) {
-				boolean water = Level.water[heap.pos];
+			if ((dropInterval -= Game.elapsed) <= 0){
 
-				if (water) {
-					GameScene.ripple(heap.pos);
-				} else {
-					int cell = Dungeon.level.map[heap.pos];
-					water = (cell == Terrain.WELL || cell == Terrain.ALCHEMY);
-				}
+				speed.set(0);
+				acc.set(0);
+				shadowOffset = 0.25f;
+				place(heap.pos);
 
-				if (!(heap.peek() instanceof Gold)) {
-					Sample.INSTANCE.play(water ? Assets.SND_WATER : Assets.SND_STEP, 0.8f, 0.8f, 1.2f);
+				if (visible) {
+					boolean water = Level.water[heap.pos];
+
+					if (water) {
+						GameScene.ripple(heap.pos);
+					} else {
+						int cell = Dungeon.level.map[heap.pos];
+						water = (cell == Terrain.WELL || cell == Terrain.ALCHEMY);
+					}
+
+					if (!(heap.peek() instanceof Gold)) {
+						Sample.INSTANCE.play(water ? Assets.SND_WATER : Assets.SND_STEP, 0.8f, 0.8f, 1.2f);
+					}
 				}
 			}
 		}

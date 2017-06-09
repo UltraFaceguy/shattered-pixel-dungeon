@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -48,7 +49,7 @@ public class Viscosity extends Glyph {
 		
 		int level = Math.max( 0, armor.level() );
 		
-		if (Random.Int( level + 4 ) >= 3) {
+		if (Random.Int( level + 6 ) >= 5) {
 			
 			DeferedDamage debuff = defender.buff( DeferedDamage.class );
 			if (debuff == null) {
@@ -118,7 +119,7 @@ public class Viscosity extends Glyph {
 		public boolean act() {
 			if (target.isAlive()) {
 
-				int damageThisTick = Math.max(1, damage/10);
+				int damageThisTick = Math.max(1, (int)(damage*0.1f));
 				target.damage( damageThisTick, this );
 				if (target == Dungeon.hero && !target.isAlive()) {
 

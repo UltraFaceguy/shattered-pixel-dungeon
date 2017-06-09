@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -51,9 +52,9 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.LastShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.StartScene;
@@ -75,8 +76,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Dungeon {
-
-	public static int transmutation;	// depth number for a well of transmutation
 
 	//enum of items which have limited spawns, records how many have spawned
 	//could all be their own separate numbers, but this allows iterating, much nicer for bundling/initializing.
@@ -156,9 +155,7 @@ public class Dungeon {
 			Potion.initColors();
 			Ring.initGems();
 
-			transmutation = Random.IntRange( 6, 14 );
-
-			Room.shuffleTypes();
+			SpecialRoom.initForRun();
 
 		Random.seed();
 		
@@ -268,8 +265,7 @@ public class Dungeon {
 			level = new DeadEndLevel();
 			Statistics.deepestFloor--;
 		}
-
-		visible = new boolean[level.length()];
+		
 		level.create();
 		
 		Statistics.qualifiedForNoKilling = !bossLevel();
@@ -458,8 +454,6 @@ public class Dungeon {
 
 			quickslot.storePlaceholders( bundle );
 
-			bundle.put( WT, transmutation );
-
 			int[] dropValues = new int[limitedDrops.values().length];
 			for (limitedDrops value : limitedDrops.values())
 				dropValues[value.ordinal()] = value.count;
@@ -479,7 +473,7 @@ public class Dungeon {
 			Imp			.Quest.storeInBundle( quests );
 			bundle.put( QUESTS, quests );
 			
-			Room.storeRoomsInBundle( bundle );
+			SpecialRoom.storeRoomsInBundle( bundle );
 			
 			Statistics.storeInBundle( bundle );
 			Journal.storeInBundle( bundle );
@@ -567,8 +561,6 @@ public class Dungeon {
 		quickslot.restorePlaceholders( bundle );
 		
 		if (fullLoad) {
-			transmutation = bundle.getInt( WT );
-
 			int[] dropValues = bundle.getIntArray(LIMDROPS);
 			for (limitedDrops value : limitedDrops.values())
 				value.count = value.ordinal() < dropValues.length ?
@@ -595,7 +587,7 @@ public class Dungeon {
 				Imp.Quest.reset();
 			}
 			
-			Room.restoreRoomsFromBundle(bundle);
+			SpecialRoom.restoreRoomsFromBundle(bundle);
 		}
 		
 		Bundle badges = bundle.getBundle(BADGES);
@@ -665,10 +657,8 @@ public class Dungeon {
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.depth = bundle.getInt( DEPTH );
+		info.version = bundle.getInt( VERSION );
 		info.challenges = (bundle.getInt( CHALLENGES ) != 0);
-		if (info.depth == -1) {
-			info.depth = bundle.getInt( "maxDepth" );	// FIXME
-		}
 		Hero.preview( info, bundle.getBundle( HERO ) );
 	}
 	
@@ -701,24 +691,30 @@ public class Dungeon {
 		
 		level.updateFieldOfView(hero, visible);
 
-		int cx = hero.pos % level.width();
-		int cy = hero.pos / level.width();
+		if (hero.buff(MindVision.class) != null || hero.buff(Awareness.class) != null) {
+			BArray.or( level.visited, visible, 0, visible.length, level.visited );
 
-		int ax = Math.max( 0, cx - dist );
-		int bx = Math.min( cx + dist, level.width() - 1 );
-		int ay = Math.max( 0, cy - dist );
-		int by = Math.min( cy + dist, level.height() - 1 );
+			GameScene.updateFog();
+		} else {
 
-		int len = bx - ax + 1;
-		int pos = ax + ay * level.width();
-		for (int y = ay; y <= by; y++, pos+=level.width()) {
-			BArray.or( level.visited, visible, pos, len, level.visited );
+			int cx = hero.pos % level.width();
+			int cy = hero.pos / level.width();
+
+			int ax = Math.max( 0, cx - dist );
+			int bx = Math.min( cx + dist, level.width() - 1 );
+			int ay = Math.max( 0, cy - dist );
+			int by = Math.min( cy + dist, level.height() - 1 );
+
+			int len = bx - ax + 1;
+			int pos = ax + ay * level.width();
+
+			for (int y = ay; y <= by; y++, pos+=level.width()) {
+				BArray.or( level.visited, visible, pos, len, level.visited );
+			}
+
+			GameScene.updateFog(ax, ay, len, by-ay);
 		}
 
-		if (hero.buff(MindVision.class) != null || hero.buff(Awareness.class) != null)
-			GameScene.updateFog();
-		else
-			GameScene.updateFog(ax, ay, len, by-ay);
 
 		GameScene.afterObserve();
 	}

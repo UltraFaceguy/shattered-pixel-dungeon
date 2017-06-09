@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -60,15 +61,17 @@ public class WarlockSprite extends MobSprite {
 		
 		turnTo( ch.pos , cell );
 		play( zap );
-		
-		MagicMissile.shadow( parent, ch.pos, cell,
-			new Callback() {
-				@Override
-				public void call() {
-					((Warlock)ch).zapComplete();
-				}
-			} );
 
+		MagicMissile.boltFromChar( parent,
+				MagicMissile.SHADOW,
+				this,
+				cell,
+				new Callback() {
+					@Override
+					public void call() {
+						((Warlock)ch).onZapComplete();
+					}
+				} );
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 	

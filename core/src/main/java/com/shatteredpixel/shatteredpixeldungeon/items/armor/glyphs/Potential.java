@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -42,15 +43,13 @@ public class Potential extends Glyph {
 
 		if (Random.Int( level + 20 ) >= 18) {
 
-			int shockDmg = Random.NormalIntRange( defender.HT/20, defender.HT/10 );
-
-			shockDmg *= Math.pow(0.9, level);
+			int shockDmg = Random.NormalIntRange( 2, 6 );
 
 			defender.damage( shockDmg, LightningTrap.LIGHTNING );
 			
 			checkOwner( defender );
 			if (defender == Dungeon.hero) {
-				Dungeon.hero.belongings.charge(1f);
+				Dungeon.hero.belongings.charge(1f + level/10f);
 				Camera.main.shake( 2, 0.3f );
 			}
 

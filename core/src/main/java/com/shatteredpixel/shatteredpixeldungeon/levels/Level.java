@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -68,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.HighGrass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MassGraveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -75,7 +77,8 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.BlandfruitBush;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.CustomTileVisual;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTiledVisual;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
@@ -85,7 +88,6 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
-import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
@@ -116,7 +118,7 @@ public abstract class Level implements Bundlable {
 	public boolean[] visited;
 	public boolean[] mapped;
 
-	public int viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 3: 8;
+	public int viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 4 : 8;
 
 	//FIXME should not be static!
 	public static boolean[] fieldOfView;
@@ -145,7 +147,8 @@ public abstract class Level implements Bundlable {
 	public HashMap<Class<? extends Blob>,Blob> blobs;
 	public SparseArray<Plant> plants;
 	public SparseArray<Trap> traps;
-	public HashSet<CustomTileVisual> customTiles;
+	public HashSet<CustomTiledVisual> customTiles;
+	public HashSet<CustomTiledVisual> customWalls;
 	
 	protected ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
@@ -153,10 +156,6 @@ public abstract class Level implements Bundlable {
 	
 	public int color1 = 0x004400;
 	public int color2 = 0x88CC44;
-
-	//FIXME this is sloppy. Should be able to keep track of this without static variables
-	protected static boolean pitRoomNeeded = false;
-	public static boolean weakFloorCreated = false;
 
 	private static final String VERSION     = "version";
 	private static final String MAP			= "map";
@@ -169,6 +168,7 @@ public abstract class Level implements Bundlable {
 	private static final String PLANTS		= "plants";
 	private static final String TRAPS       = "traps";
 	private static final String CUSTOM_TILES= "customTiles";
+	private static final String CUSTOM_WALLS= "customWalls";
 	private static final String MOBS		= "mobs";
 	private static final String BLOBS		= "blobs";
 	private static final String FEELING		= "feeling";
@@ -176,23 +176,6 @@ public abstract class Level implements Bundlable {
 	public void create() {
 
 		Random.seed( Dungeon.seedCurDepth() );
-
-		setupSize();
-		PathFinder.setMapSize(width(), height());
-		passable	= new boolean[length()];
-		losBlocking	= new boolean[length()];
-		flamable	= new boolean[length()];
-		secret		= new boolean[length()];
-		solid		= new boolean[length()];
-		avoid		= new boolean[length()];
-		water		= new boolean[length()];
-		pit			= new boolean[length()];
-		
-		map = new int[length()];
-		visited = new boolean[length()];
-		Arrays.fill( visited, false );
-		mapped = new boolean[length()];
-		Arrays.fill( mapped, false );
 		
 		if (!(Dungeon.bossLevel() || Dungeon.depth == 21) /*final shop floor*/) {
 			addItemToSpawn( Generator.random( Generator.Category.FOOD ) );
@@ -250,19 +233,14 @@ public abstract class Level implements Bundlable {
 				case 3:
 					feeling = Feeling.DARK;
 					addItemToSpawn(new Torch());
-					viewDistance = (int)Math.ceil(viewDistance/3f);
+					viewDistance = Math.round(viewDistance/2f);
 					break;
 				}
 			}
 		}
 		
-		boolean pitNeeded = Dungeon.depth > 1 && weakFloorCreated;
-		
 		do {
-			Arrays.fill( map, feeling == Feeling.CHASM ? Terrain.CHASM : Terrain.WALL );
-			
-			pitRoomNeeded = pitNeeded;
-			weakFloorCreated = false;
+			width = height = length = 0;
 
 			mobs = new HashSet<>();
 			heaps = new SparseArray<>();
@@ -270,9 +248,9 @@ public abstract class Level implements Bundlable {
 			plants = new SparseArray<>();
 			traps = new SparseArray<>();
 			customTiles = new HashSet<>();
+			customWalls = new HashSet<>();
 			
 		} while (!build());
-		decorate();
 		
 		buildFlagMaps();
 		cleanWalls();
@@ -282,11 +260,33 @@ public abstract class Level implements Bundlable {
 
 		Random.seed();
 	}
-
-	protected void setupSize(){
-		if (width == 0 || height == 0)
-			width = height = 32;
-		length = width * height;
+	
+	public void setSize(int w, int h){
+		
+		width = w;
+		height = h;
+		length = w * h;
+		
+		map = new int[length];
+		Arrays.fill( map, Terrain.WALL );
+		Arrays.fill( map, feeling == Level.Feeling.CHASM ? Terrain.CHASM : Terrain.WALL );
+		
+		visited = new boolean[length];
+		mapped = new boolean[length];
+		Dungeon.visible = new boolean[length];
+		
+		fieldOfView = new boolean[length()];
+		
+		passable	= new boolean[length()];
+		losBlocking	= new boolean[length()];
+		flamable	= new boolean[length()];
+		secret		= new boolean[length()];
+		solid		= new boolean[length()];
+		avoid		= new boolean[length()];
+		water		= new boolean[length()];
+		pit			= new boolean[length()];
+		
+		PathFinder.setMapSize(w, h);
 	}
 	
 	public void reset() {
@@ -303,14 +303,16 @@ public abstract class Level implements Bundlable {
 	public void restoreFromBundle( Bundle bundle ) {
 
 		version = bundle.getInt( VERSION );
+		
+		//saves from before 0.4.0 are not supported
+		if (version < ShatteredPixelDungeon.v0_4_0){
+			throw new RuntimeException("old save");
+		}
 
 		if (bundle.contains("width") && bundle.contains("height")){
-			width = bundle.getInt("width");
-			height = bundle.getInt("height");
+			setSize( bundle.getInt("width"), bundle.getInt("height"));
 		} else
-			width = height = 32; //default sizes
-		length = width * height;
-		PathFinder.setMapSize(width(), height());
+			setSize( 32, 32); //default sizes
 		
 		mobs = new HashSet<>();
 		heaps = new SparseArray<>();
@@ -318,6 +320,7 @@ public abstract class Level implements Bundlable {
 		plants = new SparseArray<>();
 		traps = new SparseArray<>();
 		customTiles = new HashSet<>();
+		customWalls = new HashSet<>();
 		
 		map		= bundle.getIntArray( MAP );
 
@@ -328,16 +331,9 @@ public abstract class Level implements Bundlable {
 		exit		= bundle.getInt( EXIT );
 
 		locked      = bundle.getBoolean( LOCKED );
-		
-		weakFloorCreated = false;
-
-		//for pre-0.3.0c saves
-		if (version < 44){
-			map = Terrain.convertTrapsFrom43( map, traps );
-		}
 
 		//for pre-0.4.3 saves
-		if (version < 130){
+		if (version <= ShatteredPixelDungeon.v0_4_2b){
 			map = Terrain.convertTilesFrom129( map );
 		}
 		
@@ -362,8 +358,39 @@ public abstract class Level implements Bundlable {
 
 		collection = bundle.getCollection( CUSTOM_TILES );
 		for (Bundlable p : collection) {
-			CustomTileVisual vis = (CustomTileVisual)p;
-			customTiles.add( vis );
+			CustomTiledVisual vis = (CustomTiledVisual)p;
+			//for compatibilities with pre-0.5.0b saves
+			//extends one of the bones visuals and discards the rest
+			if (vis instanceof MassGraveRoom.Bones && vis.tileH == 0){
+				int cell = vis.tileX + vis.tileY*width;
+				if (map[cell] == Terrain.EMPTY_SP &&
+						DungeonTileSheet.wallStitcheable(map[cell - width]) &&
+						DungeonTileSheet.wallStitcheable(map[cell - 1])){
+
+					vis.tileY--; //move top to into the wall
+					vis.tileW = 1;
+					vis.tileH = 2;
+
+					while (map[cell+1] == Terrain.EMPTY_SP){
+						vis.tileW++;
+						cell++;
+					}
+					while (map[cell+width] == Terrain.EMPTY_SP){
+						vis.tileH++;
+						cell+=width;
+					}
+
+					customTiles.add(vis);
+				}
+			} else {
+				customTiles.add(vis);
+			}
+		}
+
+		collection = bundle.getCollection( CUSTOM_WALLS );
+		for (Bundlable p : collection) {
+			CustomTiledVisual vis = (CustomTiledVisual)p;
+			customWalls.add(vis);
 		}
 		
 		collection = bundle.getCollection( MOBS );
@@ -382,7 +409,7 @@ public abstract class Level implements Bundlable {
 
 		feeling = bundle.getEnum( FEELING, Feeling.class );
 		if (feeling == Feeling.DARK)
-			viewDistance = (int)Math.ceil(viewDistance/3f);
+			viewDistance = Math.round(viewDistance/2f);
 
 		buildFlagMaps();
 		cleanWalls();
@@ -403,6 +430,7 @@ public abstract class Level implements Bundlable {
 		bundle.put( PLANTS, plants.values() );
 		bundle.put( TRAPS, traps.values() );
 		bundle.put( CUSTOM_TILES, customTiles );
+		bundle.put( CUSTOM_WALLS, customWalls );
 		bundle.put( MOBS, mobs );
 		bundle.put( BLOBS, blobs.values() );
 		bundle.put( FEELING, feeling );
@@ -413,20 +441,14 @@ public abstract class Level implements Bundlable {
 	}
 
 	public int width() {
-		if (width == 0)
-			setupSize();
 		return width;
 	}
 
 	public int height() {
-		if (height == 0)
-			setupSize();
 		return height;
 	}
 
 	public int length() {
-		if (length == 0)
-			setupSize();
 		return length;
 	}
 	
@@ -439,8 +461,6 @@ public abstract class Level implements Bundlable {
 	}
 	
 	abstract protected boolean build();
-
-	abstract protected void decorate();
 
 	abstract protected void createMobs();
 
@@ -561,17 +581,6 @@ public abstract class Level implements Bundlable {
 	}
 
 	protected void buildFlagMaps() {
-
-		fieldOfView = new boolean[length()];
-
-		passable	= new boolean[length()];
-		losBlocking	= new boolean[length()];
-		flamable	= new boolean[length()];
-		secret		= new boolean[length()];
-		solid		= new boolean[length()];
-		avoid		= new boolean[length()];
-		water		= new boolean[length()];
-		pit			= new boolean[length()];
 		
 		for (int i=0; i < length(); i++) {
 			int flags = Terrain.flags[map[i]];
@@ -597,16 +606,6 @@ public abstract class Level implements Bundlable {
 	}
 
 	public void destroy( int pos ) {
-
-		if (!DungeonTilemap.waterStitcheable.contains(map[pos])) {
-			for (int j = 0; j < PathFinder.NEIGHBOURS4.length; j++) {
-				if (water[pos + PathFinder.NEIGHBOURS4[j]]) {
-					set(pos, Terrain.WATER);
-					return;
-				}
-			}
-		}
-
 		set( pos, Terrain.EMBERS );
 	}
 
@@ -622,18 +621,6 @@ public abstract class Level implements Bundlable {
 				if (n >= 0 && n < length() && map[n] != Terrain.WALL && map[n] != Terrain.WALL_DECO) {
 					d = true;
 					break;
-				}
-			}
-			
-			if (d) {
-				d = false;
-				
-				for (int j=0; j < PathFinder.NEIGHBOURS9.length; j++) {
-					int n = i + PathFinder.NEIGHBOURS9[j];
-					if (n >= 0 && n < length() && !pit[n]) {
-						d = true;
-						break;
-					}
 				}
 			}
 			
@@ -723,6 +710,10 @@ public abstract class Level implements Bundlable {
 	}
 	
 	public Plant plant( Plant.Seed seed, int pos ) {
+		
+		if (Dungeon.isChallenged(Challenges.NO_HERBALISM)){
+			return null;
+		}
 
 		Plant plant = plants.get( pos );
 		if (plant != null) {
@@ -774,8 +765,14 @@ public abstract class Level implements Bundlable {
 		GameScene.updateMap( cell );
 	}
 	
-	public int pitCell() {
-		return randomRespawnCell();
+	public int fallCell( boolean fallIntoPit ) {
+		int result;
+		do {
+			result = randomRespawnCell();
+		} while (traps.get(result) != null
+				|| findMob(result) != null
+				|| heaps.get(result) != null);
+		return result;
 	}
 	
 	public void press( int cell, Char ch ) {
@@ -881,6 +878,10 @@ public abstract class Level implements Bundlable {
 		Plant plant = plants.get( cell );
 		if (plant != null) {
 			plant.trigger();
+		}
+
+		if ( map[cell] == Terrain.HIGH_GRASS){
+			HighGrass.trample( this, cell, mob );
 		}
 	}
 	

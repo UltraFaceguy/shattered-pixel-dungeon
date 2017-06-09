@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -973,7 +974,7 @@ public class Hero extends Char {
 		//TODO improve this when I have proper damage source logic
 		if (belongings.armor != null && belongings.armor.hasGlyph(AntiMagic.class)
 				&& RingOfElements.FULL.contains(src.getClass())){
-			dmg -= Random.NormalIntRange(belongings.armor.DRMin(), belongings.armor.DRMax())/2;
+			dmg -= Random.NormalIntRange(belongings.armor.DRMin(), belongings.armor.DRMax())/3;
 		}
 
 		if (subClass == HeroSubClass.BERSERKER && berserk == null){
@@ -1112,8 +1113,11 @@ public class Hero extends Char {
 			move(step);
 
 			spend( moveTime / speed() );
-			
-			return true;
+
+			//FIXME this is a fairly sloppy fix for a crash involving pitfall traps.
+			//really there should be a way for traps to specify whether action should continue or
+			//not when they are pressed.
+			return InterlevelScene.mode != InterlevelScene.Mode.FALL;
 
 		} else {
 
@@ -1418,7 +1422,8 @@ public class Hero extends Char {
 	public boolean isAlive() {
 		if (subClass == HeroSubClass.BERSERKER
 				&& berserk != null
-				&& berserk.berserking()){
+				&& berserk.berserking()
+				&& SHLD > 0){
 			return true;
 		}
 		return super.isAlive();

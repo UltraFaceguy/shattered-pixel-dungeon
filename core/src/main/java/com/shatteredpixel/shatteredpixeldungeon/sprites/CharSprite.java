@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
@@ -34,14 +34,17 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.TorchHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.watabou.glwrap.Matrix;
+import com.watabou.glwrap.Vertexbuffer;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.MovieClip;
+import com.watabou.noosa.NoosaScript;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -64,7 +67,17 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	
 	private static final float MOVE_INTERVAL	= 0.1f;
 	private static final float FLASH_INTERVAL	= 0.05f;
-	
+
+	//the amount the sprite is raised from flat when viewed in a raised perspective
+	protected float perspectiveRaise    = 6 / 16f; //6 pixels
+
+	//the width and height of the shadow are a percentage of sprite size
+	//offset is the number of pixels the shadow is moved down or up (handy for some animations)
+	protected boolean renderShadow  = false;
+	protected float shadowWidth     = 1.2f;
+	protected float shadowHeight    = 0.25f;
+	protected float shadowOffset    = 0.25f;
+
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED
 	}
@@ -115,6 +128,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		
 		place( ch.pos );
 		turnTo( ch.pos, Random.Int( Dungeon.level.length() ) );
+		renderShadow = true;
 
 		ch.updateSpriteState();
 	}
@@ -125,7 +139,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		
 		return new PointF(
 			PixelScene.align(Camera.main, ((cell % Dungeon.level.width()) + 0.5f) * csize - width * 0.5f),
-			PixelScene.align(Camera.main, ((cell / Dungeon.level.width()) + 1.0f) * csize - height)
+			PixelScene.align(Camera.main, ((cell / Dungeon.level.width()) + 1.0f) * csize - height - csize * perspectiveRaise)
 		);
 	}
 	
@@ -139,8 +153,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				text = Messages.format( text, args );
 			}
 			if (ch != null) {
-				PointF tile = DungeonTilemap.tileCenterToWorld(ch.pos);
-				FloatingText.show( tile.x, tile.y-(width*0.5f), ch.pos, text, color );
+				FloatingText.show( x + width * 0.5f, y, ch.pos, text, color );
 			} else {
 				FloatingText.show( x + width * 0.5f, y, text, color );
 			}
@@ -398,6 +411,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		if (chilled != null) {
 			chilled.visible = visible;
 		}
+		if (marked != null) {
+			marked.visible = visible;
+		}
 		if (sleeping) {
 			showSleep();
 		} else {
@@ -453,7 +469,55 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			emo.killAndErase();
 		}
 	}
-	
+
+	private float[] shadowMatrix = new float[16];
+
+	@Override
+	protected void updateMatrix() {
+		super.updateMatrix();
+		Matrix.copy(matrix, shadowMatrix);
+		Matrix.translate(shadowMatrix,
+				(width() * (1f - shadowWidth)) / 2f,
+				(height() * (1f - shadowHeight)) + shadowOffset);
+		Matrix.scale(shadowMatrix, shadowWidth, shadowHeight);
+	}
+
+	@Override
+	public void draw() {
+		if (texture == null || (!dirty && buffer == null))
+			return;
+
+		if (renderShadow) {
+			if (dirty) {
+				verticesBuffer.position(0);
+				verticesBuffer.put(vertices);
+				if (buffer == null)
+					buffer = new Vertexbuffer(verticesBuffer);
+				else
+					buffer.updateVertices(verticesBuffer);
+				dirty = false;
+			}
+
+			NoosaScript script = script();
+
+			texture.bind();
+
+			script.camera(camera());
+
+			updateMatrix();
+
+			script.uModel.valueM4(shadowMatrix);
+			script.lighting(
+					0, 0, 0, am * .6f,
+					0, 0, 0, aa * .6f);
+
+			script.drawQuad(buffer);
+		}
+
+		super.draw();
+
+	}
+
 	@Override
 	public void onComplete( Tweener tweener ) {
 		if (tweener == jumpTweener) {

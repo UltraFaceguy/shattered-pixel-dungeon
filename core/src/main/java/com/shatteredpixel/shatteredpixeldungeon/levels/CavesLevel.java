@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Room.Type;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CavesPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ConfusionTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ExplosiveTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FireTrap;
@@ -46,12 +47,14 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TeleportationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.VenomTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WarpingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
-import com.watabou.utils.Rect;
+
+import java.util.ArrayList;
 
 public class CavesLevel extends RegularLevel {
 
@@ -60,6 +63,31 @@ public class CavesLevel extends RegularLevel {
 		color2 = 0xb9d661;
 		
 		viewDistance = 6;
+	}
+	
+	@Override
+	protected ArrayList<Room> initRooms() {
+		return Blacksmith.Quest.spawn(super.initRooms());
+	}
+	
+	@Override
+	protected int standardRooms() {
+		//6 to 9, average 7.333
+		return 6+Random.chances(new float[]{2, 3, 3, 1});
+	}
+	
+	@Override
+	protected int specialRooms() {
+		//1 to 3, average 2.2
+		return 1+Random.chances(new float[]{2, 4, 4});
+	}
+	
+	@Override
+	protected Painter painter() {
+		return new CavesPainter()
+				.setWater(feeling == Feeling.WATER ? 0.85f : 0.30f, 6)
+				.setGrass(feeling == Feeling.GRASS ? 0.65f : 0.15f, 3)
+				.setTraps(nTraps(), trapClasses(), trapChances());
 	}
 	
 	@Override
@@ -72,14 +100,6 @@ public class CavesLevel extends RegularLevel {
 		return Assets.WATER_CAVES;
 	}
 	
-	protected boolean[] water() {
-		return Patch.generate( this, feeling == Feeling.WATER ? 0.60f : 0.45f, 6 );
-	}
-	
-	protected boolean[] grass() {
-		return Patch.generate( this, feeling == Feeling.GRASS ? 0.55f : 0.35f, 3 );
-	}
-
 	@Override
 	protected Class<?>[] trapClasses() {
 		return new Class[]{ FireTrap.class, FrostTrap.class, PoisonTrap.class, SpearTrap.class, VenomTrap.class,
@@ -94,131 +114,6 @@ public class CavesLevel extends RegularLevel {
 				4, 4, 4, 4, 4, 4, 4,
 				2, 2, 2, 2, 2, 2,
 				1 };
-	}
-	
-	@Override
-	protected boolean assignRoomType() {
-		if (!super.assignRoomType()) return false;
-
-		if (!Blacksmith.Quest.spawn( rooms ) && Dungeon.depth == 14)
-			return false;
-
-		return true;
-	}
-	
-	@Override
-	protected void decorate() {
-		
-		for (Room room : rooms) {
-			if (room.type != Room.Type.STANDARD) {
-				continue;
-			}
-			
-			if (room.width() <= 3 || room.height() <= 3) {
-				continue;
-			}
-			
-			int s = room.square();
-			
-			if (Random.Int( s ) > 8) {
-				int corner = (room.left + 1) + (room.top + 1) * width();
-				if (map[corner - 1] == Terrain.WALL && map[corner - width()] == Terrain.WALL) {
-					map[corner] = Terrain.WALL;
-					traps.remove(corner);
-				}
-			}
-			
-			if (Random.Int( s ) > 8) {
-				int corner = (room.right - 1) + (room.top + 1) * width();
-				if (map[corner + 1] == Terrain.WALL && map[corner - width()] == Terrain.WALL) {
-					map[corner] = Terrain.WALL;
-					traps.remove(corner);
-				}
-			}
-			
-			if (Random.Int( s ) > 8) {
-				int corner = (room.left + 1) + (room.bottom - 1) * width();
-				if (map[corner - 1] == Terrain.WALL && map[corner + width()] == Terrain.WALL) {
-					map[corner] = Terrain.WALL;
-					traps.remove(corner);
-				}
-			}
-			
-			if (Random.Int( s ) > 8) {
-				int corner = (room.right - 1) + (room.bottom - 1) * width();
-				if (map[corner + 1] == Terrain.WALL && map[corner + width()] == Terrain.WALL) {
-					map[corner] = Terrain.WALL;
-					traps.remove(corner);
-				}
-			}
-
-			for (Room n : room.connected.keySet()) {
-				if ((n.type == Room.Type.STANDARD || n.type == Room.Type.TUNNEL) && Random.Int( 3 ) == 0) {
-					Painter.set( this, room.connected.get( n ), Terrain.EMPTY_DECO );
-				}
-			}
-		}
-		
-		for (int i=width() + 1; i < length() - width(); i++) {
-			if (map[i] == Terrain.EMPTY) {
-				int n = 0;
-				if (map[i+1] == Terrain.WALL) {
-					n++;
-				}
-				if (map[i-1] == Terrain.WALL) {
-					n++;
-				}
-				if (map[i+width()] == Terrain.WALL) {
-					n++;
-				}
-				if (map[i-width()] == Terrain.WALL) {
-					n++;
-				}
-				if (Random.Int( 6 ) <= n) {
-					map[i] = Terrain.EMPTY_DECO;
-				}
-			}
-		}
-		
-		for (int i=0; i < length(); i++) {
-			if (map[i] == Terrain.WALL && Random.Int( 12 ) == 0) {
-				map[i] = Terrain.WALL_DECO;
-			}
-		}
-		
-		placeSign();
-		
-		if (Dungeon.bossLevel( Dungeon.depth + 1 )) {
-			return;
-		}
-		
-		for (Room r : rooms) {
-			if (r.type == Type.STANDARD) {
-				for (Room n : r.neigbours) {
-					if (n.type == Type.STANDARD && !r.connected.containsKey( n )) {
-						Rect w = r.intersect( n );
-						if (w.left == w.right && w.bottom - w.top >= 5) {
-							
-							w.top += 2;
-							w.bottom -= 1;
-							
-							w.right++;
-							
-							Painter.fill( this, w.left, w.top, 1, w.height(), Terrain.CHASM );
-							
-						} else if (w.top == w.bottom && w.right - w.left >= 5) {
-							
-							w.left += 2;
-							w.right -= 1;
-							
-							w.bottom++;
-							
-							Painter.fill( this, w.left, w.top, w.width(), 1, Terrain.CHASM );
-						}
-					}
-				}
-			}
-		}
 	}
 	
 	@Override

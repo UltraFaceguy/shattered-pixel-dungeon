@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.noosa.TextureFilm;
 
@@ -28,6 +30,9 @@ public class PiranhaSprite extends MobSprite {
 	
 	public PiranhaSprite() {
 		super();
+
+		renderShadow = false;
+		perspectiveRaise = 0.2f;
 		
 		texture( Assets.PIRANHA );
 		
@@ -47,7 +52,13 @@ public class PiranhaSprite extends MobSprite {
 		
 		play( idle );
 	}
-	
+
+	@Override
+	public void link(Char ch) {
+		super.link(ch);
+		renderShadow = false;
+	}
+
 	@Override
 	public void onComplete( Animation anim ) {
 		super.onComplete( anim );

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -117,27 +118,32 @@ public class ItemSlot extends Button {
 	protected void layout() {
 		super.layout();
 		
-		icon.x = x + (width - icon.width) / 2;
-		icon.y = y + (height - icon.height) / 2;
+		icon.x = x + (width - icon.width) / 2f;
+		icon.y = y + (height - icon.height) / 2f;
+		PixelScene.align(icon);
 		
 		if (topLeft != null) {
 			topLeft.x = x;
 			topLeft.y = y;
+			PixelScene.align(topLeft);
 		}
 		
 		if (topRight != null) {
 			topRight.x = x + (width - topRight.width());
 			topRight.y = y;
+			PixelScene.align(topRight);
 		}
 		
 		if (bottomRight != null) {
 			bottomRight.x = x + (width - bottomRight.width());
 			bottomRight.y = y + (height - bottomRight.height());
+			PixelScene.align(bottomRight);
 		}
 
 		if (bottomRightIcon != null) {
 			bottomRightIcon.x = x + (width - bottomRightIcon.width()) -1;
 			bottomRightIcon.y = y + (height - bottomRightIcon.height());
+			PixelScene.align(bottomRightIcon);
 		}
 	}
 	

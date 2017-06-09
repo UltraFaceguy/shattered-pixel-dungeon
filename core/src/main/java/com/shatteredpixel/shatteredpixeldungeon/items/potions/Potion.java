@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -28,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -251,6 +253,7 @@ public class Potion extends Item {
 		if (!ownedByFruit) {
 			if (!isKnown()) {
 				handler.know(this);
+				updateQuickslot();
 			}
 
 			Badges.validateAllPotionsIdentified();
@@ -303,16 +306,21 @@ public class Potion extends Item {
 	}
 	
 	protected void splash( int cell ) {
-		final int color = ItemSprite.pick( image, 8, 10 );
-		Splash.at( cell, color, 5 );
 
 		Fire fire = (Fire)Dungeon.level.blobs.get( Fire.class );
 		if (fire != null)
 			fire.clear( cell );
 
+		final int color = ItemSprite.pick( image, 8, 10 );
+
 		Char ch = Actor.findChar(cell);
-		if (ch != null)
-			Buff.detach( ch, Burning.class );
+		if (ch != null) {
+			Buff.detach(ch, Burning.class);
+			Buff.detach(ch, Ooze.class);
+			Splash.at( ch.sprite.center(), color, 5 );
+		} else {
+			Splash.at( cell, color, 5 );
+		}
 	}
 	
 	@Override

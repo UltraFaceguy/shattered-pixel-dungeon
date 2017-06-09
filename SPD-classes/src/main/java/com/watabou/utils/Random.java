@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
 package com.watabou.utils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class Random {
 
@@ -155,6 +157,10 @@ public class Random {
 		return size > 0 ?
 			(T)collection.toArray()[Int( size )] :
 			null;
+	}
+
+	public static<T> void shuffle( List<?extends T> list){
+		Collections.shuffle(list, rand);
 	}
 	
 	public static<T> void shuffle( T[] array ) {

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -44,6 +45,11 @@ public class GamesInProgress {
 				Bundle bundle = Dungeon.gameBundle( Dungeon.gameFile( cl ) );
 				info = new Info();
 				Dungeon.preview( info, bundle );
+				
+				//saves from before 0.4.0 are not supported
+				if (info.version < ShatteredPixelDungeon.v0_4_0){
+					info = null;
+				}
 
 			} catch (IOException e) {
 				info = null;
@@ -74,6 +80,7 @@ public class GamesInProgress {
 	public static class Info {
 		public int depth;
 		public int level;
+		public int version;
 		public boolean challenges;
 	}
 }

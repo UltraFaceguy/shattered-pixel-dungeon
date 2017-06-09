@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -30,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.watabou.utils.PathFinder;
 
 public class PitfallTrap extends Trap {
 
@@ -63,11 +65,18 @@ public class PitfallTrap extends Trap {
 	@Override
 	protected void disarm() {
 		super.disarm();
-
+		
+		int stateChanges = 0;
+		boolean curPassable = Level.passable[pos + PathFinder.CIRCLE8[PathFinder.CIRCLE8.length-1]];
+		for (int i : PathFinder.CIRCLE8){
+			if (curPassable != Level.passable[pos + i]){
+				stateChanges++;
+				curPassable = Level.passable[pos + i];
+			}
+		}
+		
 		//if making a pit here wouldn't block any paths, make a pit tile instead of a disarmed trap tile.
-		if (!(Dungeon.level.solid[pos - Dungeon.level.width()] && Dungeon.level.solid[pos + Dungeon.level.width()])
-				&& !(Dungeon.level.solid[pos - 1]&& Dungeon.level.solid[pos + 1])){
-
+		if (stateChanges <= 2){
 			Level.set(pos, Terrain.CHASM);
 			GameScene.updateMap( pos );
 		}

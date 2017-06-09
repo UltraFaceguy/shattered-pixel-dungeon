@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,31 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.King;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Yog;
-import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.watabou.noosa.Game;
@@ -55,7 +42,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.UUID;
 
 public enum Rankings {
@@ -188,6 +174,8 @@ public enum Rankings {
 		Dungeon.hero = (Hero)data.get(HERO);
 
 		Statistics.restoreFromBundle(data.getBundle(STATS));
+		
+		Dungeon.challenges = 0;
 
 	}
 	
@@ -210,6 +198,7 @@ public enum Rankings {
 		} catch (IOException e) {
 			ShatteredPixelDungeon.reportException(e);
 		}
+
 	}
 	
 	public void load() {
@@ -249,11 +238,7 @@ public enum Rankings {
 	}
 
 	public static class Record implements Bundlable {
-
-		//pre 0.3.4
-		public String info;
-		private static final String REASON	= "reason";
-
+		
 		//pre 0.4.1
 		public String gameFile;
 		private static final String FILE    = "gameFile";
@@ -282,16 +267,7 @@ public enum Rankings {
 
 		public String desc(){
 			if (cause == null) {
-				if (info != null){
-					//support for pre-0.3.4 saves
-					if (Messages.lang() == Languages.ENGLISH) {
-						return info;
-					} else {
-						return Messages.get(this, "something");
-					}
-				} else {
-					return Messages.get(this, "something");
-				}
+				return Messages.get(this, "something");
 			} else {
 				String result = Messages.get(cause, "rankings_desc", (Messages.get(cause, "name")));
 				if (result.contains("!!!NO TEXT FOUND!!!")){
@@ -304,31 +280,13 @@ public enum Rankings {
 		
 		@Override
 		public void restoreFromBundle( Bundle bundle ) {
-
-			//conversion logic for pre-0.3.4 saves
-			if (bundle.contains( REASON )){
-				String info = bundle.getString( REASON ).toLowerCase(Locale.ENGLISH);
-				if (info.equals("obtained the amulet of yendor"))   cause = Amulet.class;
-				else if (info.contains("goo"))                      cause = Goo.class;
-				else if (info.contains("tengu"))                    cause = Tengu.class;
-				else if (info.contains("dm-300"))                   cause = DM300.class;
-				else if (info.contains("king"))                     cause = King.class;
-				else if (info.contains("yog"))                      cause = Yog.class;
-				else if (info.contains("fist"))                     cause = Yog.class;
-				else if (info.contains("larva"))                    cause = Yog.class;
-				else if (info.equals("burned to ash"))              cause = Burning.class;
-				else if (info.equals("starved to death"))           cause = Hunger.class;
-				else if (info.equals("succumbed to poison"))        cause = Poison.class;
-				else if (info.equals("suffocated"))                 cause = ToxicGas.class;
-				else if (info.equals("bled to death"))              cause = Bleeding.class;
-				else if (info.equals("melted away"))                cause = Ooze.class;
-				else if (info.equals("died on impact"))             cause = Chasm.class;
-				//can't get the all, just keep what remains as-is
-				else                                                this.info = info;
-			} else {
+			
+			if (bundle.contains( CAUSE )) {
 				cause   = bundle.getClass( CAUSE );
+			} else {
+				cause = null;
 			}
-
+			
 			win		= bundle.getBoolean( WIN );
 			score	= bundle.getInt( SCORE );
 			
@@ -347,8 +305,7 @@ public enum Rankings {
 		@Override
 		public void storeInBundle( Bundle bundle ) {
 			
-			if (info != null) bundle.put( REASON, info );
-			else bundle.put( CAUSE, cause );
+			if (cause != null) bundle.put( CAUSE, cause );
 
 			bundle.put( WIN, win );
 			bundle.put( SCORE, score );

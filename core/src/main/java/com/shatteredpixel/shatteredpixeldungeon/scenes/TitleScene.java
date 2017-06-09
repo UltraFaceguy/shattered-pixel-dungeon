@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import android.opengl.GLES20;
@@ -82,7 +83,8 @@ public class TitleScene extends PixelScene {
 			@Override
 			public void update() {
 				super.update();
-				am = (float)Math.sin( -(time += Game.elapsed) );
+				am = Math.max(0f, (float)Math.sin( time += Game.elapsed ));
+				if (time >= 1.5f*Math.PI) time = 0;
 			}
 			@Override
 			public void draw() {

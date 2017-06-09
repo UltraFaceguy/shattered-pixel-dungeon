@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import android.opengl.GLES20;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
@@ -35,12 +37,14 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 
-import javax.microedition.khronos.opengles.GL10;
+import java.util.ArrayList;
 import java.util.UUID;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class WelcomeScene extends PixelScene {
 
-	private static int LATEST_UPDATE = 139;
+	private static int LATEST_UPDATE = 181;
 
 	@Override
 	public void create() {
@@ -79,7 +83,8 @@ public class WelcomeScene extends PixelScene {
 			@Override
 			public void update() {
 				super.update();
-				am = (float)Math.sin( -(time += Game.elapsed) );
+				am = Math.max(0f, (float)Math.sin( time += Game.elapsed ));
+				if (time >= 1.5f*Math.PI) time = 0;
 			}
 			@Override
 			public void draw() {
@@ -136,7 +141,7 @@ public class WelcomeScene extends PixelScene {
 				message = Messages.get(this, "patch_intro");
 				message += "\n\n" + Messages.get(this, "patch_bugfixes");
 				message += "\n" + Messages.get(this, "patch_translations");
-				message += "\n" + Messages.get(this, "patch_balance");
+				//message += "\n" + Messages.get(this, "patch_balance");
 
 			}
 		} else {
@@ -151,28 +156,34 @@ public class WelcomeScene extends PixelScene {
 
 	private void updateVersion(int previousVersion){
 		//rankings conversion
-		if (previousVersion <= 114){
-			Rankings.INSTANCE.load();
-			for (Rankings.Record rec : Rankings.INSTANCE.records){
-				if (rec.gameFile != null) {
-					try {
-						Dungeon.loadGame(rec.gameFile, false);
-						rec.gameID = rec.gameFile.replaceAll("\\D", "");
+		if (previousVersion <= ShatteredPixelDungeon.v0_4_1){
+			try {
+				Rankings.INSTANCE.load();
+				for (Rankings.Record rec : Rankings.INSTANCE.records) {
+					if (rec.gameFile != null) {
+						try {
+							Dungeon.loadGame(rec.gameFile, false);
+							rec.gameID = rec.gameFile.replaceAll("\\D", "");
 
-						Rankings.INSTANCE.saveGameData(rec);
-					} catch (Exception e) {
-						rec.gameID = rec.gameFile.replaceAll("\\D", "");
-						rec.gameData = null;
+							Rankings.INSTANCE.saveGameData(rec);
+						} catch (Exception e) {
+							rec.gameID = rec.gameFile.replaceAll("\\D", "");
+							rec.gameData = null;
+						}
+
+						String file = rec.gameFile;
+						rec.gameFile = "";
+						Game.instance.deleteFile(file);
+					} else if (rec.gameID == null) {
+						rec.gameID = UUID.randomUUID().toString();
 					}
-
-					String file = rec.gameFile;
-					rec.gameFile = "";
-					Game.instance.deleteFile(file);
-				} else if (rec.gameID == null){
-					rec.gameID = UUID.randomUUID().toString();
 				}
+				Rankings.INSTANCE.save();
+			} catch (Exception e) {
+				//if we encounter a fatal error, then just clear the rankings
+				Game.instance.deleteFile( Rankings.RANKINGS_FILE );
 			}
-			Rankings.INSTANCE.save();
+
 		}
 
 		ShatteredPixelDungeon.version(ShatteredPixelDungeon.versionCode);

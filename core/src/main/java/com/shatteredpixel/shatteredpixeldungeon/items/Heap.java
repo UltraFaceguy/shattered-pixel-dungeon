@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -165,6 +166,7 @@ public class Heap implements Bundlable {
 			destroy();
 		} else if (sprite != null) {
 			sprite.view( image(), glowing() );
+			sprite.place( pos );
 		}
 		
 		return item;
@@ -189,7 +191,7 @@ public class Heap implements Bundlable {
 			
 		}
 		
-		if (item instanceof Dewdrop && type != Type.FOR_SALE) {
+		if ((item instanceof Dewdrop || item instanceof DriedRose.Petal) && type != Type.FOR_SALE) {
 			items.add( item );
 		} else {
 			items.addFirst( item );
@@ -200,6 +202,7 @@ public class Heap implements Bundlable {
 				sprite.view( items.peek() );
 			else
 				sprite.view( image(), glowing() );
+			    sprite.place( pos );
 		}
 	}
 	

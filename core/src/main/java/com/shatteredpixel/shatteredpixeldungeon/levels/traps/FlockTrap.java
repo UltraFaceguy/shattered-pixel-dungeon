@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -56,6 +57,7 @@ public class FlockTrap extends Trap {
 						Sheep sheep = new Sheep();
 						sheep.lifespan = 2 + Random.Int(Dungeon.depth + 10);
 						sheep.pos = i;
+						Dungeon.level.mobPress(sheep);
 						GameScene.add(sheep);
 						CellEmitter.get(i).burst(Speck.factory(Speck.WOOL), 4);
 					}

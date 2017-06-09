@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -169,12 +170,6 @@ public class UnstableSpellbook extends Artifact {
 		super.restoreFromBundle(bundle);
 		scrolls.clear();
 		Collections.addAll(scrolls, bundle.getClassArray(SCROLLS));
-		if (scrolls.contains(null)){
-			//compatability with pre-0.3.4, just give them a maxed book.
-			scrolls.clear();
-			level(levelCap);
-			chargeCap = 8;
-		}
 	}
 
 	public class bookRecharge extends ArtifactBuff{

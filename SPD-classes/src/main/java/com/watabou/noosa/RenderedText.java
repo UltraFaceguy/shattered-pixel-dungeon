@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ public class RenderedText extends Image {
 
 			r.texture = new SmartTexture(bitmap, Texture.NEAREST, Texture.CLAMP, true);
 
-			RectF rect = r.texture.uvRect(0, 0, (int)r.width, (int)r.height);
+			RectF rect = r.texture.uvRect(0, 0, r.width, r.height);
 			r.frame(rect);
 
 			r.cache = new CachedText();

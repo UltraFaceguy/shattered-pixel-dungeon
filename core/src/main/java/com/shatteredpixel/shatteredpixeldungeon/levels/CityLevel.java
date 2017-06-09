@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Room.Type;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CityPainter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.BlazingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.CursingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisarmingTrap;
@@ -44,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.VenomTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WarpingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WeakeningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
@@ -58,6 +60,18 @@ public class CityLevel extends RegularLevel {
 	}
 	
 	@Override
+	protected int standardRooms() {
+		//7 to 10, average 7.9
+		return 7+Random.chances(new float[]{4, 3, 2, 1});
+	}
+	
+	@Override
+	protected int specialRooms() {
+		//2 to 3, average 2.33
+		return 2 + Random.chances(new float[]{2, 1});
+	}
+	
+	@Override
 	public String tilesTex() {
 		return Assets.TILES_CITY;
 	}
@@ -67,14 +81,14 @@ public class CityLevel extends RegularLevel {
 		return Assets.WATER_CITY;
 	}
 	
-	protected boolean[] water() {
-		return Patch.generate( this, feeling == Feeling.WATER ? 0.65f : 0.45f, 4 );
+	@Override
+	protected Painter painter() {
+		return new CityPainter()
+				.setWater(feeling == Feeling.WATER ? 0.90f : 0.30f, 4)
+				.setGrass(feeling == Feeling.GRASS ? 0.80f : 0.20f, 3)
+				.setTraps(nTraps(), trapClasses(), trapChances());
 	}
 	
-	protected boolean[] grass() {
-		return Patch.generate( this, feeling == Feeling.GRASS ? 0.60f : 0.40f, 3 );
-	}
-
 	@Override
 	protected Class<?>[] trapClasses() {
 		return new Class[]{ BlazingTrap.class, FrostTrap.class, SpearTrap.class, VenomTrap.class,
@@ -89,33 +103,6 @@ public class CityLevel extends RegularLevel {
 				4, 4, 4, 4, 4, 4,
 				2, 2, 2, 2, 2, 2,
 				1, 1 };
-	}
-	
-	@Override
-	protected boolean assignRoomType() {
-		if (!super.assignRoomType()) return false;
-		
-		for (Room r : rooms) {
-			if (r.type == Type.TUNNEL) {
-				r.type = Type.PASSAGE;
-			}
-		}
-
-		return true;
-	}
-	
-	@Override
-	protected void decorate() {
-		
-		for (int i=0; i < length(); i++) {
-			if (map[i] == Terrain.EMPTY && Random.Int( 10 ) == 0) {
-				map[i] = Terrain.EMPTY_DECO;
-			} else if (map[i] == Terrain.WALL && Random.Int( 8 ) == 0) {
-				map[i] = Terrain.WALL_DECO;
-			}
-		}
-		
-		placeSign();
 	}
 	
 	@Override
@@ -193,7 +180,7 @@ public class CityLevel extends RegularLevel {
 			this.pos = pos;
 			
 			PointF p = DungeonTilemap.tileCenterToWorld( pos );
-			pos( p.x - 4, p.y - 2, 4, 0 );
+			pos( p.x - 6, p.y - 4, 12, 12 );
 			
 			pour( factory, 0.2f );
 		}
@@ -212,7 +199,7 @@ public class CityLevel extends RegularLevel {
 			super();
 			
 			color( 0x000000 );
-			speed.set( Random.Float( 8 ), -Random.Float( 8 ) );
+			speed.set( Random.Float( -2, 4 ), -Random.Float( 3, 6 ) );
 		}
 		
 		public void reset( float x, float y ) {
@@ -229,7 +216,7 @@ public class CityLevel extends RegularLevel {
 			super.update();
 			float p = left / lifespan;
 			am = p > 0.8f ? 1 - p : p * 0.25f;
-			size( 8 - p * 4 );
+			size( 6 - p * 3 );
 		}
 	}
 }

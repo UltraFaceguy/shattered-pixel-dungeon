@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -33,8 +34,8 @@ public class Greatshield extends MeleeWeapon {
 
 	@Override
 	public int max(int lvl) {
-		return  2*(tier+1) +    //12 base, down from 30
-				lvl*(tier-2);   //+3 per level, down from +6
+		return  Math.round(2.5f*(tier+1)) +     //15 base, down from 30
+				lvl*(tier-2);                   //+3 per level, down from +6
 	}
 
 	@Override

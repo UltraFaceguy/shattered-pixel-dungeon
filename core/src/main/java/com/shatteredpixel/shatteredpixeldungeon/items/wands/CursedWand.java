@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -408,9 +409,15 @@ public class CursedWand {
 					} else {
 						GameScene.show(
 								new WndOptions("CURSED WAND ERROR", "this application will now self-destruct", "abort", "retry", "fail") {
+									
 									@Override
-									public void hide() {
-										throw new RuntimeException("critical wand exception");
+									protected void onSelect(int index) {
+										Game.instance.finish();
+									}
+									
+									@Override
+									public void onBackPressed() {
+										//do nothing
 									}
 								}
 						);
@@ -442,7 +449,11 @@ public class CursedWand {
 	}
 
 	private static void cursedFX(final Hero user, final Ballistica bolt, final Callback callback){
-		MagicMissile.rainbow(user.sprite.parent, bolt.sourcePos, bolt.collisionPos, callback);
+		MagicMissile.boltFromChar( user.sprite.parent,
+				MagicMissile.RAINBOW,
+				user.sprite,
+				bolt.collisionPos,
+				callback);
 		Sample.INSTANCE.play( Assets.SND_ZAP );
 	}
 

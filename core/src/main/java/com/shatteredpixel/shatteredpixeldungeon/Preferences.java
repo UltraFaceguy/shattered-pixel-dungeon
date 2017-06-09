@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ enum Preferences {
 	public static final String KEY_INTRO		= "intro";
 	public static final String KEY_BRIGHTNESS	= "brightness";
 	public static final String KEY_SMOOTH		= "smooth_camera";
+    public static final String KEY_GRID 	    = "visual_grid";
 	public static final String KEY_VERSION      = "version";
 	
 	private SharedPreferences prefs;

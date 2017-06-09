@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Ripple;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.SewerPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.AlarmTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ChillingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FlockTrap;
@@ -36,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WornTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.particles.Emitter;
@@ -52,6 +55,26 @@ public class SewerLevel extends RegularLevel {
 	}
 	
 	@Override
+	protected int standardRooms() {
+		//5 to 7, average 5.57
+		return 5+Random.chances(new float[]{4, 2, 1});
+	}
+	
+	@Override
+	protected int specialRooms() {
+		//1 to 3, average 1.67
+		return 1+Random.chances(new float[]{4, 4, 2});
+	}
+	
+	@Override
+	protected Painter painter() {
+		return new SewerPainter()
+				.setWater(feeling == Feeling.WATER ? 0.85f : 0.30f, 5)
+				.setGrass(feeling == Feeling.GRASS ? 0.80f : 0.20f, 4)
+				.setTraps(nTraps(), trapClasses(), trapChances());
+	}
+	
+	@Override
 	public String tilesTex() {
 		return Assets.TILES_SEWERS;
 	}
@@ -61,14 +84,6 @@ public class SewerLevel extends RegularLevel {
 		return Assets.WATER_SEWERS;
 	}
 	
-	protected boolean[] water() {
-		return Patch.generate( this, feeling == Feeling.WATER ? 0.60f : 0.45f, 5 );
-	}
-	
-	protected boolean[] grass() {
-		return Patch.generate( this, feeling == Feeling.GRASS ? 0.60f : 0.40f, 4 );
-	}
-
 	@Override
 	protected Class<?>[] trapClasses() {
 		return Dungeon.depth == 1 ?
@@ -85,54 +100,6 @@ public class SewerLevel extends RegularLevel {
 				new float[]{4, 4, 4,
 						2, 2,
 						1, 1, 1};
-	}
-
-	@Override
-	protected void decorate() {
-		
-		for (int i=0; i < width(); i++) {
-			if (map[i] == Terrain.WALL &&
-				map[i + width()] == Terrain.WATER &&
-				Random.Int( 4 ) == 0) {
-				
-				map[i] = Terrain.WALL_DECO;
-			}
-		}
-		
-		for (int i=width(); i < length() - width(); i++) {
-			if (map[i] == Terrain.WALL &&
-				map[i - width()] == Terrain.WALL &&
-				map[i + width()] == Terrain.WATER &&
-				Random.Int( 2 ) == 0) {
-				
-				map[i] = Terrain.WALL_DECO;
-			}
-		}
-		
-		for (int i=width() + 1; i < length() - width() - 1; i++) {
-			if (map[i] == Terrain.EMPTY) {
-				
-				int count =
-					(map[i + 1] == Terrain.WALL ? 1 : 0) +
-					(map[i - 1] == Terrain.WALL ? 1 : 0) +
-					(map[i + width()] == Terrain.WALL ? 1 : 0) +
-					(map[i - width()] == Terrain.WALL ? 1 : 0);
-				
-				if (Random.Int( 16 ) < count * count) {
-					map[i] = Terrain.EMPTY_DECO;
-				}
-			}
-		}
-
-		//hides all doors in the entrance room on floor 2, teaches the player to search.
-		if (Dungeon.depth == 2)
-			for (Room r : roomEntrance.connected.keySet()){
-				Room.Door d = roomEntrance.connected.get(r);
-				if (d.type == Room.Door.Type.REGULAR)
-					map[d.x + d.y * width()] = Terrain.SECRET_DOOR;
-			}
-		
-		placeSign();
 	}
 	
 	@Override
@@ -204,7 +171,7 @@ public class SewerLevel extends RegularLevel {
 			this.pos = pos;
 			
 			PointF p = DungeonTilemap.tileCenterToWorld( pos );
-			pos( p.x - 2, p.y + 1, 4, 0 );
+			pos( p.x - 2, p.y + 3, 4, 0 );
 			
 			pour( factory, 0.1f );
 		}
@@ -246,7 +213,7 @@ public class SewerLevel extends RegularLevel {
 			
 			speed.set( Random.Float( -2, +2 ), 0 );
 			
-			left = lifespan = 0.5f;
+			left = lifespan = 0.4f;
 		}
 	}
 }

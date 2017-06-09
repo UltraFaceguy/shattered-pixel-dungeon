@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
 
 package com.watabou.noosa;
 
-import java.util.ArrayList;
-
 import com.watabou.glwrap.Matrix;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class Camera extends Gizmo {
 
@@ -58,7 +58,7 @@ public class Camera extends Gizmo {
 	public Visual target;
 
     public PointF scrollMag;
-	
+
 	private float shakeMagX		= 10f;
 	private float shakeMagY		= 10f;
 	private float shakeTime		= 0f;
@@ -129,7 +129,7 @@ public class Camera extends Gizmo {
 		
 		scroll = new PointF();
         tweenTarget = new PointF();
-		
+
 		matrix = new float[16];
 		Matrix.setIdentity( matrix );
 	}
@@ -178,13 +178,13 @@ public class Camera extends Gizmo {
             }
         }
     }
-	
+
 	@Override
 	public void update() {
 		super.update();
 
 		if (target != null) {
-			focusOn( target );
+			focusOn( target.x + target.width / 2, target.y + target.height / 2 );
 		} else {
             scrollDecay();
             tweenTarget = Camera.main.center().offset( scroll );
@@ -213,7 +213,7 @@ public class Camera extends Gizmo {
     public void updateTween(PointF target) {
         tweenTarget = PointF.inter(tweenTarget, target, 0.2f);
     }
-	
+
 	public void focusOn( float x, float y ) {
 		scroll.set( x - width / 2, y - height / 2 );
 	}

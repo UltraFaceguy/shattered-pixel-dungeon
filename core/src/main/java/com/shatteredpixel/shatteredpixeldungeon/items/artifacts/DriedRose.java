@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -205,7 +206,7 @@ public class DriedRose extends Artifact {
 
 			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
-				partialCharge += 1/5f; //500 turns to a full charge
+				partialCharge += 1/4f; //400 turns to a full charge
 				if (partialCharge > 1){
 					charge++;
 					partialCharge--;
@@ -376,14 +377,14 @@ public class DriedRose extends Artifact {
 
 		@Override
 		public int damageRoll() {
-			int lvl = (HT-10)/3;
-			return Random.NormalIntRange( lvl/2, 5+lvl);
+			int lvl = (HT-10)/4;
+			return Random.NormalIntRange( 3+lvl/2, 8+lvl);
 		}
 
 		@Override
 		public int drRoll() {
-			//defence is equal to the level of rose.
-			return Random.NormalIntRange(0, (HT-10)/3);
+			int lvl = (HT-10)/4;
+			return Random.NormalIntRange(0, 2+lvl);
 		}
 
 		@Override

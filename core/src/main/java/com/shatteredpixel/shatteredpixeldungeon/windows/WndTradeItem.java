@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -228,9 +229,10 @@ public class WndTradeItem extends Window {
 		}
 		item.detachAll( hero.belongings.backpack );
 		
-		int price = item.price();
+		new Gold( item.price() ).doPickUp( hero );
 		
-		new Gold( price ).doPickUp( hero );
+		//selling items in the sell interface doesn't spend time
+		hero.spend(-hero.cooldown());
 	}
 	
 	private void sellOne( Item item ) {
@@ -242,9 +244,11 @@ public class WndTradeItem extends Window {
 			Hero hero = Dungeon.hero;
 			
 			item = item.detach( hero.belongings.backpack );
-			int price = item.price();
 			
-			new Gold( price ).doPickUp( hero );
+			new Gold( item.price() ).doPickUp( hero );
+			
+			//selling items in the sell interface doesn't spend time
+			hero.spend(-hero.cooldown());
 		}
 	}
 	

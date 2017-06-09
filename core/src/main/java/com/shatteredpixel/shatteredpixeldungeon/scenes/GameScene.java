@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import android.opengl.GLES20;
@@ -25,8 +26,6 @@ import android.opengl.GLES20;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.DungeonTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.FogOfWar;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -48,7 +47,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.SeedPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.WandHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -58,18 +56,25 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DiscardedItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTiledVisual;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTerrainTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonWallsTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.FogOfWar;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.GridTileMap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.TerrainFeaturesTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.WallBlockingTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Banner;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BusyIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.CustomTileVisual;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.LootIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ResumeIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TerrainFeaturesTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toast;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -98,6 +103,7 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.io.IOException;
@@ -109,8 +115,11 @@ public class GameScene extends PixelScene {
 	static GameScene scene;
 
 	private SkinnedBlock water;
-	private DungeonTilemap tiles;
+	private DungeonTerrainTilemap tiles;
+	private GridTileMap visualGrid;
 	private TerrainFeaturesTilemap terrainFeatures;
+	private DungeonWallsTilemap walls;
+	private WallBlockingTilemap wallBlocking;
 	private FogOfWar fog;
 	private HeroSprite hero;
 
@@ -125,6 +134,7 @@ public class GameScene extends PixelScene {
 	private Group terrain;
 	private Group customTiles;
 	private Group levelVisuals;
+	private Group customWalls;
 	private Group ripples;
 	private Group plants;
 	private Group traps;
@@ -180,19 +190,24 @@ public class GameScene extends PixelScene {
 			}
 		};
 		terrain.add( water );
-		
-		tiles = new DungeonTilemap();
-		terrain.add( tiles );
 
 		ripples = new Group();
 		terrain.add( ripples );
 
+		DungeonTileSheet.setupVariance(Dungeon.level.map.length, Dungeon.seedCurDepth());
+		
+		tiles = new DungeonTerrainTilemap();
+		terrain.add( tiles );
+
 		customTiles = new Group();
 		terrain.add(customTiles);
 
-		for( CustomTileVisual visual : Dungeon.level.customTiles){
-			addCustomTile(visual.create());
+		for( CustomTiledVisual visual : Dungeon.level.customTiles){
+			addCustomTile(visual);
 		}
+
+		visualGrid = new GridTileMap();
+		terrain.add( visualGrid );
 
 		terrainFeatures = new TerrainFeaturesTilemap(Dungeon.level.plants, Dungeon.level.traps);
 		terrain.add(terrainFeatures);
@@ -221,17 +236,31 @@ public class GameScene extends PixelScene {
 				mob.beckon( Dungeon.hero.pos );
 			}
 		}
-		
+
+		walls = new DungeonWallsTilemap();
+		add(walls);
+
+		customWalls = new Group();
+		add(customWalls);
+
+		for( CustomTiledVisual visual : Dungeon.level.customWalls){
+			addCustomWall(visual);
+		}
+
+		wallBlocking = new WallBlockingTilemap();
+		add (wallBlocking);
+
 		add( emitters );
 		add( effects );
-		
+
 		gases = new Group();
 		add( gases );
-		
+
 		for (Blob blob : Dungeon.level.blobs.values()) {
 			blob.emitter = null;
 			addBlobSprite( blob );
 		}
+
 
 		fog = new FogOfWar( Dungeon.level.width(), Dungeon.level.height() );
 		add( fog );
@@ -391,6 +420,12 @@ public class GameScene extends PixelScene {
 		scene = null;
 		Badges.saveGlobal();
 		
+		if (actorThread.isAlive()){
+			synchronized (actorThread) {
+				actorThread.interrupt();
+			}
+		}
+		
 		super.destroy();
 	}
 	
@@ -404,7 +439,7 @@ public class GameScene extends PixelScene {
 		}
 	}
 
-	private final Thread t = new Thread() {
+	private static final Thread actorThread = new Thread() {
 		@Override
 		public void run() {
 			Actor.process();
@@ -422,13 +457,13 @@ public class GameScene extends PixelScene {
 		if (!freezeEmitters) water.offset( 0, -5 * Game.elapsed );
 
 		if (!Actor.processing() && Dungeon.hero.isAlive()) {
-			if (!t.isAlive()) {
+			if (!actorThread.isAlive()) {
 				//if cpu time is limited, game should prefer drawing the current frame
-				t.setPriority(Thread.NORM_PRIORITY - 1);
-				t.start();
+				actorThread.setPriority(Thread.NORM_PRIORITY - 1);
+				actorThread.start();
 			} else {
-				synchronized (t) {
-					t.notify();
+				synchronized (actorThread) {
+					actorThread.notify();
 				}
 			}
 		}
@@ -516,8 +551,12 @@ public class GameScene extends PixelScene {
 		}
 	}
 
-	public void addCustomTile( CustomTileVisual visual){
+	public void addCustomTile( CustomTiledVisual visual){
 		customTiles.add( visual.create() );
+	}
+
+	public void addCustomWall( CustomTiledVisual visual){
+		customWalls.add( visual.create() );
 	}
 	
 	private void addHeapSprite( Heap heap ) {
@@ -665,17 +704,19 @@ public class GameScene extends PixelScene {
 	}
 	
 	public static void pickUp( Item item ) {
-		scene.toolbar.pickup( item );
+		if (scene != null) scene.toolbar.pickup( item );
 	}
 
 	public static void pickUpJournal( Item item ) {
-		scene.pane.pickup( item );
+		if (scene != null) scene.pane.pickup( item );
 	}
 
 	public static void resetMap() {
 		if (scene != null) {
 			scene.tiles.map(Dungeon.level.map, Dungeon.level.width() );
+			scene.visualGrid.map(Dungeon.level.map, Dungeon.level.width() );
 			scene.terrainFeatures.map(Dungeon.level.map, Dungeon.level.width() );
+			scene.walls.map(Dungeon.level.map, Dungeon.level.width() );
 		}
 		updateFog();
 	}
@@ -684,14 +725,20 @@ public class GameScene extends PixelScene {
 	public static void updateMap() {
 		if (scene != null) {
 			scene.tiles.updateMap();
+			scene.visualGrid.updateMap();
 			scene.terrainFeatures.updateMap();
+			scene.walls.updateMap();
+			updateFog();
 		}
 	}
 	
 	public static void updateMap( int cell ) {
 		if (scene != null) {
 			scene.tiles.updateMapCell( cell );
+			scene.visualGrid.updateMapCell( cell );
 			scene.terrainFeatures.updateMapCell( cell );
+			scene.walls.updateMapCell( cell );
+			updateFog( cell );
 		}
 	}
 
@@ -708,18 +755,40 @@ public class GameScene extends PixelScene {
 	}
 	
 	public static void show( Window wnd ) {
-		cancelCellSelector();
-		scene.addToFront( wnd );
+		if (scene != null) {
+			cancelCellSelector();
+			scene.addToFront(wnd);
+		}
 	}
 
 	public static void updateFog(){
-		if (scene != null)
+		if (scene != null) {
 			scene.fog.updateFog();
+			scene.wallBlocking.updateMap();
+		}
 	}
 
 	public static void updateFog(int x, int y, int w, int h){
 		if (scene != null) {
 			scene.fog.updateFogArea(x, y, w, h);
+			scene.wallBlocking.updateArea(x, y, w, h);
+		}
+	}
+
+	public static void updateFog( int cell ){
+		if (scene != null) {
+			//update in a 3x3 grid to account for neighbours which might also be affected
+			if (Dungeon.level.insideMap(cell)) {
+				for (int i : PathFinder.NEIGHBOURS9) {
+					scene.fog.updateFogCell( cell + i );
+					scene.wallBlocking.updateMapCell( cell + i );
+				}
+
+			//unless we're at the level's edge, then just do the one tile.
+			} else {
+				scene.fog.updateFogCell( cell );
+				scene.wallBlocking.updateMapCell( cell );
+			}
 		}
 	}
 	

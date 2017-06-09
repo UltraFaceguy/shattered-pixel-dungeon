@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.watabou.utils.Random;
-
-import java.util.Arrays;
 
 public class DeadEndLevel extends Level {
 
@@ -47,8 +45,8 @@ public class DeadEndLevel extends Level {
 	
 	@Override
 	protected boolean build() {
-
-		Arrays.fill( map, Terrain.WALL );
+		
+		setSize(7, 7);
 		
 		for (int i=2; i < SIZE; i++) {
 			for (int j=2; j < SIZE; j++) {
@@ -72,17 +70,6 @@ public class DeadEndLevel extends Level {
 		exit = 0;
 		
 		return true;
-	}
-
-	@Override
-	protected void decorate() {
-		for (int i=0; i < length(); i++) {
-			if (map[i] == Terrain.EMPTY && Random.Int( 10 ) == 0) {
-				map[i] = Terrain.EMPTY_DECO;
-			} else if (map[i] == Terrain.WALL && Random.Int( 8 ) == 0) {
-				map[i] = Terrain.WALL_DECO;
-			}
-		}
 	}
 
 	@Override

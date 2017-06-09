@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
 public class Assets {
@@ -101,11 +102,11 @@ public class Assets {
 	public static final String ITEMS	        = "items.png";
 	public static final String TERRAIN_FEATURES	= "terrain_features.png";
 	
-	public static final String TILES_SEWERS	= "tiles0.png";
-	public static final String TILES_PRISON	= "tiles1.png";
-	public static final String TILES_CAVES	= "tiles2.png";
-	public static final String TILES_CITY	= "tiles3.png";
-	public static final String TILES_HALLS	= "tiles4.png";
+	public static final String TILES_SEWERS	= "tiles_sewers.png";
+	public static final String TILES_PRISON	= "tiles_prison.png";
+	public static final String TILES_CAVES	= "tiles_caves.png";
+	public static final String TILES_CITY	= "tiles_city.png";
+	public static final String TILES_HALLS	= "tiles_halls.png";
 	
 	public static final String WATER_SEWERS	= "water0.png";
 	public static final String WATER_PRISON	= "water1.png";

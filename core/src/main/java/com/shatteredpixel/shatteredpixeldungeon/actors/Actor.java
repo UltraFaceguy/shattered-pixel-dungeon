@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import android.util.SparseArray;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -177,29 +178,25 @@ public abstract class Actor implements Bundlable {
 	
 	public static void process() {
 		
-		if (current != null) {
-			return;
-		}
-	
 		boolean doNext;
+		boolean interrupted = false;
 
 		do {
 			now = Float.MAX_VALUE;
 			current = null;
-
 			
 			for (Actor actor : all) {
-
+				
 				//some actors will always go before others if time is equal.
 				if (actor.time < now ||
 						actor.time == now && (current == null || actor.actPriority < current.actPriority)) {
 					now = actor.time;
 					current = actor;
 				}
-
+				
 			}
 
-			if  (current != null) {
+			if  (!interrupted && current != null) {
 
 				Actor acting = current;
 
@@ -213,11 +210,14 @@ public abstract class Actor implements Bundlable {
 							}
 						}
 					} catch (InterruptedException e) {
-						ShatteredPixelDungeon.reportException(e);
+						interrupted = true;
 					}
 				}
-
-				doNext = acting.act();
+				
+				interrupted = interrupted || Thread.interrupted();
+				
+				doNext = !interrupted && acting.act();
+				
 				if (doNext && !Dungeon.hero.isAlive()) {
 					doNext = false;
 					current = null;
@@ -227,11 +227,12 @@ public abstract class Actor implements Bundlable {
 			}
 
 			if (!doNext){
+				interrupted = false;
 				synchronized (Thread.currentThread()) {
 					try {
 						Thread.currentThread().wait();
 					} catch (InterruptedException e) {
-						ShatteredPixelDungeon.reportException(e);
+						interrupted = true;
 					}
 				}
 			}

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -44,15 +45,6 @@ public class LastLevel extends Level {
 	private int pedestal;
 
 	@Override
-	protected void setupSize() {
-		if (width == 0 || height == 0) {
-			width = 16;
-			height = 64;
-		}
-		length = width * height;
-	}
-
-	@Override
 	public String tilesTex() {
 		return Assets.TILES_HALLS;
 	}
@@ -76,7 +68,8 @@ public class LastLevel extends Level {
 
 	@Override
 	protected boolean build() {
-
+		
+		setSize(16, 64);
 		Arrays.fill( map, Terrain.CHASM );
 
 		int mid = width/2;
@@ -107,21 +100,17 @@ public class LastLevel extends Level {
 		map[pos-3] = map[pos-2] = map[pos-1] = map[pos] = map[pos+1] = map[pos+2] = map[pos+3] = Terrain.WATER;
 		pos+=width();
 		map[pos-2] = map[pos+2] = Terrain.WATER;
-
-
-		feeling = Feeling.NONE;
-		viewDistance = 8;
-
-		return true;
-	}
-
-	@Override
-	protected void decorate() {
+		
 		for (int i=0; i < length(); i++) {
 			if (map[i] == Terrain.EMPTY && Random.Int( 10 ) == 0) {
 				map[i] = Terrain.EMPTY_DECO;
 			}
 		}
+
+		feeling = Feeling.NONE;
+		viewDistance = 8;
+
+		return true;
 	}
 
 	@Override

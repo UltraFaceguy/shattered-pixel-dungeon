@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -42,10 +43,10 @@ public class Entanglement extends Glyph {
 
 		int level = Math.max( 0, armor.level() );
 		
-		if (Random.Int( 3 ) == 0) {
+		if (Random.Int( 4 ) == 0) {
 			
-			Buff.add( defender, Roots.class, 5 );
-			Buff.apply( defender, Earthroot.Armor.class ).level( 5 + level );
+			Buff.add( defender, Roots.class, 3 );
+			Buff.apply( defender, Earthroot.Armor.class ).level( 3 + level * 2 );
 			CellEmitter.bottom( defender.pos ).start( EarthParticle.FACTORY, 0.05f, 8 );
 			Camera.main.shake( 1, 0.4f );
 			

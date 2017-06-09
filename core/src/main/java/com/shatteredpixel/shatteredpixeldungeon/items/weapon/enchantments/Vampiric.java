@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -37,11 +38,11 @@ public class Vampiric extends Weapon.Enchantment {
 		
 		int level = Math.max( 0, weapon.level() );
 		
-		// lvl 0 - 20%
-		// lvl 1 - 21.5%
-		// lvl 2 - 23%
-		int maxValue = Math.round(damage * ((level + 10) / (float)(level + 50)));
-		int effValue = Random.NormalIntRange( 0, maxValue );
+		// lvl 0 - 16%
+		// lvl 1 - 17.65%
+		// lvl 2 - 19.23%
+		int maxValue = Math.round(damage * ((level + 8) / (float)(level + 50)));
+		int effValue = Math.min( Random.IntRange( 0, maxValue ), attacker.HT - attacker.HP );
 		
 		if (effValue > 0) {
 			attacker.heal(effValue);

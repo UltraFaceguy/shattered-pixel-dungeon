@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -33,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.LightningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
@@ -110,7 +112,7 @@ public class WandOfLightning extends DamageWand {
 						//the hero is only zapped if they are adjacent
 						continue;
 					else if (n != null && !affected.contains( n )) {
-						arcs.add(new Lightning.Arc(ch.pos, n.pos));
+						arcs.add(new Lightning.Arc(ch.sprite.center(), n.sprite.center()));
 						arc(n);
 					}
 				}
@@ -122,19 +124,20 @@ public class WandOfLightning extends DamageWand {
 
 		affected.clear();
 		arcs.clear();
-		arcs.add( new Lightning.Arc(bolt.sourcePos, bolt.collisionPos));
 
 		int cell = bolt.collisionPos;
 
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {
+			arcs.add( new Lightning.Arc(curUser.sprite.center(), ch.sprite.center()));
 			arc(ch);
 		} else {
+			arcs.add( new Lightning.Arc(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos)));
 			CellEmitter.center( cell ).burst( SparkParticle.FACTORY, 3 );
 		}
 
 		//don't want to wait for the effect before processing damage.
-		curUser.sprite.parent.add( new Lightning( arcs, null ) );
+		curUser.sprite.parent.addToFront( new Lightning( arcs, null ) );
 		callback.call();
 	}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -32,7 +33,6 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Shocking extends Weapon.Enchantment {
 
@@ -51,10 +51,10 @@ public class Shocking extends Weapon.Enchantment {
 			affected.add(attacker);
 
 			arcs.clear();
-			arcs.add(new Lightning.Arc(attacker.pos, defender.pos));
+			arcs.add(new Lightning.Arc(attacker.sprite.center(), defender.sprite.center()));
 			hit(defender, Random.Int(1, damage / 3));
 
-			attacker.sprite.parent.add( new Lightning( arcs, null ) );
+			attacker.sprite.parent.addToFront( new Lightning( arcs, null ) );
 			
 		}
 
@@ -82,12 +82,11 @@ public class Shocking extends Weapon.Enchantment {
 		
 		ch.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
 		ch.sprite.flash();
-		
-		HashSet<Char> ns = new HashSet<Char>();
+
 		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
 			Char n = Actor.findChar( ch.pos + PathFinder.NEIGHBOURS8[i] );
 			if (n != null && !affected.contains( n )) {
-				arcs.add(new Lightning.Arc(ch.pos, n.pos));
+				arcs.add(new Lightning.Arc(ch.sprite.center(), n.sprite.center()));
 				hit(n, Random.Int(damage / 2, damage));
 			}
 		}

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015  Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2016 Evan Debenham
+ * Copyright (C) 2014-2017 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
@@ -37,69 +38,63 @@ import com.watabou.noosa.ui.Component;
 public class ChangesScene extends PixelScene {
 
 	private static final String TXT_Update =
-			"_v0.4.3c:_\n" +
-			"_-_ Additional bugfixes\n" +
-			"\n" +
-			"_v0.4.3b:_\n" +
-			"_-_ Thrown potions now trigger traps and plants\n" +
-			"_-_ Various bugfixes\n" +
-			"\n" +
-			"_v0.4.3a:_\n" +
-			"_-_ Reworked glyph of brimstone\n" +
-			"\t \tnow grants shielding instead of healing\n" +
-			"_-_ Reworked glyph of stone\n" +
-			"\t \tnow reduces speed in doorways\n" +
-			"_-_ Power saver looks less blurry on some devices\n" +
-			"\n" +
-			"_v0.4.3:_\n" +
-			"General Improvements:\n" +
-			"_-_ Added rankings and hall of heroes sync\n" +
-			"_-_ Added Power Saver mode in settings\n" +
-			"_-_ Game now supports small screen devices\n" +
-			"_-_ Improved variety of level visuals\n" +
-			"\n" +
-			"Balance Changes:\n" +
-			"_-_ Flail max damage increased by ~15%\n" +
-			"_-_ Wand of Frost damage reduction increased\n" +
-			"\t \tfrom 5% per turn of chill to 7.5%\n" +
-			"_-_ Ring of Furor speed bonus reduced by\n" +
-			"\t \t~15% for slow weapons, ~0% for fast weapons\n" +
-			"_-_ Reduced sacrificial curse bleed by ~33%\n" +
-			"\n" +
-			"_v0.4.2:_\n" +
-			"_-_ Improved performance on many devices\n" +
-			"_-_ Various balance changes\n" +
-			"\n" +
-			"_v0.4.1:_\n" +
-			"_-_ Armor effectiveness increased\n" +
-			"_-_ Evil Eyes reworked\n" +
-			"\n" +
+			"_v0.6.0:_\n" +
+			"New levelgen!\n" +
+			"_-_ Level creation algorithm completely overhauled!\n" +
+			"_-_ Sewers are now smaller, caves+ are now larger\n" +
+			"_-_ Some rooms can now be much larger than before\n" +
+			"_-_ Added 8 new standard room types,\n" +
+			"\t\t and loads of new standard room layouts\n" +
+			"\n"+
+			"Environment Balance Changes:\n"+
+			"_-_ Falling damage tweaked to be less random\n" +
+			"_-_ Reduced number of traps in later chapters\n" +
+			"_-_ Floor 2 entry doors only hidden for new players\n" +
+			"_-_ Visiting floor 21 before completing the imp quest\n" +
+			"\t\t no longer prevents his shop from spawning\n" +
+			"_-_ Light sources now grant significantly more vision\n" +
+			"_-_ Light from torches now lasts 20% longer\n" +
+			"_-_ Slightly increased visibility on floor 22+\n" +
+			"_-_ Floor 21 shop now sells 3 torches, up from 2\n" +
+			"\n"+
+			"Item Balance Changes:\n"+
+			"_-_ Meat and small rations are 50% more filling\n" +
+			"_-_ Pasties and blandfruit are 12.5% more filling\n" +
+			"_-_ Greataxe base damage increased by ~22%\n" +
+			"_-_ Greatshield base damage increased by ~17%\n" +
+			"_-_ Vampiric enchant lifesteal reduced by 20%\n" +
+			"_-_ Lucky enchant rebalanced:\n" +
+			"\t\t now deals 2x/0x damage, instead of min/max\n" +
+			"\t\t base chance to deal 2x increased by ~10%\n" +
+			"_-_ Glyph of Viscosity rebalanced:\n" +
+			"\t\t proc chance reduced by ~25% \n" +
+			"\t\t damage over time reverted from 15% to 10%\n" +
+			"_-_ Glyph of Entanglement root time reduced by 40%\n" +
+			"_-_ Glyph of Potential rebalanced:\n" +
+			"\t\t self-damage no longer scales with max hp\n" +
+			"\t\t grants more charge at higher levels\n" +
+			"\n"+
+			"_v0.5.0:_ New visual style, shadows and depth!\n" +
+			"\n"+
+			"_v0.4.3:_ Various utility features and improvements\n" +
+			"_v0.4.2:_ Performance and game engine improvements\n" +
+			"_v0.4.1:_ Balance adjustments to enemies & armor\n" +
 			"_v0.4.0:_ Reworked equips, enchants & curses\n" +
 			"\n" +
 			"_v0.3.5:_ Reworked Warrior & subclasses\n" +
-			"\n"+
 			"_v0.3.4:_ Multiple language support\n" +
-			"\n" +
 			"_v0.3.3:_ Support for Google Play Games\n" +
-			"\n" +
 			"_v0.3.2:_ Prison Rework & Balance Changes\n" +
-			"\n" +
 			"_v0.3.1:_ Traps reworked & UI upgrades\n" +
-			"\n" +
 			"_v0.3.0:_ Wands & Mage completely reworked\n" +
 			"\n" +
 			"_v0.2.4:_ Small improvements and tweaks\n" +
-			"\n" +
 			"_v0.2.3:_ Artifact additions & improvements\n" +
-			"\n" +
 			"_v0.2.2:_ Small improvements and tweaks\n" +
-			"\n" +
 			"_v0.2.1:_ Sewer improvements\n" +
-			"\n" +
 			"_v0.2.0:_ Added artifacts, reworked rings\n" +
 			"\n" +
 			"_v0.1.1:_ Added blandfruit, reworked dew vial\n" +
-			"\n" +
 			"_v0.1.0:_ Improvements to potions/scrolls";
 
 	@Override
